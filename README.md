@@ -1,24 +1,25 @@
 # SFX (Situation Framework eXchange)
 
+[![en](https://img.shields.io/badge/lang-mn-red.svg)](https://raw.githubusercontent.com/roriau0422/sfex-lang/blob/main/README-en.md)
 [![Rust](https://img.shields.io/badge/rust-1.75%2B-orange.svg)](https://www.rust-lang.org/)
 [![Build Status](https://github.com/roriau0422/sfex-lang/actions/workflows/rust.yml/badge.svg)](https://github.com/roriau0422/sfex-lang/actions)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/roriau0422/sfex-lang)](https://github.com/roriau0422/sfex-lang/releases)
 
-A context-oriented programming language I've been building in Rust. The core idea: objects should behave differently based on the current "situation" - like how you act differently at work vs. at home.
+Rust дээр бичиж байгаа context-oriented програмчлалын хэл. Гол санаа нь: объектууд одоогийн нөхцөл байдал буюу situation-с хамаарч өөр өөрөөр ажиллах ёстой - яг л чи ажил дээрээ өөрөөр, гэртээ өөрөөр биеэ авч явдаг шиг.
 
 ```sfex
 Story:
     Print "Hello, SFX!"
     
     Numbers is [10, 20, 30]
-    Print Numbers[1]  # 10 - yes, 1-based indexing
+    Print Numbers[1]  # хариу 10 - тийм ээ индекс 1-ээс эхэлдэг
 ```
 
-## What is this?
+## Энэ юу вэ?
 
-SFX is the first standalone Context-Oriented Programming language. Previous COP implementations (ContextJ, ContextPy, etc.) were all extensions bolted onto existing languages. SFX has native `Situation` and `Switch` syntax built into the language from the ground up.
+SFX бол анхны бие даасан Context-Oriented Programming хэл. Өмнөх COP implementation-ууд (ContextJ, ContextPy гэх мэт) бүгд бусад хэлнүүд дээр залгаж тавьсан extension-ууд байсан. SFX-д `Situation` болон `Switch` syntax хэлний үндсэн бүтцэд шууд орсон.
 
-I started this because I got tired of the ceremony in traditional OOP. Why can't objects just... change behavior based on context? In real life, a `User` object behaves differently when they're an admin vs. a guest. In most languages, you need strategy patterns, dependency injection, or runtime type checks. In SFX:
+Уламжлалт OOP-ийн ёс журмаас залхаад л эхлүүлсэн юм. Яагаад объектууд зүгээр л... context-оос хамаарч өөрчлөгдөж болдоггүй юм бэ? Бодит амьдрал дээр `User` объект админ үед өөрөөр, зочин үед өөрөөр ажилладаг шүү дээ. Ихэнх хэлнүүдэд strategy pattern, dependency injection, эсвэл runtime type check хэрэгтэй болдог. SFX-д:
 
 ```sfex
 Situation: AdminMode
@@ -41,25 +42,25 @@ Story:
     Print Bob.GetPermissions       # "read"
 ```
 
-## Current State
+## Одоогийн байдал
 
-**Working:**
-- Lexer/parser with Python-style indentation
+**Ажиллаж байгаа:**
+- Python маягийн indentation-тай Lexer/parser
 - Tree-walking interpreter
-- JIT compilation via Cranelift (kicks in after 100 calls)
-- Reactive `When` observers
-- Standard library: HTTP, WebSocket, TCP, JSON, CSV, XML, HTML, TOML, File I/O
-- Async with `Do in background` and channels
-- 1-based indexing, arbitrary precision math
+- Cranelift ашигласан JIT (100 удаа дуудагдсаны дараа идэвхждэг)
+- Reactive `When` observer-ууд
+- Standard library: HTTP, WebSocket, TCP, JSON, CSV, XML, HTML, TOML, LLM, File I/O
+- `Do in background` болон channel-тай async
+- 1-ээс эхэлдэг index, arbitrary precision тоо
 
-**Not working / TODO:**
-- No debugger yet
-- No LSP / editor support
-- Error messages could be better
-- Documentation is sparse
-- No package manager
+**Ажиллахгүй байгаа / TODO:**
+- Debugger байхгүй
+- LSP / editor support байхгүй
+- Error message-үүд WORSE
+- Баримтжуулалт дутуу
+- Package manager байхгүй
 
-## Installation
+## Суулгах
 
 ```bash
 git clone https://github.com/roriau0422/sfex-lang.git
@@ -68,29 +69,29 @@ cargo build --release
 ./target/release/sfex run your_script.sfex
 ```
 
-Requires Rust 1.75+.
+Rust 1.75+ хэрэгтэй.
 
-## Design Decisions
+## Дизайны шийдвэрүүд
 
-Some choices I made that might seem weird:
+Хачин санагдаж магадгүй зарим шийдвэрүүд:
 
-**1-based indexing:** `List[1]` is the first element. Fight me. It's how humans count. Lua does it. R does it. MATLAB does it. You'll survive.
+**1-ээс эхлэх index:** `List[1]` бол эхний элемент. Ингэж л хүмүүс тоолдог шүү дээ. Lua ч тэгдэг. R ч тэгдэг. MATLAB ч тэгдэг.
 
-**Arbitrary precision by default:** `0.1 + 0.2 = 0.3` in SFX, not `0.30000000000000004`. If you need speed over precision, use `FastNumber`.
+**Default-аар arbitrary precision:** SFX дээр `0.1 + 0.2 = 0.3`, `0.30000000000000004` биш. Хурд хэрэгтэй бол `FastNumber` хэрэглэ.
 
-**No null:** Variables default to safe values (0, "", False, []). If you need "absence of value", use `Option` with `Some(x)` or `None`.
+**Null байхгүй:** Хувьсагчид аюулгүй утгаар эхэлдэг (0, "", False, []). "Утга байхгүй" гэж хэрэгтэй бол `Option`-г `Some(x)` эсвэл `None`-тэй хэрэглэ.
 
-**Grapheme-aware strings:** `"👨‍👩‍👧‍👦".Length` is 1, not 7. Because it's one character.
+**Grapheme-aware string:** `"👨‍👩‍👧‍👦".Length` бол 1, 7 биш. Нэг тэмдэгт учраас.
 
-## Syntax Overview
+## Syntax тойм
 
 ```sfex
-# Variables
+# Хувьсагч
 Name is "Alice"
 Age is 25
 Items is [1, 2, 3]
 
-# Concepts (like classes)
+# Concept (class шиг юм)
 Concept: Person
     Name, Age
     
@@ -119,9 +120,9 @@ When Score:
         Print "OK"
 ```
 
-## Reactive Observers
+## Reactive Observer-ууд
 
-This is probably my favorite feature. Define `When` blocks and they fire automatically:
+Миний хамгийн дуртай feature. `When` block тодорхой нөхөлд автоматаар ажилладаг:
 
 ```sfex
 Concept: Product
@@ -134,59 +135,59 @@ Concept: Product
 Story:
     Create Product Called Phone
     Set Phone.Price to 100
-    # Tax is now 10, Total is now 110 - automatically
+    # Tax одоо 10, Total одоо 110 - автоматаар
 ```
 
-No pub/sub boilerplate. No manual invalidation. It just works.
+Pub/sub boilerplate байхгүй. Гараар invalidate хийх хэрэггүй. Зүгээр л ажилладаг.
 
 ## Standard Library
 
-| Module | What it does |
-|--------|-------------|
+| Модуль | Юу хийдэг |
+|--------|-----------|
 | HTTP | GET/POST/PUT/DELETE |
 | WebSocket | Bidirectional real-time |
-| TCP/UDP | Low-level sockets |
-| JSON/XML/HTML/CSV/TOML | Parsing and generation |
-| Data | Auto-detect format and parse |
-| File | Read/write/stream |
-| Env | Environment variables, .env support |
-| System | Shell commands |
-| Time | Date/time handling |
-| Math | Random, trig, rounding |
+| TCP/UDP | Low-level socket |
+| JSON/XML/HTML/CSV/TOML | Parse хийх, үүсгэх |
+| Data | Формат автоматаар таниад parse хийх |
+| File | Унших/бичих/stream |
+| Env | Environment variable, .env support |
+| System | Shell command |
+| Time | Огноо/цаг |
+| Math | Random, тригонометр, бөөрөнхийлөх |
 | LLM | OpenAI API integration |
-| Task/Channel | Concurrency primitives |
+| Task/Channel | Concurrency primitive |
 
 ## Performance
 
-The JIT uses Cranelift. After a function gets called 100 times, it compiles to native code. In my benchmarks on an AMD Ryzen:
+JIT нь Cranelift хэрэглэдэг. Function 100 удаа дуудагдсаны дараа native код болж compile хийгддэг. AMD Ryzen дээрх миний benchmark:
 
-- Simple arithmetic loops: ~230M iterations/sec (JIT) vs ~45M (interpreted)
-- Fibonacci(30): ~3M calls/sec
+- Энгийн арифметик loop: ~230M iteration/sec (JIT) vs ~45M (interpreted)
+- Fibonacci(30): ~3M call/sec
 
-Take these numbers with a grain of salt. Microbenchmarks lie. Real-world performance depends on your actual code.
+Эдгээр тоонуудыг бүрэн итгэж болохгүй. Microbenchmark худлаа ярьдаг. Бодит performance чиний бодит кодоос хамаарна.
 
-## Why "SFX"?
+## Яагаад "SFX"?
 
-**S**ituation **F**ramework e**X**change. Also it sounds cool.
+**S**ituation **F**ramework e**X**change. Бас сайхан сонсогддог.
 
-## Contributing
+## Хамтран ажиллах
 
-This is a solo project but I'd welcome help with:
-- Better error messages
+Ганцаараа хийж байгаа project, гэхдээ дараах зүйлсэд туслах хүнд баяртай талархах болно:
+- Илүү сайн error message
 - Test coverage
-- Documentation
-- An LSP implementation would be amazing
+- Баримтжуулалт
+- LSP implementation гоё байх байсан
 
-File issues at https://github.com/roriau0422/sfex-lang/issues
+Issue-г https://github.com/roriau0422/sfex-lang/issues дээр бичээрэй
 
-## License
+## Лиценз
 
 Apache 2.0
 
-## Contact
+## Холбоо барих
 
-Temuujin - roriau@gmail.com
+Тэмүүжин - roriau@gmail.com
 
 ---
 
-*Still early. Things will break. But the core ideas work and I'm actively developing it.*
+*Эрт байгаа. Эвдрэх зүйлс байх. Гэхдээ үндсэн санаа ажиллаж байгаа, идэвхтэй хөгжүүлж байна.*
