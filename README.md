@@ -15,7 +15,7 @@ Story:
     Print Numbers[1]  # хариу 10 - тийм ээ индекс 1-ээс эхэлдэг
 ```
 
-## Энэ юу вэ?
+## SFX гэж юу вэ?
 
 SFX бол анхны бие даасан Context-Oriented Programming хэл. Өмнөх COP implementation-ууд (ContextJ, ContextPy гэх мэт) бүгд бусад хэлнүүд дээр залгаж тавьсан extension-ууд байсан. SFX-д `Situation` болон `Switch` syntax хэлний үндсэн бүтцэд шууд орсон.
 
