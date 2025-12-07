@@ -1,0 +1,14 @@
+Story:
+    Print "Test 1: Basic Try"
+    Try:
+        Print "In try"
+    Always:
+        Print "In always"
+
+    Print "Test 2: Try with Catch (no variable)"
+    Try:
+        Print "In try 2"
+    Catch:
+        Print "In catch"
+
+    Print "Done"

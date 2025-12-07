@@ -1,0 +1,12 @@
+Story:
+    Print "Line 2: Starting test"
+    Print "Line 3: Setting up"
+    X is 10
+    Y is 20
+    Print "Line 6: About to error"
+    Try:
+        BadVariable is UndefinedVar
+        Print "Line 9: Should not reach here"
+    Catch err:
+        Print "Caught error on line: " + err.line
+        Print "Expected: 8, Got: " + err.line

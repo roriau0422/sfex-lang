@@ -1,0 +1,88 @@
+Story:
+    Print "=========================================="
+    Print "Line Tracking Demo"
+    Print "=========================================="
+    Print "Note: error.line tracks statement execution count"
+    Print ""
+
+    # Example 1: Early error
+    Print "[Test 1] Error in first few statements"
+    Try:
+        Statement1 is "OK"
+        Statement2 is BadVariable  # Error on 2nd statement in Try
+    Catch error:
+        Print "  Error at statement: " + error.line
+        Print "  Type: " + error.type
+        Print "  Message: " + error.message
+    Print ""
+
+    # Example 2: Error later in block
+    Print "[Test 2] Error after several statements"
+    Try:
+        A is 1
+        B is 2
+        C is 3
+        D is 4
+        E is 5
+        F is NonExistent  # Error on 6th statement
+    Catch err:
+        Print "  Error at statement: " + err.line
+        Print "  Type: " + err.type
+    Print ""
+
+    # Example 3: Nested blocks
+    Print "[Test 3] Error in nested block"
+    Try:
+        Outer is "OK"
+        If True:
+            Inner1 is "OK"
+            Inner2 is "OK"
+            Inner3 is MissingVar  # Error deeper in
+    Catch e:
+        Print "  Error at statement: " + e.line
+        Print "  Type: " + e.type
+    Print ""
+
+    # Example 4: Multiple errors at different depths
+    Print "[Test 4] First error"
+    Try:
+        X is 10
+        Y is 20
+        Z is Undefined1
+    Catch error:
+        Print "  First error at statement: " + error.line
+
+    Print "[Test 4] Second error"
+    Try:
+        A is 100
+        B is 200
+        C is 300
+        D is 400
+        E is Undefined2
+    Catch error:
+        Print "  Second error at statement: " + error.line
+    Print ""
+
+    # Example 5: Using line info for debugging
+    Print "[Test 5] Debugging with line numbers"
+    Try:
+        Data is [10, 20, 30, 40, 50]
+        Item1 is Data[1]
+        Item2 is Data[2]
+        Item3 is Data[3]
+        Item4 is Data[0]  # Error: 0-index on 1-based list
+    Catch err:
+        Print "  Statement count when error occurred: " + err.line
+        Print "  This helps identify which operation failed"
+        Print "  Error: " + err.type + " - " + err.message
+    Print ""
+
+    Print "=========================================="
+    Print "Line Tracking Complete!"
+    Print "=========================================="
+    Print ""
+    Print "Key Points:"
+    Print "  • error.line = statement execution count"
+    Print "  • Useful for identifying which operation failed"
+    Print "  • Counts statements within Try/Catch blocks"
+    Print "  • Increments with each executed statement"

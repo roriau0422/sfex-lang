@@ -1,0 +1,443 @@
+# ============================================
+# SFX Language - Complete Feature Showcase
+# ============================================
+# This file demonstrates every feature of the SFX language
+# Version: 0.3.2
+
+# ============================================
+# SECTION 1: Concepts (Classes) with Fields
+# ============================================
+
+Concept: Person
+    Name, Age, Email  # Comma-separated field declarations
+
+    To Greet:
+        Print "Hello, I'm " + This.Name + " and I'm " + This.Age + " years old"
+        Return This.Name
+
+    To Birthday:
+        Set This.Age to This.Age + 1
+        Print This.Name + " is now " + This.Age + "!"
+        Return This.Age
+
+    To GetInfo:
+        Return This.Name + " (" + This.Email + ")"
+
+# Concept with reactive When observers (self-healing data)
+Concept: Product
+    BasePrice, Discount, Tax, FinalPrice
+
+    # Reactive observer - fires automatically when BasePrice changes
+    When BasePrice changes:
+        Set This.Tax to This.BasePrice * 0.1
+        Set This.FinalPrice to This.BasePrice + This.Tax
+        Print "Price updated: $" + This.FinalPrice
+
+    # Another observer for Discount changes
+    When Discount changes:
+        Set This.FinalPrice to (This.BasePrice + This.Tax) * (1 - This.Discount)
+        Print "Discount applied: $" + This.FinalPrice
+
+    To GetPrice:
+        Return This.FinalPrice
+
+# Concept with methods using parameters
+Concept: Calculator
+    LastResult
+
+    To Add with X and Y:
+        Result is X + Y
+        Set This.LastResult to Result
+        Return Result
+
+    To Subtract with X and Y:
+        Result is X - Y
+        Set This.LastResult to Result
+        Return Result
+
+    To Multiply with X and Y:
+        Result is X * Y
+        Set This.LastResult to Result
+        Return Result
+
+    To Divide with X and Y:
+        If Y = 0:
+            Print "Error: Division by zero"
+            Return 0
+        Else:
+            Result is X / Y
+            Set This.LastResult to Result
+            Return Result
+
+    To Power with Base and Exponent:
+        Result is 1
+        Counter is 1
+        Repeat Exponent times:
+            Result is Result * Base
+        Set This.LastResult to Result
+        Return Result
+
+# ============================================
+# SECTION 2: Situations (Context-Oriented Programming)
+# ============================================
+
+Situation: VIPMode
+    Adjust Person:
+        To Greet:
+            Print "Welcome, esteemed " + This.Name + "! It's an honor to see you."
+            Return This.Name
+
+    Adjust Product:
+        To GetPrice:
+            # VIP gets 20% discount
+            Discounted is This.FinalPrice * 0.8
+            Return Discounted
+
+Situation: DebugMode
+    Adjust Calculator:
+        To Add with X and Y:
+            Print "[DEBUG] Adding " + X + " + " + Y
+            Result is Proceed
+            Print "[DEBUG] Result: " + Result
+            Return Result
+
+# ============================================
+# SECTION 3: Story (Main Program)
+# ============================================
+
+Story:
+    Print "================================================"
+    Print "  SFX Language - Complete Feature Showcase"
+    Print "================================================"
+    Print ""
+
+    # ============================================
+    # 1. MATHEMATICAL HONESTY (0.1 + 0.2 = 0.3)
+    # ============================================
+    Print "=== 1. Mathematical Honesty ==="
+    Result is 0.1 + 0.2
+    Print "0.1 + 0.2 = " + Result + " (NOT 0.30000000000000004!)"
+
+    Precise is 1 / 3
+    Print "1 / 3 = " + Precise + " (arbitrary precision)"
+    Print ""
+
+    # ============================================
+    # 2. BASIC DATA TYPES
+    # ============================================
+    Print "=== 2. Basic Data Types ==="
+
+    # Numbers
+    MyNumber is 42
+    Print "Number: " + MyNumber
+
+    # FastNumber (IEEE 754 f64 for performance)
+    Speed is FastNumber(299792458.0)
+    Print "FastNumber: " + Speed
+
+    # Strings
+    Greeting is "Hello, SFX!"
+    Print "String: " + Greeting
+
+    # Multiline strings
+    Poem is """Roses are red
+Violets are blue
+SFX is honest
+And so are you"""
+    Print "Multiline: " + Poem
+
+    # Boolean
+    IsActive is True
+    IsClosed is False
+    Print "Boolean: " + IsActive + ", " + IsClosed
+
+    # Grapheme clustering (emoji = 1 character)
+    Family is "👨‍👩‍👧‍👦"
+    Print "Emoji string: " + Family + " (treated as 1 character!)"
+    Print ""
+
+    # ============================================
+    # 3. COLLECTIONS (1-based indexing!)
+    # ============================================
+    Print "=== 3. Collections (1-based indexing) ==="
+
+    # Lists - 1-based indexing (List[1] is first)
+    Numbers is [10, 20, 30, 40, 50]
+    Print "List created with 5 elements"
+    First is Numbers[1]
+    Last is Numbers[5]
+    Print "First element (index 1): " + First
+    Print "Last element (index 5): " + Last
+
+    # Maps (dictionaries)
+    User is {
+        name: "Alice",
+        age: 30,
+        active: True
+    }
+    Print "Map created with name, age, and active fields"
+    Print ""
+
+    # ============================================
+    # 4. CONTROL FLOW - If/Else
+    # ============================================
+    Print "=== 4. Control Flow: If/Else ==="
+    Score is 85
+    If Score > 90:
+        Print "Grade: A"
+    Else:
+        If Score > 80:
+            Print "Grade: B"
+        Else:
+            Print "Grade: C"
+    Print ""
+
+    # ============================================
+    # 5. PATTERN MATCHING - When/Is/Otherwise
+    # ============================================
+    Print "=== 5. Pattern Matching: When/Is/Otherwise ==="
+    Status is 200
+    When Status:
+        is 200:
+            Print "HTTP Status: OK"
+        is 404:
+            Print "HTTP Status: Not Found"
+        is 500:
+            Print "HTTP Status: Server Error"
+        Otherwise:
+            Print "HTTP Status: Unknown"
+    Print ""
+
+    # ============================================
+    # 6. LOOPS - Repeat, For Each
+    # ============================================
+    Print "=== 6. Loops ==="
+
+    # Repeat N times
+    Print "Repeat 3 times:"
+    Repeat 3 times:
+        Print "  - Iteration"
+
+    # Repeat with loop variable (1-indexed)
+    Print "Repeat with variable:"
+    Repeat 3 times with I:
+        Print "  - Iteration " + I
+
+    # For each
+    Print "For each in list:"
+    Items is ["Apple", "Banana", "Cherry"]
+    For each Fruit in Items:
+        Print "  - " + Fruit
+    Print ""
+
+    # ============================================
+    # 7. ERROR HANDLING - Try/Catch/Always
+    # ============================================
+    Print "=== 7. Error Handling: Try/Catch/Always ==="
+    Try:
+        Print "Attempting risky operation..."
+        TestValue is 100
+        # Simulate error by dividing by zero would fail, but we'll just continue
+        Print "Operation successful: " + TestValue
+    Catch Error:
+        Print "Caught error: " + Error
+    Always:
+        Print "Cleanup complete (Always runs)"
+    Print ""
+
+    # ============================================
+    # 8. OBJECT-ORIENTED PROGRAMMING
+    # ============================================
+    Print "=== 8. Object-Oriented Programming ==="
+
+    Create Person Called Alice
+    Set Alice.Name to "Alice"
+    Set Alice.Age to 30
+    Set Alice.Email to "alice@example.com"
+
+    Alice.Greet
+    Alice.Birthday
+    Info is Alice.GetInfo
+    Print "Info: " + Info
+    Print ""
+
+    # ============================================
+    # 9. REACTIVE WHEN OBSERVERS
+    # ============================================
+    Print "=== 9. Reactive When Observers (Self-Healing Data) ==="
+
+    Create Product Called Laptop
+    Set Laptop.BasePrice to 1000
+    # Observer fires automatically! Tax and FinalPrice update
+
+    Set Laptop.Discount to 0.1
+    # Observer fires again! FinalPrice recalculated
+
+    Price is Laptop.GetPrice
+    Print "Final price after discount: $" + Price
+    Print ""
+
+    # ============================================
+    # 10. CALCULATOR WITH METHODS
+    # ============================================
+    Print "=== 10. Methods with Named Parameters ==="
+
+    Create Calculator Called Calc
+
+    Sum is Calc.Add with 10 and 20
+    Print "10 + 20 = " + Sum
+
+    Diff is Calc.Subtract with 50 and 15
+    Print "50 - 15 = " + Diff
+
+    Product is Calc.Multiply with 6 and 7
+    Print "6 × 7 = " + Product
+
+    Quotient is Calc.Divide with 100 and 4
+    Print "100 ÷ 4 = " + Quotient
+
+    Pow is Calc.Power with 2 and 8
+    Print "2^8 = " + Pow
+    Print ""
+
+    # ============================================
+    # 11. CONTEXT-ORIENTED PROGRAMMING (Situations)
+    # ============================================
+    Print "=== 11. Context-Oriented Programming ==="
+
+    Create Person Called Bob
+    Set Bob.Name to "Bob"
+    Set Bob.Age to 25
+
+    Print "Normal mode:"
+    Bob.Greet
+
+    Print "VIP mode activated:"
+    Switch on VIPMode
+    Bob.Greet
+
+    Print "VIP mode deactivated:"
+    Switch off VIPMode
+    Bob.Greet
+    Print ""
+
+    # ============================================
+    # 12. PROCEED (Call Next Adjustment Layer)
+    # ============================================
+    Print "=== 12. Proceed (Call Base Implementation) ==="
+
+    Print "Without debug:"
+    Result1 is Calc.Add with 5 and 3
+    Print "Result: " + Result1
+
+    Print "With debug mode:"
+    Switch on DebugMode
+    Result2 is Calc.Add with 5 and 3
+    Print "Result: " + Result2
+    Switch off DebugMode
+    Print ""
+
+    # ============================================
+    # 13. OPTION TYPE (Some/None)
+    # ============================================
+    Print "=== 13. Option Type (Some/None) ==="
+
+    HasValue is Some(42)
+    NoValue is None
+
+    If HasValue.IsSome:
+        Value is HasValue.Unwrap()
+        Print "Has value: " + Value
+
+    SafeValue is NoValue.UnwrapOr(0)
+    Print "Safe unwrap with default: " + SafeValue
+    Print ""
+
+    # ============================================
+    # 14. WEAK REFERENCES
+    # ============================================
+    Print "=== 14. Weak References ==="
+
+    StrongList is [1, 2, 3, 4, 5]
+    WeakList is WeakRef(StrongList)
+
+    If WeakList.IsValid:
+        Print "Weak reference is valid"
+        Print "Weak reference can be restored when needed"
+    Print ""
+
+    # ============================================
+    # 15. STRING OPERATIONS
+    # ============================================
+    Print "=== 15. String Operations ==="
+
+    FirstName is "John"
+    LastName is "Doe"
+    FullName is FirstName + " " + LastName
+    Print "Concatenation: " + FullName
+
+    # String interpolation (future feature - currently use concatenation)
+    Age is 35
+    Message is "My name is " + FullName + " and I'm " + Age
+    Print "Template: " + Message
+    Print ""
+
+    # ============================================
+    # 16. COMMA-SEPARATED STATEMENTS
+    # ============================================
+    Print "=== 16. Comma-Separated Syntax ==="
+
+    Create Person Called Charlie
+    Set Charlie.Name to "Charlie", Set Charlie.Age to 40, Set Charlie.Email to "charlie@test.com"
+    Print "Created Charlie with comma-separated statements"
+    Charlie.Greet
+    Print ""
+
+    # ============================================
+    # 17. MATHEMATICAL OPERATIONS
+    # ============================================
+    Print "=== 17. Mathematical Operations ==="
+
+    A is 10, B is 3
+
+    Print A + " + " + B + " = " + (A + B)
+    Print A + " - " + B + " = " + (A - B)
+    Print A + " × " + B + " = " + (A * B)
+    Print A + " ÷ " + B + " = " + (A / B)
+    Print A + " % " + B + " = " + (A % B)
+
+    # Comparison operators
+    Print A + " > " + B + " = " + (A > B)
+    Print A + " < " + B + " = " + (A < B)
+    Print A + " = " + B + " = " + (A = B)
+
+    # Logical operators
+    IsTrue is True
+    IsFalse is False
+    Print "True and False = " + (IsTrue and IsFalse)
+    Print "True or False = " + (IsTrue or IsFalse)
+    Print "not True = " + (not IsTrue)
+    Print ""
+
+    # ============================================
+    # FINAL MESSAGE
+    # ============================================
+    Print "================================================"
+    Print "  All Features Showcased Successfully! ✓"
+    Print "================================================"
+    Print ""
+    Print "SFX Features Demonstrated:"
+    Print "  ✓ Mathematical honesty (0.1 + 0.2 = 0.3)"
+    Print "  ✓ 1-based indexing (List[1] is first)"
+    Print "  ✓ Grapheme clustering (emoji = 1 char)"
+    Print "  ✓ Concepts (OOP classes)"
+    Print "  ✓ Reactive When observers"
+    Print "  ✓ Situations (context-oriented)"
+    Print "  ✓ Control flow (If, When, Repeat, For)"
+    Print "  ✓ Error handling (Try/Catch/Always)"
+    Print "  ✓ Option types (Some/None)"
+    Print "  ✓ Weak references"
+    Print "  ✓ Comma-separated syntax"
+    Print "  ✓ Named method parameters"
+    Print "  ✓ Proceed (adjustment chaining)"
+    Print ""

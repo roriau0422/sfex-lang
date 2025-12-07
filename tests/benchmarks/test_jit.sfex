@@ -1,0 +1,34 @@
+# JIT Test - Simple method called many times to trigger JIT compilation
+
+Concept: Calculator
+    Value
+
+    To Add with Number:
+        Return This.Value + Number
+
+Story:
+    Print "Testing JIT Compilation..."
+    Print ""
+
+    # Create calculator
+    Create Calculator Called Calc
+    Set Calc.Value to 5
+
+    # Call method 150 times (threshold is 100)
+    # Should trigger JIT compilation around call #100
+    Print "Calling Add method 150 times..."
+
+    StartTime is Time.Precise()
+
+    Result is 0
+    Repeat 150 times:
+        Result is Calc.Add with 10
+
+    EndTime is Time.Precise()
+    Elapsed is EndTime - StartTime
+
+    Print "Final result: " + Result
+    Print "Time elapsed: " + Elapsed + " seconds"
+    Print ""
+    Print "JIT should have been triggered at call #100"
+    Print "(Check for 'JIT compilation' messages if compilation occurred)"

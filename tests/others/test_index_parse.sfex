@@ -1,0 +1,9 @@
+Story:
+    Data is { "title": "Test", "Body": "Content" }
+
+    Task is Do in background:
+        Value is Data["title"]
+        Print Value
+
+    Result is Task.Await()
+    Print "Done"

@@ -1,0 +1,33 @@
+Story:
+    Print "=== Testing Improved Detection ==="
+    Print ""
+
+    # Test JSON detection
+    Print "JSON file detection:"
+    JsonInfo is Data.Detect("tests/assets/products.json")
+    Print "  Format: " + JsonInfo["Format"]
+    Print "  MediaType: " + JsonInfo["MediaType"]
+    Print ""
+
+    # Test XML detection
+    Print "XML file detection:"
+    XmlInfo is Data.Detect("tests/assets/books.xml")
+    Print "  Format: " + XmlInfo["Format"]
+    Print "  MediaType: " + XmlInfo["MediaType"]
+    Print ""
+
+    # Test TOML detection
+    Print "TOML file detection:"
+    TomlInfo is Data.Detect("tests/assets/config.toml")
+    Print "  Format: " + TomlInfo["Format"]
+    Print "  MediaType: " + TomlInfo["MediaType"]
+    Print ""
+
+    # Test CSV detection
+    Print "CSV file detection:"
+    CsvInfo is Data.Detect("tests/assets/users.csv")
+    Print "  Format: " + CsvInfo["Format"]
+    Print "  MediaType: " + CsvInfo["MediaType"]
+    Print ""
+
+    Print "Detection test complete!"

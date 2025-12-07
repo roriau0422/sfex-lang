@@ -1,0 +1,10 @@
+Story:
+    Urls is ["url1", "url2"]
+
+    For each Url in Urls:
+        Worker is Do in background:
+            Print "URL: " + Url
+            Result is "done"
+            Print Result
+
+    Print "Complete"

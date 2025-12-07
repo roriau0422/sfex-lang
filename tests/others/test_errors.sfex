@@ -1,0 +1,53 @@
+# Test comprehensive error system
+
+Story:
+    Print "=== Error System Test ==="
+
+    # Test Error.System errors
+    Print ""
+    Print "1. System Errors:"
+    Err1 is Error.System.FileNotFound("config.json not found")
+    Print Err1
+    Print "Category: " + Error.GetCategory(Err1)
+    Print "Subtype: " + Error.GetSubtype(Err1)
+    Print "Message: " + Error.GetMessage(Err1)
+
+    # Test Error.Logic errors
+    Print ""
+    Print "2. Logic Errors:"
+    Err2 is Error.Logic.DivisionByZero("Cannot divide by zero")
+    Print Err2
+
+    # Test Error.Lookup errors
+    Print ""
+    Print "3. Lookup Errors:"
+    Err3 is Error.Lookup.KeyNotFound("Key 'age' not found in map")
+    Print Err3
+
+    # Test Error.Validation errors
+    Print ""
+    Print "4. Validation Errors:"
+    Err4 is Error.Validation.InvalidType("Expected Number, got String")
+    Print Err4
+
+    # Test Error.Panic errors
+    Print ""
+    Print "5. Panic Errors:"
+    Err5 is Error.Panic.TaskPanicked("Background task crashed unexpectedly")
+    Print Err5
+
+    # Test Error.IsError helper
+    Print ""
+    Print "6. Error.IsError tests:"
+    Print "Is Err1 an error? " + Error.IsError(Err1)
+    Print "Is 42 an error? " + Error.IsError(42)
+    Print "Is 'hello' an error? " + Error.IsError("hello")
+
+    # Test error creation without message
+    Print ""
+    Print "7. Error without message:"
+    Err6 is Error.System.NetworkError()
+    Print Err6
+
+    Print ""
+    Print "=== All Error Tests Complete ==="

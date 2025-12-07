@@ -1,0 +1,51 @@
+# Test channel communication between tasks
+
+Story:
+    Print "=== Channel Test ==="
+
+    # Create a channel
+    Ch is Channel.Create(10)
+
+    # Spawn producer task
+    Producer is Do in background:
+        Print "Producer: Sending messages..."
+        Ch.Send(100)
+        Print "Producer: Sent 100"
+        Ch.Send(200)
+        Print "Producer: Sent 200"
+        Ch.Send(300)
+        Print "Producer: Sent 300"
+        Return True
+
+    # Spawn consumer task
+    Consumer is Do in background:
+        Print "Consumer: Waiting for messages..."
+        Msg1 is Ch.Receive()
+        Print "Consumer: Received"
+        Print Msg1
+
+        Msg2 is Ch.Receive()
+        Print "Consumer: Received"
+        Print Msg2
+
+        Msg3 is Ch.Receive()
+        Print "Consumer: Received"
+        Print Msg3
+
+        Total is Msg1 + Msg2 + Msg3
+        Print "Consumer: Total ="
+        Print Total
+        Return Total
+
+    Print "Main: Tasks spawned"
+
+    # Wait for both tasks
+    ProducerResult is Producer.Await()
+    ConsumerResult is Consumer.Await()
+
+    Print "Main: Producer result ="
+    Print ProducerResult
+    Print "Main: Consumer result ="
+    Print ConsumerResult
+
+    Print "=== Test Complete ==="

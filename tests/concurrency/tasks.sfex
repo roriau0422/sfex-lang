@@ -1,0 +1,88 @@
+# Test Task Cancellation
+
+Story:
+    Print "=== Task Cancellation Test ==="
+
+    # Test 1: Check cancellation status before cancelling
+    Print ""
+    Print "1. Check initial cancellation status:"
+    Task1 is Do in background:
+        Counter is 0
+        Repeat 100000 times:
+            Counter is Counter + 1
+        Return Counter
+
+    IsCancelled1 is Task.IsCancelled(Task1)
+    Print "Before cancel: IsCancelled = " + IsCancelled1
+
+    # Test 2: Cancel a task and check status
+    Print ""
+    Print "2. Cancel task and check status:"
+    Task.Cancel(Task1)
+    IsCancelled2 is Task.IsCancelled(Task1)
+    Print "After cancel: IsCancelled = " + IsCancelled2
+
+    # Wait for task (it will complete anyway since we don't check cancellation inside)
+    Result1 is Task1.Await()
+    Print "Task completed with: " + Result1
+
+    # Test 3: Cancel before task starts heavy work
+    Print ""
+    Print "3. Cancel task early:"
+    Task2 is Do in background:
+        Print "Task2: Started"
+        Counter is 0
+        Repeat 50000 times:
+            Counter is Counter + 1
+        Print "Task2: Finished work"
+        Return 999
+
+    # Cancel immediately
+    Task.Cancel(Task2)
+    Print "Task2 cancelled immediately"
+    Print "IsCancelled: " + Task.IsCancelled(Task2)
+
+    Result2 is Task2.Await()
+    Print "Task2 result: " + Result2
+
+    # Test 4: Multiple tasks with selective cancellation
+    Print ""
+    Print "4. Multiple tasks with selective cancellation:"
+    TaskA is Do in background:
+        Counter is 0
+        Repeat 30000 times:
+            Counter is Counter + 1
+        Return 100
+
+    TaskB is Do in background:
+        Counter is 0
+        Repeat 30000 times:
+            Counter is Counter + 1
+        Return 200
+
+    TaskC is Do in background:
+        Counter is 0
+        Repeat 30000 times:
+            Counter is Counter + 1
+        Return 300
+
+    # Cancel only TaskB
+    Task.Cancel(TaskB)
+    Print "TaskB cancelled"
+    Print "TaskA cancelled? " + Task.IsCancelled(TaskA)
+    Print "TaskB cancelled? " + Task.IsCancelled(TaskB)
+    Print "TaskC cancelled? " + Task.IsCancelled(TaskC)
+
+    # Wait for all
+    ResultA is TaskA.Await()
+    ResultB is TaskB.Await()
+    ResultC is TaskC.Await()
+
+    Print "Results: A=" + ResultA + ", B=" + ResultB + ", C=" + ResultC
+
+    Print ""
+    Print "=== All Cancellation Tests Complete ==="
+    Print ""
+    Print "NOTE: Tasks complete anyway because SFX code doesn't check"
+    Print "      cancellation status. In real usage, tasks should"
+    Print "      periodically check Task.IsCancelled(TaskHandle) and exit."

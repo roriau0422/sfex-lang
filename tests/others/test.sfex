@@ -1,0 +1,2 @@
+Story:
+    Print Data.Detect("tests/assets/products.json")

@@ -1,0 +1,7 @@
+Story:
+    Multi is """Hello 👋
+Welcome 🧑
+Goodbye 🎉"""
+    SingleLine is "Hello 🧑 "World""
+    Print SingleLine
+    Print Multi

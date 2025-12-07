@@ -1,0 +1,10 @@
+Story:
+    Raw is "<html><body><div class='product'>Laptop</div><div class='product'>Phone</div><a href='/buy'>Buy</a></body></html>"
+    Page is HTML.Parse(Raw)
+    
+    Products is Page.SelectText(".product")
+    Print "Found product: " + Products[1]
+    Print "Found product: " + Products[2]
+    
+    Links is Page.SelectAttr("a", "href")
+    Print "Link to: " + Links[1]

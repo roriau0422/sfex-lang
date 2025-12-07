@@ -1,0 +1,39 @@
+Story:
+    Print "=== UDP Client Test ==="
+    Print "Setting up UDP client on 127.0.0.1:7777"
+    Print ""
+
+    # Bind UDP socket
+    Socket is UDP.Bind("127.0.0.1:7777")
+    Print "✓ Socket bound to port 7777"
+    Print ""
+
+    # Test 1: Send and receive
+    Print "Test 1: Send and receive"
+    BytesSent is Socket.SendTo("Hello UDP!", "127.0.0.1:8888")
+    Print "Sent: Hello UDP! (" + BytesSent + " bytes)"
+    Result1 is Socket.ReceiveFrom()
+    Response1 is Result1["Data"]
+    Print "Received: " + Response1
+    Print ""
+
+    # Test 2: Second message
+    Print "Test 2: Second message"
+    Socket.SendTo("SFX Language", "127.0.0.1:8888")
+    Print "Sent: SFX Language"
+    Result2 is Socket.ReceiveFrom()
+    Response2 is Result2["Data"]
+    Print "Received: " + Response2
+    Print ""
+
+    # Test 3: Connected mode
+    Print "Test 3: Using connected mode"
+    Socket.Connect("127.0.0.1:8888")
+    Print "✓ Connected to server"
+    Socket.Send("Connected UDP!")
+    Print "Sent: Connected UDP!"
+    Response3 is Socket.Receive()
+    Print "Received: " + Response3
+    Print ""
+
+    Print "=== UDP Client test completed! ==="

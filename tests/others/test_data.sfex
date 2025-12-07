@@ -1,0 +1,9 @@
+Story:
+    ConfigStr is "title = \"SFX\"\nversion = 1.0"
+    Config is TOML.Parse(ConfigStr)
+    Print "Project: " + Config["title"]
+
+    CsvStr is "Product,Price\nApple,100\nBanana,50"
+    Data is CSV.Parse(CsvStr)
+    Print "First Item: " + Data[1]["Product"]
+    Print "First Price: " + Data[1]["Price"]

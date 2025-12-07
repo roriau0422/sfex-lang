@@ -1,0 +1,40 @@
+Concept: SafeProduct
+    Price
+    Tax
+    Total
+
+    When Price changes:
+        Set This.Tax to This.Price * 0.1
+        Set This.Total to This.Price + This.Tax
+        Print "  [When fired] Price updated -> Tax: " + This.Tax + ", Total: " + This.Total
+
+    When Tax changes:
+        # This is safe - Tax changes don't trigger more Tax changes
+        Print "  [When fired] Tax updated to: " + This.Tax
+
+Story:
+    Print "=== Testing Reactive When with Multiple Observers ==="
+    Print ""
+
+    Create SafeProduct Called Item
+    Set Item.Price to 0
+    Set Item.Tax to 0
+    Set Item.Total to 0
+
+    Print "Test 1: Setting Price triggers cascading updates"
+    Set Item.Price to 100
+    Print "Result: Price=" + Item.Price + ", Tax=" + Item.Tax + ", Total=" + Item.Total
+    Print ""
+
+    Print "Test 2: Multiple price updates"  
+    Set Item.Price to 200
+    Print "Result: Price=" + Item.Price + ", Tax=" + Item.Tax + ", Total=" + Item.Total
+    Print ""
+
+    Print "Test 3: Direct Tax update doesn't cause recursion"
+    Set Item.Tax to 50
+    Print "Result: Tax manually set to: " + Item.Tax
+    Print ""
+
+    Print "=== All Tests Complete! ==="
+    Print "Note: Recursion guard has MAX_DEPTH=10 to prevent infinite loops"

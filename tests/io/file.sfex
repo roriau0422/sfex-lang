@@ -1,0 +1,10 @@
+Story:
+    Print "Writing to file..."
+    File.Write("test.txt", "This is a test from SFX!")
+    
+    If File.Exists("test.txt"):
+        Print "File created successfully!"
+        Content is File.Read("test.txt")
+        Print "Content: " + Content
+    Else:
+        Print "Failed to create file."

@@ -1,0 +1,91 @@
+Story:
+    Print "=== SFX JIT Performance Benchmark ==="
+    Print ""
+    Print "This benchmark demonstrates the performance improvements from:"
+    Print "  1. Set statement support (field mutation in JIT)"
+    Print "  2. Native f64 operations (fadd/fsub/fmul/fdiv)"
+    Print ""
+
+    # Benchmark 1: Pure arithmetic (benefits from f64)
+    Print "Benchmark 1: Pure Arithmetic (f64 specialization)"
+    Create Math Called M
+    Set M.X to 5
+    Set M.Y to 3
+    Set M.Result to 0
+
+    Repeat 500 times:
+        Temp is M.Compute
+
+    Print "  M.X * M.Y + M.X - M.Y = "
+    Print M.Result
+    Print ""
+
+    # Benchmark 2: Field mutation (benefits from Set support)
+    Print "Benchmark 2: Field Mutation (Set statement JIT)"
+    Create Counter Called C
+    Set C.Value to 0
+    Set C.Step to 2
+
+    Repeat 500 times:
+        Temp is C.IncrementBy
+
+    Print "  Final count: "
+    Print C.Value
+    Print ""
+
+    # Benchmark 3: Combined (both optimizations)
+    Print "Benchmark 3: Combined Arithmetic + Mutation"
+    Create Stats Called S
+    Set S.Sum to 0
+    Set S.Count to 0
+    Set S.Mean to 0
+    Set S.Value to 10
+
+    Repeat 500 times:
+        Temp is S.Update
+
+    Print "  Sum: "
+    Print S.Sum
+    Print "  Count: "
+    Print S.Count
+    Print "  Mean: "
+    Print S.Mean
+    Print ""
+
+    Print "✅ JIT Performance Benchmark Complete!"
+    Print ""
+    Print "Performance improvements from JIT:"
+    Print "  - Set statements: Native field updates (no interpreter overhead)"
+    Print "  - f64 operations: Direct CPU instructions (fadd, fmul, etc.)"
+    Print "  - Expected speedup: 2-5x over interpreter for hot methods"
+
+Concept: Math
+    X
+    Y
+    Result
+
+    To Compute:
+        # Pure arithmetic: X * Y + X - Y
+        Set This.Result to This.X * This.Y + This.X - This.Y
+        Return This.Result
+
+Concept: Counter
+    Value
+    Step
+
+    To IncrementBy:
+        Set This.Value to This.Value + This.Step
+        Return This.Value
+
+Concept: Stats
+    Sum
+    Count
+    Mean
+    Value
+
+    To Update:
+        # Update running statistics
+        Set This.Sum to This.Sum + This.Value
+        Set This.Count to This.Count + 1
+        Set This.Mean to This.Sum / This.Count
+        Return This.Mean

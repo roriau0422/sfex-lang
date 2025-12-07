@@ -1,0 +1,38 @@
+Story:
+    Print "=== HTTP + JSON Integration Test ==="
+    Print ""
+
+    # Fetch JSON from JSONPlaceholder API
+    Print "Fetching data from: https://jsonplaceholder.typicode.com/todos/1"
+    Response is HTTP.Get("https://jsonplaceholder.typicode.com/todos/1")
+
+    # Check response status
+    Status is Response["Status"]
+    Print "Response status: " + Status
+    Print ""
+
+    # Get response body
+    Body is Response["Body"]
+    Print "Raw JSON response:"
+    Print Body
+    Print ""
+
+    # Parse JSON
+    Print "Parsing JSON..."
+    Todo is JSON.Parse(Body)
+
+    # Extract fields
+    UserId is Todo["userId"]
+    Id is Todo["id"]
+    Title is Todo["title"]
+    Completed is Todo["completed"]
+
+    # Display parsed data
+    Print "Parsed Todo Item:"
+    Print "  User ID: " + UserId
+    Print "  Todo ID: " + Id
+    Print "  Title: " + Title
+    Print "  Completed: " + Completed
+    Print ""
+
+    Print "✓ HTTP + JSON integration test completed!"

@@ -1,0 +1,42 @@
+Story:
+    Print "Testing Real Source Line Numbers"
+    Print "================================"
+    Print ""
+
+    # Test 1: Error on line 10
+    Print "Test 1: Error should be on line 10"
+    Try:
+        Print "Line 9: Before error"
+        X is UndefinedVariable
+        Print "Line 11: Should not reach"
+    Catch error:
+        Print "Caught error at source line: " + error.line
+        Print "Expected: 10, Got: " + error.line
+    Print ""
+
+    # Test 2: Error on line 23
+    Print "Test 2: Error should be on line 23"
+    Try:
+        A is 1
+        B is 2
+        C is 3
+        Bad is AnotherUndefined
+        Print "Should not reach"
+    Catch err:
+        Print "Caught error at source line: " + err.line
+        Print "Expected: 23, Got: " + err.line
+    Print ""
+
+    # Test 3: Error on line 34
+    Print "Test 3: Error should be on line 34"
+    Try:
+        Items is [1, 2, 3]
+        Item is Items[0]
+        Print "Should not reach"
+    Catch e:
+        Print "Caught error at source line: " + e.line
+        Print "Expected: 34, Got: " + e.line
+        Print "Error: " + e.type + " - " + e.message
+
+    Print ""
+    Print "All tests complete!"

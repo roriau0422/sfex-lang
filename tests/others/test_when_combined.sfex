@@ -1,0 +1,31 @@
+Concept: SmartStudent
+    Score
+    Grade
+
+    # 1. REACTIVE OBSERVER (Concept Level)
+    # This runs automatically when Score changes
+    When Score changes:
+        Print ">> Observer: Score changed to " + This.Score
+        
+        # 2. PATTERN MATCHING (Statement Level)
+        # This logic is nested inside the observer!
+        When This.Score:
+            is 100:
+                Set This.Grade to "A+"
+            is 90:
+                Set This.Grade to "A"
+            Otherwise:
+                Set This.Grade to "B"
+
+Story:
+    Print "=== Testing Combined When Semantics ==="
+    
+    Create SmartStudent Called Temka
+    
+    Print "1. Setting Score to 90..."
+    Set Temka.Score to 90
+    Print "   Result Grade: " + Temka.Grade
+    
+    Print "2. Setting Score to 100..."
+    Set Temka.Score to 100
+    Print "   Result Grade: " + Temka.Grade

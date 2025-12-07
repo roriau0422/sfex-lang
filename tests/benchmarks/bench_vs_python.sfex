@@ -1,0 +1,77 @@
+# Heavy Benchmark Suite for SFX
+# Goal: Stress test the Tree-Walker and Context Dispatcher
+
+Concept: Item
+    Value
+
+Concept: Calculator
+    Result
+    To Add with Val:
+        Set This.Result to This.Result + Val
+
+Story:
+    Print "=== SFX HEAVY BENCHMARK ==="
+    Print ""
+
+    # -------------------------------------------------
+    # TEST 1: The Loop (1,000,000 iterations)
+    # Stress: Lexer/Parser overhead, BigInt Math
+    # -------------------------------------------------
+    Print "1. Loop (1,000,000 ops)..."
+
+    StartTime is Time.Precise()
+    Sum is 0
+    Repeat 1000000 times:
+        Sum is Sum + 1
+    EndTime is Time.Precise()
+
+    ElapsedLoop is EndTime - StartTime
+    Print "   Done. Sum: " + Sum
+    Print "   Time: " + ElapsedLoop + " seconds"
+    Print ""
+
+    # -------------------------------------------------
+    # TEST 2: Allocation (10,000 Objects)
+    # Stress: Memory Allocator, HashMap creation
+    # -------------------------------------------------
+    Print "2. Allocation (10,000 objects)..."
+
+    StartTime is Time.Precise()
+    Repeat 10000 times:
+        Create Item Called Thing
+        Set Thing.Value to 100
+    EndTime is Time.Precise()
+
+    ElapsedAlloc is EndTime - StartTime
+    Print "   Done."
+    Print "   Time: " + ElapsedAlloc + " seconds"
+    Print ""
+
+    # -------------------------------------------------
+    # TEST 3: The Dispatcher (100,000 Calls)
+    # Stress: Context Stack Lookup, Method Binding
+    # -------------------------------------------------
+    Print "3. Dispatch (100,000 calls)..."
+
+    Create Calculator Called Calc
+    Set Calc.Result to 0
+
+    StartTime is Time.Precise()
+    Repeat 100000 times:
+        Calc.Add with 1
+    EndTime is Time.Precise()
+
+    ElapsedDispatch is EndTime - StartTime
+    Print "   Done. Result: " + Calc.Result
+    Print "   Time: " + ElapsedDispatch + " seconds"
+    Print ""
+
+    # -------------------------------------------------
+    # SUMMARY
+    # -------------------------------------------------
+    TotalTime is ElapsedLoop + ElapsedAlloc + ElapsedDispatch
+    Print "=== SUMMARY ==="
+    Print "Loop:       " + ElapsedLoop + "s"
+    Print "Allocation: " + ElapsedAlloc + "s"
+    Print "Dispatch:   " + ElapsedDispatch + "s"
+    Print "Total:      " + TotalTime + "s"

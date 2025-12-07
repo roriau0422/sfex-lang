@@ -1,0 +1,72 @@
+Story:
+    Print "=== Testing Reactive When System ==="
+    Print ""
+
+    # Test 1: Basic When Trigger
+    Print "1. Basic When Trigger (Price -> Tax auto-calculation):"
+
+Concept: Product
+    Price
+    Tax
+
+    When Price changes:
+        Set This.Tax to This.Price * 0.1
+        Print "   [When fired] Tax auto-calculated to: " + This.Tax
+
+Story:
+    Create Product called Phone
+    Set Phone.Tax to 0
+
+    Print "   Setting Phone.Price to 100..."
+    Set Phone.Price to 100
+    Print "   Phone.Price: " + Phone.Price
+    Print "   Phone.Tax: " + Phone.Tax
+    Print ""
+
+    # Test 2: Multiple Property Updates
+    Print "2. Multiple Updates (each triggers When):"
+    Print "   Setting Phone.Price to 200..."
+    Set Phone.Price to 200
+    Print "   Phone.Tax: " + Phone.Tax
+
+    Print "   Setting Phone.Price to 50..."
+    Set Phone.Price to 50
+    Print "   Phone.Tax: " + Phone.Tax
+    Print ""
+
+    # Test 3: Self-Healing Data (Business Logic)
+    Print "3. Self-Healing Data (Discount auto-applies):"
+
+Concept: Item
+    BasePrice
+    Discount
+    FinalPrice
+
+    When BasePrice changes:
+        Set This.FinalPrice to This.BasePrice * (1 - This.Discount)
+        Print "   [When fired] FinalPrice recalculated: " + This.FinalPrice
+
+    When Discount changes:
+        Set This.FinalPrice to This.BasePrice * (1 - This.Discount)
+        Print "   [When fired] FinalPrice recalculated: " + This.FinalPrice
+
+Story:
+    Create Item called Laptop
+    Set Laptop.BasePrice to 1000
+    Set Laptop.Discount to 0
+    Set Laptop.FinalPrice to 0
+
+    Print "   Initial: BasePrice=1000, Discount=0"
+    Set Laptop.BasePrice to 1000
+    Print "   FinalPrice: " + Laptop.FinalPrice
+
+    Print "   Applying 20% discount..."
+    Set Laptop.Discount to 0.2
+    Print "   FinalPrice: " + Laptop.FinalPrice
+
+    Print "   Changing BasePrice to 500..."
+    Set Laptop.BasePrice to 500
+    Print "   FinalPrice: " + Laptop.FinalPrice
+
+    Print ""
+    Print "=== All When Tests Complete! ==="

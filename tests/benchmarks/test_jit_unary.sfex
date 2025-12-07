@@ -1,0 +1,37 @@
+# Test JIT compilation of unary operators
+
+Concept: Math
+    To Negate with X:
+        Return -X
+
+    To IsZero with X:
+        Return not X
+
+Story:
+    Print "=== JIT UNARY OPERATORS TEST ==="
+    Print ""
+
+    Create Math Called M
+
+    Print "Testing Negate (120 calls to trigger JIT)..."
+    Result is 0
+    Repeat 120 times:
+        Result is M.Negate with 42
+
+    Print "Negate(42): " + Result + " (expected: -42)"
+    Print ""
+
+    Print "Testing Not/IsZero (120 calls to trigger JIT)..."
+    Result1 is 0
+    Repeat 120 times:
+        Result1 is M.IsZero with 0
+
+    Print "IsZero(0): " + Result1 + " (expected: 1 for true)"
+
+    Result2 is 0
+    Repeat 120 times:
+        Result2 is M.IsZero with 5
+
+    Print "IsZero(5): " + Result2 + " (expected: 0 for false)"
+    Print ""
+    Print "All unary operator tests complete!"

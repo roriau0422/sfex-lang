@@ -1,0 +1,27 @@
+# Million call benchmark to see true JIT speedup
+
+Concept: Math
+    To Double with X:
+        Return X + X
+
+Story:
+    Print "=== JIT 1 MILLION CALL BENCHMARK ==="
+    Print ""
+
+    Create Math Called M
+
+    Print "Calling Double 1,000,000 times..."
+    StartTime is Time.Precise()
+
+    Result is 0
+    Repeat 1000000 times:
+        Result is M.Double with 5
+
+    EndTime is Time.Precise()
+    Elapsed is EndTime - StartTime
+
+    Print "Done. Result: " + Result
+    Print "Time: " + Elapsed + " seconds"
+    Print "Throughput: " + (1000000 / Elapsed) + " calls/sec"
+    Print ""
+    Print "(99.99% of calls use JIT - should show true JIT performance)"

@@ -1,0 +1,93 @@
+Story:
+    Print "=== Matrix Math Benchmark ==="
+    Print ""
+    Print "Testing JIT with 3x3 matrix determinant"
+    Print ""
+
+    # Interpreter benchmark (99 calls)
+    Create Matrix3 Called M1
+    Set M1.M00 to 3 Set M1.M01 to 2
+    Set M1.M02 to 1
+    Set M1.M10 to 4
+    Set M1.M11 to 5
+    Set M1.M12 to 6
+    Set M1.M20 to 7
+    Set M1.M21 to 8
+    Set M1.M22 to 9
+
+    Print "1. Interpreter (99 calls):"
+    Start is Time.Precise()
+    Repeat 99 times:
+        Det is M1.DeterminantOptimized
+    End is Time.Precise()
+    Time1 is End - Start
+    Rate1 is 99 / Time1
+    Print "   Rate: " + Rate1 + " calls/sec"
+    Print ""
+
+    # JIT benchmark (1M calls)
+    Create Matrix3 Called M2
+    Set M2.M00 to 3
+    Set M2.M01 to 2
+    Set M2.M02 to 1
+    Set M2.M10 to 4
+    Set M2.M11 to 5
+    Set M2.M12 to 6
+    Set M2.M20 to 7
+    Set M2.M21 to 8
+    Set M2.M22 to 9
+
+    Print "2. JIT (1,000,000 calls):"
+    Start is Time.Precise()
+    Repeat 1000000 times:
+        Det is M2.DeterminantOptimized
+    End is Time.Precise()
+    Time2 is End - Start
+    Rate2 is 1000000 / Time2
+    Print "   Rate: " + Rate2 + " calls/sec"
+    Print ""
+
+    # Results
+    Print "=== Results ==="
+    Speedup is Rate2 / Rate1
+    Print "Speedup: " + Speedup + "x"
+    FinalDet is M2.DeterminantOptimized
+    Print "Determinant: " + FinalDet + " (expected: 0)"
+
+Concept: Matrix3
+    M00
+    M01
+    M02
+    M10
+    M11
+    M12
+    M20
+    M21
+    M22
+
+    To DeterminantOptimized:
+        # Load fields into locals ONCE
+        A00 is This.M00
+        A01 is This.M01
+        A02 is This.M02
+        A10 is This.M10
+        A11 is This.M11
+        A12 is This.M12
+        A20 is This.M20
+        A21 is This.M21
+        A22 is This.M22
+        
+        # Now all arithmetic is on locals (fast!)
+        P1 is A00 * A11 * A22
+        P2 is A01 * A12 * A20
+        P3 is A02 * A10 * A21
+        
+        N1 is A02 * A11 * A20
+        N2 is A01 * A10 * A22
+        N3 is A00 * A12 * A21
+        
+        Positive is P1 + P2 + P3
+        Negative is N1 + N2 + N3
+        
+        Det is Positive - Negative
+        Return Det

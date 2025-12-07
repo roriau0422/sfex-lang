@@ -1,0 +1,58 @@
+Story:
+    Print "=== SFX AI DEMO: RAG PATTERN ==="
+    
+    # Check for API key
+    If Env.Has("OPENAI_API_KEY"):
+        Print "✓ OPENAI_API_KEY found"
+    Else:
+        Print "✗ OPENAI_API_KEY not found!"
+        Print "  Set it via: Env.Load(\".env\") or export OPENAI_API_KEY=sk-..."
+        Print "  Skipping tests."
+        Print ""
+        # Exit early if no API key
+        Print "=== Tests Skipped ==="
+        Print ""
+
+    Print ""
+
+    # 2. Configure the AI
+    # We use a Map for options, keeping the syntax clean
+    AiConfig is { 
+        model: "gpt-4o-mini", 
+        temperature: 0.5 
+    }
+
+    # 3. Simple Interaction
+    Print ""
+    Print "[1/2] Warming up the Brain..."
+    
+    Question is "What is the capital of Mongolia? Answer in 1 sentence."
+    Response is LLM.Simple(Question, AiConfig)
+    
+    # The API returns a Map, so we extract the Content
+    Print "AI: " + Response["Content"]
+
+    # 4. RAG Pattern (The "Killer Feature")
+    # We fetch raw data, inject it into the prompt, and ask for a summary.
+    
+    Print ""
+    Print "[2/2] Executing RAG Workflow..."
+    Print "   1. Fetching live business data..."
+    
+    # Fetch a dummy "Todo" item from the web
+    RawResponse is HTTP.Get("https://jsonplaceholder.typicode.com/todos/1")
+    JsonData is RawResponse["Body"]
+    
+    Print "   2. Data received: " + JsonData
+    Print "   3. Sending to AI for analysis..."
+    
+    # Construct the Prompt with the data
+    Prompt is "You are an Executive Assistant. Summarize this raw JSON data into a polite email for the boss:\n\n" + JsonData
+    
+    # Ask the LLM
+    Summary is LLM.Simple(Prompt, AiConfig)
+    
+    Print ""
+    Print "=== 📧 GENERATED EMAIL ==="
+    Print Summary["Content"]
+    Print "=========================="

@@ -1,0 +1,39 @@
+Story:
+    Print "=== TCP Client Test ==="
+    Print "Connecting to server at 127.0.0.1:9999"
+    Print ""
+
+    # Connect to server
+    Connection is TCP.Connect("127.0.0.1:9999")
+    Print "✓ Connected to server"
+    Print ""
+
+    # Send message 1
+    Print "Test 1: Send and receive"
+    Connection.Send("Hello TCP!")
+    Response1 is Connection.Receive()
+    Print "Sent: Hello TCP!"
+    Print "Received: " + Response1
+    Print ""
+
+    # Send message 2
+    Print "Test 2: Second message"
+    Connection.Send("SFX Language")
+    Response2 is Connection.Receive()
+    Print "Sent: SFX Language"
+    Print "Received: " + Response2
+    Print ""
+
+    # Send message 3
+    Print "Test 3: Third message"
+    Connection.Send("Networking works!")
+    Response3 is Connection.Receive()
+    Print "Sent: Networking works!"
+    Print "Received: " + Response3
+    Print ""
+
+    # Close connection
+    Connection.Close()
+    Print "✓ Connection closed"
+    Print ""
+    Print "=== TCP Client test completed! ==="

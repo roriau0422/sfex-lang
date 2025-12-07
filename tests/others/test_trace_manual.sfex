@@ -1,0 +1,64 @@
+Story:
+    Create Calculator Called C
+    Set C.A to 10.0
+    Set C.B to 5.0
+    Set C.C to 3.0
+    Set C.D to 2.0
+
+    R1 is C.Step1
+    Print "Step1: " + R1
+
+    R2 is C.Step2
+    Print "Step2: " + R2
+
+    R3 is C.Step3
+    Print "Step3: " + R3
+
+    R4 is C.Step4
+    Print "Step4: " + R4
+
+    R5 is C.Step5
+    Print "Step5: " + R5
+
+    Total is R1 + R2 + R3 + R4 + R5
+    Print "Total: " + Total
+
+Concept: Calculator
+    A
+    B
+    C
+    D
+
+    To Step1:
+        Sum is This.A + This.B
+        Product is This.A * This.B
+        Result is Sum + Product
+        Return Result
+
+    To Step2:
+        Diff is This.A - This.B
+        Quot is This.A / This.B
+        Result is Diff + Quot
+        Return Result
+
+    To Step3:
+        Temp1 is This.C * This.C
+        Temp2 is This.D * This.D
+        Temp3 is Temp1 + Temp2
+        Result is Temp3 * This.A
+        Return Result
+
+    To Step4:
+        X is This.B + This.C
+        Y is X * This.D
+        Z is Y - This.A
+        Final is Z + This.B
+        Return Final
+
+    To Step5:
+        V1 is This.A / This.D
+        V2 is This.B * This.C
+        V3 is V1 + V2
+        V4 is V3 - This.C
+        V5 is V4 + This.D
+        Return V5

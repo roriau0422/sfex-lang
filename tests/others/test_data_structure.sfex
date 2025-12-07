@@ -1,0 +1,87 @@
+# Test Data.Structure() - Introspect data schemas
+
+Story:
+    Print "=== Data.Structure() - Schema Introspection ==="
+    Print ""
+
+    # Test 1: Simple types
+    Print "Test 1: Simple Types"
+    Print "----------------------------------------"
+    NumSchema is Data.Structure(42)
+    Print "Number: " + NumSchema
+
+    StrSchema is Data.Structure("Hello")
+    Print "String: " + StrSchema
+
+    BoolSchema is Data.Structure(True)
+    Print "Boolean: " + BoolSchema
+    Print ""
+
+    # Test 2: Homogeneous list
+    Print "Test 2: Homogeneous List"
+    Print "----------------------------------------"
+    Numbers is [1, 2, 3, 4, 5]
+    NumListSchema is Data.Structure(Numbers)
+    Print "Type: " + NumListSchema["type"]
+    Print "Count: " + NumListSchema["count"]
+    Print "Items: " + NumListSchema["items"]
+    Print ""
+
+    # Test 3: Parse JSON and inspect structure
+    Print "Test 3: JSON Products Structure"
+    Print "----------------------------------------"
+    Products is Data.Parse("tests/assets/products.json")
+    ProductSchema is Data.Structure(Products)
+    Print "Type: " + ProductSchema["type"]
+    Print "Count: " + ProductSchema["count"]
+    Print "Product item structure:"
+    ItemSchema is ProductSchema["items"]
+    Print "  - name: " + ItemSchema["name"]
+    Print "  - price: " + ItemSchema["price"]
+    Print "  - stock: " + ItemSchema["stock"]
+    Print ""
+
+    # Test 4: Nested structure from TOML
+    Print "Test 4: TOML Config Structure"
+    Print "----------------------------------------"
+    Config is Data.Parse("tests/assets/config.toml")
+    ConfigSchema is Data.Structure(Config)
+    Print "Top-level keys:"
+    Print "  - app: (Map)"
+    AppSchema is ConfigSchema["app"]
+    Print "    - name: " + AppSchema["name"]
+    Print "    - version: " + AppSchema["version"]
+    Print "    - description: " + AppSchema["description"]
+    Print "  - database: (Map)"
+    DbSchema is ConfigSchema["database"]
+    Print "    - host: " + DbSchema["host"]
+    Print "    - port: " + DbSchema["port"]
+    Print "    - name: " + DbSchema["name"]
+    Print ""
+
+    # Test 5: Complex nested structure
+    Print "Test 5: Complex Nested Structure"
+    Print "----------------------------------------"
+    User is { name: "Alice", age: 30, tags: ["developer", "gopher", "rustacean"], settings: { theme: "dark", notifications: True } }
+    UserSchema is Data.Structure(User)
+    Print "User schema:"
+    Print "  - name: " + UserSchema["name"]
+    Print "  - age: " + UserSchema["age"]
+    Print "  - tags: (List)"
+    TagsSchema is UserSchema["tags"]
+    Print "    - type: " + TagsSchema["type"]
+    Print "    - count: " + TagsSchema["count"]
+    Print "    - items: " + TagsSchema["items"]
+    Print "  - settings: (Map)"
+    SettingsSchema is UserSchema["settings"]
+    Print "    - theme: " + SettingsSchema["theme"]
+    Print "    - notifications: " + SettingsSchema["notifications"]
+    Print ""
+
+    Print "✓ Data.Structure() complete!"
+    Print ""
+    Print "Use Cases:"
+    Print "  - API exploration (inspect unknown JSON responses)"
+    Print "  - Data discovery (understand file structure quickly)"
+    Print "  - Debugging (verify expected vs actual structure)"
+    Print "  - Documentation (generate schema snapshots)"

@@ -1,0 +1,134 @@
+Story:
+    Print "=========================================="
+    Print "Testing Try/Catch with Specific Error Types"
+    Print "=========================================="
+    Print ""
+
+    # Test 1: Catch UndefinedVariable error
+    Print "Test 1: Catching UndefinedVariable"
+    Try:
+        X is UnknownVariable
+        Print "Should not reach here"
+    Catch error:
+        When error.type:
+            is "UndefinedVariable":
+                Print "  Caught undefined variable!"
+                Print "  Message: " + error.message
+            is "IndexError":
+                Print "  Index error (shouldn't happen)"
+            Otherwise:
+                Print "  Unknown error type"
+    Always:
+        Print "  Cleanup done"
+    Print ""
+
+    # Test 2: Catch IndexError
+    Print "Test 2: Catching IndexError"
+    Try:
+        Items is [1, 2, 3]
+        BadItem is Items[0]  # 0-index should fail (1-based indexing)
+        Print "Should not reach here"
+    Catch error:
+        When error.type:
+            is "IndexError":
+                Print "  Caught index error!"
+                Print "  Message: " + error.message
+            is "TypeError":
+                Print "  Type error (shouldn't happen)"
+            Otherwise:
+                Print "  Unknown error: " + error.type
+    Always:
+        Print "  Cleanup done"
+    Print ""
+
+    # Test 3: Multiple Try/Catch with different error types
+    Print "Test 3: Multiple operations with different errors"
+
+    # First operation - UndefinedVariable
+    Try:
+        Result is MissingVar
+    Catch err:
+        When err.type:
+            is "UndefinedVariable":
+                Print "  [1] Undefined variable caught: " + err.message
+            Otherwise:
+                Print "  [1] Other error"
+
+    # Second operation - IndexError
+    Try:
+        List is [10, 20, 30]
+        Value is List[0]
+    Catch err:
+        When err.type:
+            is "IndexError":
+                Print "  [2] Index error caught: " + err.message
+            Otherwise:
+                Print "  [2] Other error"
+
+    Print ""
+
+    # Test 4: Error with type field access
+    Print "Test 4: Accessing error fields directly"
+    Try:
+        Boom is NonExistentVariable
+    Catch e:
+        Print "  Error type: " + e.type
+        Print "  Error message: " + e.message
+
+        # Use When for specific handling
+        When e.type:
+            is "UndefinedVariable":
+                Print "  -> Handling as undefined variable"
+            is "IndexError":
+                Print "  -> Handling as index error"
+            is "TypeError":
+                Print "  -> Handling as type error"
+            Otherwise:
+                Print "  -> Unknown error type: " + e.type
+    Print ""
+
+    # Test 5: Nested error handling with types
+    Print "Test 5: Nested error handling"
+    Try:
+        Print "  Outer try..."
+        Try:
+            Print "    Inner try..."
+            Z is UndefinedZ
+        Catch inner:
+            Print "    Inner catch: " + inner.type
+            When inner.type:
+                is "UndefinedVariable":
+                    Print "    -> Variable '" + inner.message + "' not found"
+                Otherwise:
+                    Print "    -> Other error"
+        Print "  Back in outer try"
+    Catch outer:
+        Print "  Outer catch: " + outer.type
+    Print ""
+
+    # Test 6: Re-throwing or logging different error types
+    Print "Test 6: Different actions for different error types"
+    Try:
+        Data is [5, 10, 15]
+        Element is Data[0]  # Will fail with IndexError
+    Catch error:
+        When error.type:
+            is "IndexError":
+                Print "  INDEX ERROR - This is critical!"
+                Print "  Details: " + error.message
+                Print "  Action: Using default value"
+                Element is 0
+            is "UndefinedVariable":
+                Print "  UNDEFINED VARIABLE - This is a bug!"
+                Print "  Details: " + error.message
+            is "TypeError":
+                Print "  TYPE ERROR - Invalid operation"
+                Print "  Details: " + error.message
+            Otherwise:
+                Print "  UNKNOWN ERROR: " + error.type
+                Print "  Details: " + error.message
+    Print ""
+
+    Print "=========================================="
+    Print "All error type tests completed!"
+    Print "=========================================="

@@ -1,0 +1,77 @@
+Story:
+    Print "=== Data Module: Auto-Detection & Parsing ==="
+    Print ""
+
+    # Test 1: Detect formats
+    Print "Test 1: Detect file formats"
+    Print "----------------------------------------"
+    JsonInfo is Data.Detect("tests/assets/products.json")
+    XmlInfo is Data.Detect("tests/assets/books.xml")
+    TomlInfo is Data.Detect("tests/assets/config.toml")
+
+    Print "JSON detected as: " + JsonInfo["Format"]
+    Print "XML detected as: " + XmlInfo["Format"]
+    Print "TOML detected as: " + TomlInfo["Format"]
+    Print "✓ Detection complete"
+    Print ""
+
+    # Test 2: Describe files
+    Print "Test 2: Describe file metadata"
+    Print "----------------------------------------"
+    XmlDesc is Data.Describe("tests/assets/books.xml")
+    Print "XML File:"
+    Print "  Parseable: " + XmlDesc["Parseable"]
+    Print "  Parser: " + XmlDesc["Parser"]
+    Print "  Extension: " + XmlDesc["Extension"]
+    Print "✓ Metadata retrieved"
+    Print ""
+
+    # Test 3: Auto-parse XML (works great!)
+    Print "Test 3: Auto-parse XML file"
+    Print "----------------------------------------"
+    XmlDoc is Data.Parse("tests/assets/books.xml")
+    Titles is XmlDoc.XPath("//book/title")
+    Title1 is Titles[1]
+    Title2 is Titles[2]
+    Print "Parsed XML automatically"
+    Print "  Book 1: " + Title1
+    Print "  Book 2: " + Title2
+    Print "✓ XML auto-parsing works!"
+    Print ""
+
+    # Test 4: Auto-parse JSON (works!)
+    Print "Test 4: Auto-parse JSON file"
+    Print "----------------------------------------"
+    Products is Data.Parse("tests/assets/products.json")
+    Product1 is Products[1]
+    Product2 is Products[2]
+    Name1 is Product1["name"]
+    Price1 is Product1["price"]
+    Name2 is Product2["name"]
+    Print "Parsed JSON automatically"
+    Print "  Product 1: " + Name1 + " ($" + Price1 + ")"
+    Print "  Product 2: " + Name2
+    Print "✓ JSON auto-parsing works!"
+    Print ""
+
+    # Test 5: Detect from string content
+    Print "Test 5: Detect format from string"
+    Print "----------------------------------------"
+    JsonString is '{"name": "test", "value": 123}'
+    JsonStrInfo is Data.DetectFromString(JsonString)
+    XmlString is "<root><item>data</item></root>"
+    XmlStrInfo is Data.DetectFromString(XmlString)
+
+    Print "JSON string detected as: " + JsonStrInfo["Format"]
+    Print "XML string detected as: " + XmlStrInfo["Format"]
+    Print "✓ String detection works"
+    Print ""
+
+    Print "=== Summary ==="
+    Print "✓ Data.Detect() - File format detection"
+    Print "✓ Data.DetectFromString() - String format detection"
+    Print "✓ Data.Parse() - Auto-parse (XML, JSON work great!)"
+    Print "✓ Data.Describe() - File metadata"
+    Print ""
+    Print "Note: For TOML/CSV, use TOML.Parse/CSV.Parse directly"
+    Print "      (auto-detection works best with XML/JSON)"

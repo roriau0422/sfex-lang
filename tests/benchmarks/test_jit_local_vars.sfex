@@ -1,0 +1,45 @@
+# Test local variables in JIT
+
+Concept: Math
+    To SimpleAssign:
+        X is 42
+        Return X
+
+    To TwoVars:
+        A is 10
+        B is 20
+        Return A + B
+
+    To UpdateVar:
+        X is 5
+        X is X + 10
+        Return X
+
+Story:
+    Print "=== JIT LOCAL VARIABLES TEST ==="
+    Print ""
+
+    Create Math Called M
+
+    Print "1. Simple assignment..."
+    Result is 0
+    Repeat 120 times:
+        Result is M.SimpleAssign
+
+    Print "SimpleAssign: " + Result + " (expected: 42)"
+    Print ""
+
+    Print "2. Two variables..."
+    Result2 is 0
+    Repeat 120 times:
+        Result2 is M.TwoVars
+
+    Print "TwoVars: " + Result2 + " (expected: 30)"
+    Print ""
+
+    Print "3. Update variable..."
+    Result3 is 0
+    Repeat 120 times:
+        Result3 is M.UpdateVar
+
+    Print "UpdateVar: " + Result3 + " (expected: 15)"

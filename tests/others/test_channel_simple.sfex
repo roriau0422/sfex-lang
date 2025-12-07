@@ -1,0 +1,28 @@
+# Test basic channel functionality
+
+Story:
+    Print "=== Simple Channel Test ==="
+
+    # Create a channel
+    Ch is Channel.Create(5)
+
+    Print "Sending values..."
+    Ch.Send(10)
+    Ch.Send(20)
+    Ch.Send(30)
+
+    Print "Receiving values..."
+    Val1 is Ch.Receive()
+    Print Val1
+
+    Val2 is Ch.Receive()
+    Print Val2
+
+    Val3 is Ch.Receive()
+    Print Val3
+
+    Total is Val1 + Val2 + Val3
+    Print "Total:"
+    Print Total
+
+    Print "=== Test Complete ==="

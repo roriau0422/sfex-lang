@@ -1,0 +1,20 @@
+Story:
+    Print "=== SFX ASYNC CRAWLER ==="
+
+    Results is Channel.Create(5)
+
+    Urls is ["url1", "url2", "url3"]
+
+    Print "Starting 3 crawlers..."
+
+    For each Url in Urls:
+        Print "Would process: " + Url
+
+    Print "Waiting for results..."
+
+    Counter is 0
+    Repeat 3 times:
+        Counter is Counter + 1
+        Print "Count: " + Counter
+
+    Print "=== CRAWL COMPLETE ==="

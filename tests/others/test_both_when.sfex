@@ -1,0 +1,32 @@
+Concept: Product
+    Price
+    Category
+
+    When Price changes:
+        Print "  [Observer] Price changed to: " + This.Price
+
+Story:
+    Print "=== Both When Features Working Together ==="
+    Print ""
+    
+    # Test 1: New reactive When
+    Print "Test 1: Reactive When (observer):"
+    Create Product Called Item
+    Set Item.Price to 0
+    Set Item.Price to 100
+    Print ""
+    
+    # Test 2: Old pattern-matching When
+    Print "Test 2: Pattern-matching When (switch-case):"
+    Status is "completed"
+    
+    When Status:
+        is "pending":
+            Print "  Waiting..."
+        is "completed":
+            Print "  Done!"
+        Otherwise:
+            Print "  Unknown status"
+    
+    Print ""
+    Print "=== Both work perfectly! ==="

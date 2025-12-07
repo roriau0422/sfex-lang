@@ -1,0 +1,20 @@
+Story:
+    Print "Level 1"
+    
+    If True:
+        Print "Level 2"
+        
+        If True:
+            Print "Level 3"
+            Print "Still level 3"
+        
+        Print "Back to level 2"
+    
+    Print "Back to level 1"
+    
+    Repeat 3 times:
+        If True:
+            If True:
+                Print "Deep nesting"
+    
+    Print "All the way back"

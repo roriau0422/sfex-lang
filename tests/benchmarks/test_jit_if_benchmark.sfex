@@ -1,0 +1,60 @@
+# Benchmark If/Else performance in JIT
+
+Concept: Math
+    To Abs with X:
+        If X < 0:
+            Return -X
+        Else:
+            Return X
+
+    To Max3 with A and B and C:
+        If A > B:
+            If A > C:
+                Return A
+            Else:
+                Return C
+        Else:
+            If B > C:
+                Return B
+            Else:
+                Return C
+
+Story:
+    Print "=== JIT IF/ELSE PERFORMANCE ==="
+    Print ""
+
+    Create Math Called M
+
+    Print "1. Abs with branching (1M calls)..."
+    StartTime is Time.Precise()
+
+    Result is 0
+    Repeat 500000 times:
+        Result is M.Abs with -42
+    Repeat 500000 times:
+        Result is M.Abs with 42
+
+    EndTime is Time.Precise()
+    Elapsed is EndTime - StartTime
+
+    Print "Result: " + Result
+    Print "Time: " + Elapsed + " seconds"
+    Print "Throughput: " + (1000000 / Elapsed) + " calls/sec"
+    Print ""
+
+    Print "2. Nested If/Else (Max3) - (100K calls)..."
+    StartTime2 is Time.Precise()
+
+    Result2 is 0
+    Repeat 100000 times:
+        Result2 is M.Max3 with 10 and 20 and 15
+
+    EndTime2 is Time.Precise()
+    Elapsed2 is EndTime2 - StartTime2
+
+    Print "Result: " + Result2 + " (expected: 20)"
+    Print "Time: " + Elapsed2 + " seconds"
+    Print "Throughput: " + (100000 / Elapsed2) + " calls/sec"
+    Print ""
+
+    Print "If/Else branching in JIT works! 🎉"

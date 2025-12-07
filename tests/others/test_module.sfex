@@ -1,0 +1,9 @@
+Use tests.models.User
+
+Story:
+    Create User Called Player1
+    Set Player1.Name to "Temka"
+    Set Player1.Score to 100
+
+    Player1.Promote
+    Print "New Score: " + Player1.Score

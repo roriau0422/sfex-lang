@@ -1,0 +1,53 @@
+Story:
+    Print "=== Testing Complete Standard Library ==="
+    Print ""
+
+    # File Module
+    Print "1. File Module:"
+    File.Write("test_output.txt", "Hello from SFX!")
+    Content is File.Read("test_output.txt")
+    Print "   File.Read: " + Content
+    Print ""
+
+    # Time Module
+    Print "2. Time Module:"
+    Timestamp is Time.Now()
+    Print "   Time.Now: " + Timestamp
+
+    Print "   Sleeping for 1 second..."
+    Time.Sleep(1)
+    Print "   Time.Sleep: Complete!"
+    Print ""
+
+    # Math Module
+    Print "3. Math Module:"
+
+    Random is Math.Random()
+    Print "   Math.Random: " + Random
+
+    Rounded is Math.Round(3.7)
+    Print "   Math.Round(3.7): " + Rounded
+
+    Floored is Math.Floor(3.7)
+    Print "   Math.Floor(3.7): " + Floored
+
+    Ceiled is Math.Ceil(3.2)
+    Print "   Math.Ceil(3.2): " + Ceiled
+
+    Abs is Math.Abs(-5)
+    Print "   Math.Abs(-5): " + Abs
+
+    Min is Math.Min(10, 5)
+    Print "   Math.Min(10, 5): " + Min
+
+    Max is Math.Max(10, 5)
+    Print "   Math.Max(10, 5): " + Max
+
+    Power is Math.Pow(2, 8)
+    Print "   Math.Pow(2, 8): " + Power
+
+    SquareRoot is Math.Sqrt(16)
+    Print "   Math.Sqrt(16): " + SquareRoot
+
+    Print ""
+    Print "=== All Tests Complete! ==="

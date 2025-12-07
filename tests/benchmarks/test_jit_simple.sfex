@@ -1,0 +1,28 @@
+# Simple JIT test - method that returns arithmetic result
+
+Concept: Math
+    To Double with X:
+        Return X + X
+
+Story:
+    Print "Testing JIT with simple arithmetic..."
+    Print ""
+
+    Create Math Called Obj
+
+    # Call 150 times to trigger JIT
+    Print "Calling Double 150 times..."
+
+    StartTime is Time.Precise()
+
+    Result is 0
+    Repeat 150 times:
+        Result is Obj.Double with 5
+
+    EndTime is Time.Precise()
+    Elapsed is EndTime - StartTime
+
+    Print "Final result: " + Result
+    Print "Time: " + Elapsed + " seconds"
+    Print ""
+    Print "Expected: JIT compilation at call ~100, then fast native execution"

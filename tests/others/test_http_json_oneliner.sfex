@@ -1,0 +1,18 @@
+Story:
+    Print "=== One-liner HTTP + JSON Test ==="
+    Print ""
+
+    # Test 1: Can we chain operations?
+    Print "Test 1: Attempting one-liner"
+    Todo is JSON.Parse(HTTP.Get("https://jsonplaceholder.typicode.com/todos/1")["Body"])
+
+    Title is Todo["title"]
+    Print "Title: " + Title
+    Print "✓ One-liner works!"
+    Print ""
+
+    # Test 2: Even shorter - direct access
+    Print "Test 2: Direct field access"
+    Title2 is JSON.Parse(HTTP.Get("https://jsonplaceholder.typicode.com/todos/2")["Body"])["title"]
+    Print "Title: " + Title2
+    Print "✓ Super concise!"

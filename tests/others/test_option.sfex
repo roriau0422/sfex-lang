@@ -1,0 +1,158 @@
+# Test: Option Type - Explicit Optional Values
+# Tests Option type (Some/None) as safe alternative to null
+
+Story:
+    Print "=== Option Type Tests ==="
+
+    # Test 1: Create Some values
+    Print ""
+    Print "Test 1: Creating Some values"
+    NumberOpt is Some(42)
+    StringOpt is Some("Hello")
+    ListOpt is Some([1, 2, 3])
+    MapOpt is Some({ name: "Alice", age: 30 })
+    Print "Number: " + NumberOpt
+    Print "String: " + StringOpt
+    Print "List: " + ListOpt
+    Print "Map: " + MapOpt
+
+    # Test 2: Create None value
+    Print ""
+    Print "Test 2: Creating None value"
+    NoValue is None
+    Print "None: " + NoValue
+
+    # Test 3: Check IsSome property
+    Print ""
+    Print "Test 3: IsSome property"
+    If NumberOpt.IsSome:
+        Print "✓ NumberOpt.IsSome is True"
+    Else:
+        Print "✗ NumberOpt.IsSome is False"
+
+    If NoValue.IsSome:
+        Print "✗ NoValue.IsSome is True"
+    Else:
+        Print "✓ NoValue.IsSome is False"
+
+    # Test 4: Check IsNone property
+    Print ""
+    Print "Test 4: IsNone property"
+    If NoValue.IsNone:
+        Print "✓ NoValue.IsNone is True"
+    Else:
+        Print "✗ NoValue.IsNone is False"
+
+    If NumberOpt.IsNone:
+        Print "✗ NumberOpt.IsNone is True"
+    Else:
+        Print "✓ NumberOpt.IsNone is False"
+
+    # Test 5: Unwrap Some value
+    Print ""
+    Print "Test 5: Unwrap Some value"
+    UnwrappedNumber is NumberOpt.Unwrap()
+    Print "Unwrapped value: " + UnwrappedNumber
+    UnwrappedString is StringOpt.Unwrap()
+    Print "Unwrapped string: " + UnwrappedString
+
+    # Test 6: UnwrapOr with Some
+    Print ""
+    Print "Test 6: UnwrapOr with Some value"
+    ValueOrDefault is NumberOpt.UnwrapOr(0)
+    Print "Some(42).UnwrapOr(0) = " + ValueOrDefault
+
+    # Test 7: UnwrapOr with None
+    Print ""
+    Print "Test 7: UnwrapOr with None value"
+    DefaultValue is NoValue.UnwrapOr(999)
+    Print "None.UnwrapOr(999) = " + DefaultValue
+
+    # Test 8: Truthy/falsy behavior
+    Print ""
+    Print "Test 8: Truthy/falsy behavior"
+    If NumberOpt:
+        Print "✓ Some(42) is truthy"
+    Else:
+        Print "✗ Some(42) is falsy"
+
+    If NoValue:
+        Print "✗ None is truthy"
+    Else:
+        Print "✓ None is falsy"
+
+    # Test 9: Nested Option
+    Print ""
+    Print "Test 9: Nested Option (Option within Option)"
+    InnerOpt is Some(100)
+    OuterOpt is Some(InnerOpt)
+    Print "Nested Option: " + OuterOpt
+    If OuterOpt.IsSome:
+        Inner is OuterOpt.Unwrap()
+        Print "Outer unwrapped: " + Inner
+        If Inner.IsSome:
+            Value is Inner.Unwrap()
+            Print "Inner unwrapped: " + Value
+
+    # Test 10: Option with complex types
+    Print ""
+    Print "Test 10: Option with complex types"
+    User is { name: "Bob", email: "bob@example.com" }
+    UserOpt is Some(User)
+    If UserOpt.IsSome:
+        UserData is UserOpt.Unwrap()
+        Print "User name: " + UserData["name"]
+        Print "User email: " + UserData["email"]
+
+    # Test 11: Option with List
+    Print ""
+    Print "Test 11: Option with List operations"
+    Items is [10, 20, 30]
+    ItemsOpt is Some(Items)
+    If ItemsOpt.IsSome:
+        ItemList is ItemsOpt.Unwrap()
+        Print "First item: " + ItemList[1]
+        Print "Second item: " + ItemList[2]
+        Print "List length: " + ItemList.Length
+
+    # Test 12: Multiple None values
+    Print ""
+    Print "Test 12: Multiple None values"
+    None1 is None
+    None2 is None
+    Print "None1: " + None1
+    Print "None2: " + None2
+    Print "None1.IsNone: " + None1.IsNone
+    Print "None2.IsNone: " + None2.IsNone
+
+    # Test 13: Option as function return simulation
+    Print ""
+    Print "Test 13: Using Option for optional results"
+    # Simulating a search that may or may not find something
+    SearchResults is [1, 2, 3, 4, 5]
+    FoundItem is Some(SearchResults[3])
+    NotFoundItem is None
+
+    If FoundItem.IsSome:
+        Item is FoundItem.Unwrap()
+        Print "Found item: " + Item
+    Else:
+        Print "Item not found"
+
+    If NotFoundItem.IsSome:
+        Item is NotFoundItem.Unwrap()
+        Print "Found item: " + Item
+    Else:
+        Print "✓ Item not found (expected)"
+
+    # Test 14: UnwrapOr with complex default
+    Print ""
+    Print "Test 14: UnwrapOr with complex default values"
+    DefaultUser is { name: "Guest", role: "visitor" }
+    NoUser is None
+    ActualUser is NoUser.UnwrapOr(DefaultUser)
+    Print "User name: " + ActualUser["name"]
+    Print "User role: " + ActualUser["role"]
+
+    Print ""
+    Print "=== All Option Type Tests Complete ==="

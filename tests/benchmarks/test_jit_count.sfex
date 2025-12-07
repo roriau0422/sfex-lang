@@ -1,0 +1,19 @@
+# Test to count JIT vs interpreter executions
+
+Concept: Math
+    To Double with X:
+        Return X + X
+
+Story:
+    Print "Calling Double 120 times to see JIT pattern..."
+    Print ""
+
+    Create Math Called M
+
+    Result is 0
+    Repeat 120 times:
+        Result is M.Double with 5
+
+    Print "Final result: " + Result
+    Print ""
+    Print "Expected: JIT compiles at call #100, then executes JIT for calls 100-120"

@@ -1,0 +1,72 @@
+# To-Do List Application
+
+Concept: TodoItem
+    Title
+    IsDone
+
+    To Display:
+        If This.IsDone:
+            Print "✓ " + This.Title
+        Else:
+            Print "☐ " + This.Title
+
+Concept: TodoList
+    Items
+
+    To Initialize:
+        Set This.Items to []
+
+    To AddTask with Title:
+        Create TodoItem Called NewItem
+        Set NewItem.Title to Title
+        Set NewItem.IsDone to False
+        Set This.Items to This.Items + [NewItem]
+        Print "Added: " + Title
+
+    To ShowAll:
+        Print "\n=== My To-Do List ==="
+        If This.Items.Length = 0:
+            Print "No tasks yet!"
+        Else:
+            For each Item in This.Items:
+                Item.Display
+
+    To CompleteTask with Index:
+        If Index >= 1 and Index <= This.Items.Length:
+            Task is This.Items[Index]
+            Set Task.IsDone to True
+            Print "✓ Completed: " + Task.Title
+            # Update the item in the list
+            NewItems is []
+            Counter is 1
+            For each Item in This.Items:
+                If Counter = Index:
+                    Set NewItems to NewItems + [Task]
+                Else:
+                    Set NewItems to NewItems + [Item]
+                Set Counter to Counter + 1
+            Set This.Items to NewItems
+        Else:
+            Print "Invalid task number!"
+
+Story:
+    # Create the to-do list
+    Create TodoList Called MyTodos
+    MyTodos.Initialize
+
+    # Add some tasks
+    MyTodos.AddTask with "Buy groceries"
+    MyTodos.AddTask with "Write documentation"
+    MyTodos.AddTask with "Learn SFX"
+    MyTodos.AddTask with "Build an app"
+
+    # Show all tasks
+    MyTodos.ShowAll
+
+    # Complete some tasks
+    Print "\n--- Completing tasks ---"
+    MyTodos.CompleteTask with 1
+    MyTodos.CompleteTask with 3
+
+    # Show updated list
+    MyTodos.ShowAll

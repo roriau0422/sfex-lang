@@ -1,0 +1,38 @@
+[book]
+title = "SFX Language Guide"
+authors = ["Temuujin <roriau@gmail.com>"]
+description = "SFX (Situation Framework eXchange) - Programming the way humans think"
+language = "en"
+src = "src"
+
+[build]
+build-dir = "../docs"
+create-missing = true
+
+[preprocessor.links]
+
+[output.html]
+default-theme = "light"
+preferred-dark-theme = "navy"
+git-repository-url = "https://github.com/roriau0422/sfex-lang"
+edit-url-template = "https://github.com/roriau0422/sfex-lang/edit/main/docs/{path}"
+site-url = "https://github.com/roriau0422/sfex-lang"
+
+[output.html.fold]
+enable = true
+level = 1
+
+[output.html.playground]
+editable = false
+copyable = true
+line-numbers = true
+
+[output.html.search]
+enable = true
+limit-results = 30
+use-boolean-and = true
+boost-title = 2
+boost-hierarchy = 1
+boost-paragraph = 1
+expand = true
+heading-split-level = 3

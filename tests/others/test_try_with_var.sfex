@@ -1,0 +1,11 @@
+Story:
+    Print "Test: Try with Catch variable"
+    Try:
+        X is UnknownVariable
+        Print "Should not print"
+    Catch err:
+        Print "Caught: " + err.type + " - " + err.message
+    Always:
+        Print "Always runs"
+
+    Print "Done"

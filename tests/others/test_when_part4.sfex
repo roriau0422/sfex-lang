@@ -1,0 +1,21 @@
+Story:
+    Print "=== WHEN STATEMENT TESTS (Part 4) ==="
+    Print ""
+
+    # Test 8: When in a loop
+    Print "[Test 8] When in a loop:"
+    Numbers is [1, 2, 3, 4, 5]
+
+    For each Num in Numbers:
+        When Num:
+            is 1:
+                Print "  First"
+            is 2:
+                Print "  Second"
+            is 3:
+                Print "  Third"
+            Otherwise:
+                Print "  Other: " + Num
+
+    Print ""
+    Print "=== TESTS COMPLETED ==="

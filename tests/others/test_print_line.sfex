@@ -1,0 +1,8 @@
+Story:
+    Print "Line 2"
+    Print "Line 3"
+    Try:
+        Print "Line 5"
+        Print UndefVar
+    Catch err:
+        Print "Error line: " + err.line

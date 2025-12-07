@@ -1,0 +1,3 @@
+Story:
+    CheckList is ["apple", "banana", "cherry"]
+    Print "Specific fruits is: " + CheckList[1]

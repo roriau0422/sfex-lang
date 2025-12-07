@@ -1,0 +1,36 @@
+Concept: Product
+    Price
+    Tax
+
+    When Price changes:
+        Set This.Tax to This.Price * 0.1
+        Print "   [When fired] Tax auto-calculated to: " + This.Tax
+
+Story:
+    Print "=== Testing Reactive When System ==="
+    Print ""
+
+    # Test 1: Basic When Trigger
+    Print "1. Basic When Trigger (Price -> Tax auto-calculation):"
+
+    Create Product Called Phone
+    Set Phone.Tax to 0
+
+    Print "   Setting Phone.Price to 100..."
+    Set Phone.Price to 100
+    Print "   Phone.Price: " + Phone.Price
+    Print "   Phone.Tax: " + Phone.Tax
+    Print ""
+
+    # Test 2: Multiple Property Updates
+    Print "2. Multiple Updates (each triggers When):"
+    Print "   Setting Phone.Price to 200..."
+    Set Phone.Price to 200
+    Print "   Phone.Tax: " + Phone.Tax
+
+    Print "   Setting Phone.Price to 50..."
+    Set Phone.Price to 50
+    Print "   Phone.Tax: " + Phone.Tax
+    Print ""
+
+    Print "=== All When Tests Complete! ==="

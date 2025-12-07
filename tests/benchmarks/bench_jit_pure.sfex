@@ -1,0 +1,43 @@
+# Pure function benchmark - no field access needed
+
+Concept: Math
+    To Double with X:
+        Return X + X
+
+    To Triple with X:
+        Return X + X + X
+
+Story:
+    Print "=== JIT PURE FUNCTION BENCHMARK ==="
+    Print ""
+
+    Create Math Called M
+
+    Print "1. Testing Double (100,000 calls)..."
+    StartTime is Time.Precise()
+
+    Result is 0
+    Repeat 100000 times:
+        Result is M.Double with 5
+
+    EndTime is Time.Precise()
+    Elapsed is EndTime - StartTime
+
+    Print "Done. Result: " + Result
+    Print "Time: " + Elapsed + " seconds"
+    Print ""
+
+    Print "2. Testing Triple (100,000 calls)..."
+    StartTime2 is Time.Precise()
+
+    Result2 is 0
+    Repeat 100000 times:
+        Result2 is M.Triple with 3
+
+    EndTime2 is Time.Precise()
+    Elapsed2 is EndTime2 - StartTime2
+
+    Print "Done. Result: " + Result2
+    Print "Time: " + Elapsed2 + " seconds"
+    Print ""
+    Print "Expected: ~5-10x speedup after JIT kicks in at call #100"

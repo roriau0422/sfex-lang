@@ -1,0 +1,18 @@
+# Test basic task spawning with block syntax
+
+Story:
+    Print "=== Basic Task Test ==="
+
+    # Spawn a background task
+    Do in background:
+        Print "Task is running in background!"
+        Print "Background task complete!"
+
+    Print "Main thread continues..."
+
+    # Simple busy loop to give background task time
+    Counter is 0
+    Repeat 100000 times:
+        Counter is Counter + 1
+
+    Print "=== Test Complete ==="

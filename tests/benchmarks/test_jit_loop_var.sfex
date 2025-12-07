@@ -1,0 +1,26 @@
+# Test loop with local variable
+
+Concept: Math
+    To CountToFive:
+        Total is 0
+        Repeat 5 times:
+            Total is Total + 1
+        Return Total
+
+Story:
+    Print "=== JIT LOOP WITH LOCAL VARIABLE ==="
+    Print ""
+
+    Create Math Called M
+
+    # Warm up - interpreter
+    Print "Interpreter result: " + M.CountToFive
+    Print ""
+
+    # Trigger JIT
+    Print "Calling 120 times to trigger JIT..."
+    Result is 0
+    Repeat 120 times:
+        Result is M.CountToFive
+
+    Print "After JIT: " + Result + " (expected: 5)"

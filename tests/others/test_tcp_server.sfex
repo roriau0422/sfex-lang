@@ -1,0 +1,45 @@
+Story:
+    Print "=== TCP Server Test ==="
+    Print "Starting TCP echo server on 127.0.0.1:9999"
+    Print ""
+
+    # Start TCP server
+    Server is TCP.Listen("127.0.0.1:9999")
+    Print "✓ Server listening on port 9999"
+    Print "Waiting for client connection..."
+    Print ""
+
+    # Accept one connection
+    Client is Server.Accept()
+    Print "✓ Client connected!"
+    Print ""
+
+    # Echo loop - receive and send back 3 messages
+    Print "Message 1:"
+    Msg1 is Client.Receive()
+    Print "  Received: " + Msg1
+    Client.Send("Echo: " + Msg1)
+    Print "  Sent echo back"
+    Print ""
+
+    Print "Message 2:"
+    Msg2 is Client.Receive()
+    Print "  Received: " + Msg2
+    Client.Send("Echo: " + Msg2)
+    Print "  Sent echo back"
+    Print ""
+
+    Print "Message 3:"
+    Msg3 is Client.Receive()
+    Print "  Received: " + Msg3
+    Client.Send("Echo: " + Msg3)
+    Print "  Sent echo back"
+    Print ""
+
+    # Close connections
+    Print "Closing connections..."
+    Client.Close()
+    Server.Close()
+    Print "✓ Server shut down"
+    Print ""
+    Print "=== TCP Server test completed! ==="

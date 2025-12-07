@@ -1,0 +1,10 @@
+Story:
+    Score is 75
+    If Score > 90:
+        Print "A"
+    Else If Score > 80:
+        Print "B"
+    Else If Score > 70:
+        Print "C"
+    Else:
+        Print "F"

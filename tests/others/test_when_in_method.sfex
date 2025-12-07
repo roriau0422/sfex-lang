@@ -1,0 +1,27 @@
+Concept: Grader
+    Score
+
+    To GetGrade:
+        # Old pattern-matching When inside a method
+        When This.Score:
+            is 100:
+                Return "A+"
+            is 90:
+                Return "A"
+            is 80:
+                Return "B"
+            Otherwise:
+                Return "C"
+
+Story:
+    Print "Testing pattern-matching When inside Concept methods..."
+    Print ""
+    
+    Create Grader Called Student
+    Set Student.Score to 100
+    Grade is Student.GetGrade
+    Print "Score 100 -> Grade: " + Grade
+    
+    Set Student.Score to 80
+    Grade is Student.GetGrade
+    Print "Score 80 -> Grade: " + Grade

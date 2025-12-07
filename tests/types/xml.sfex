@@ -1,0 +1,69 @@
+Story:
+    Print "=== XML Parsing and XPath Tests ==="
+    Print ""
+
+    # Test 1: Basic XML Parsing
+    Print "Test 1: Basic XML Parsing"
+    XmlString is "<root><title>SFX Language</title><version>0.2.0</version></root>"
+    Doc is XML.Parse(XmlString)
+    Print "✓ XML parsed successfully"
+    Print ""
+
+    # Test 2: XPath - Select single element text
+    Print "Test 2: XPath - Select title"
+    Titles is Doc.XPath("//title")
+    Print "Title: " + Titles[1]
+    Print ""
+
+    # Test 3: XPath - Select version
+    Print "Test 3: XPath - Select version"
+    Versions is Doc.XPath("//version")
+    Print "Version: " + Versions[1]
+    Print ""
+
+    # Test 4: Complex XML with attributes
+    Print "Test 4: Complex XML with attributes"
+    BookXml is "<library><book id='1' genre='fiction'><title>The Great Story</title><author>John Doe</author><price>29.99</price></book><book id='2' genre='science'><title>Quantum Computing</title><author>Jane Smith</author><price>49.99</price></book></library>"
+    Library is XML.Parse(BookXml)
+    Print "✓ Complex XML parsed successfully"
+    Print ""
+
+    # Test 5: XPath - Select all book titles
+    Print "Test 5: XPath - Select all book titles"
+    BookTitles is Library.XPath("//book/title")
+    Print "Book 1: " + BookTitles[1]
+    Print "Book 2: " + BookTitles[2]
+    Print ""
+
+    # Test 6: XPath - Select all authors
+    Print "Test 6: XPath - Select all authors"
+    Authors is Library.XPath("//author")
+    Print "Author 1: " + Authors[1]
+    Print "Author 2: " + Authors[2]
+    Print ""
+
+    # Test 7: XPath - Select books with specific id
+    Print "Test 7: XPath - Select book with id='1'"
+    Book1Title is Library.XPath("//book[@id='1']/title")
+    Print "Book with id=1: " + Book1Title[1]
+    Print ""
+
+    # Test 8: XPath - Get attribute values
+    Print "Test 8: XPath - Get id attribute"
+    BookIds is Library.XPath("//book/@id")
+    Print "Book IDs: " + BookIds[1] + ", " + BookIds[2]
+    Print ""
+
+    # Test 9: Get all text from document
+    Print "Test 9: Get all document text"
+    AllText is Doc.Text()
+    Print "Document text: " + AllText
+    Print ""
+
+    # Test 10: XPath - Count books (using number result)
+    Print "Test 10: XPath - Count function"
+    BookCount is Library.XPath("count(//book)")
+    Print "Number of books: " + BookCount
+    Print ""
+
+    Print "=== All XML/XPath tests completed! ==="

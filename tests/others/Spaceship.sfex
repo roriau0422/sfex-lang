@@ -1,0 +1,26 @@
+# 1. The Data Structure
+Concept: Spaceship
+    Name
+    Fuel
+    Integrity
+    
+    To ReportStatus:
+        Print Name + " fuel: " + Fuel
+
+# 2. The Context specific to this Concept
+# Defined here for organization, but acts globally when switched on
+Situation: RedAlert
+    Adjust Spaceship:
+        To ReportStatus:
+            Print "⚠️ WARNING: " + Name + " CRITICAL FAILURE"
+
+# 3. The "Main" for this file (Acts as a Unit Test!)
+Story:
+    Create Spaceship Called Enterprise
+    Set Enterprise.Name to "Enterprise"
+    Set Enterprise.Fuel to 100
+    
+    Enterprise.ReportStatus
+    
+    Switch on RedAlert
+    Enterprise.ReportStatus

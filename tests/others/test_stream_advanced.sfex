@@ -1,0 +1,49 @@
+Story:
+    Print "=== Test 1: Take operation ==="
+    Numbers is Stream.Range(1, 100)
+    First5 is Numbers.Take(5).ToList()
+    Print First5
+
+    Print ""
+    Print "=== Test 2: Skip operation ==="
+    Numbers2 is Stream.Range(1, 10)
+    Skipped is Numbers2.Skip(5).ToList()
+    Print Skipped
+
+    Print ""
+    Print "=== Test 3: Take and Skip chained ==="
+    Numbers3 is Stream.Range(1, 20)
+    Middle is Numbers3.Skip(5).Take(5).ToList()
+    Print Middle
+
+    Print ""
+    Print "=== Test 4: File.ReadStream ==="
+
+    # Create a test file
+    TestData is "Line 1\nLine 2\nLine 3\nLine 4\nLine 5"
+    File.Write("test_stream_data.txt", TestData)
+
+    FileStream is File.ReadStream("test_stream_data.txt")
+
+    Count is 0
+    For each Line in FileStream:
+        Count is Count + 1
+        Print Line
+
+    Print "Total lines read:"
+    Print Count
+
+    Print ""
+    Print "=== Test 5: File.ReadStream with Take ==="
+    FileStream2 is File.ReadStream("test_stream_data.txt")
+    First3Lines is FileStream2.Take(3).ToList()
+    Print First3Lines
+
+    Print ""
+    Print "=== Test 6: File.ReadStream with Skip ==="
+    FileStream3 is File.ReadStream("test_stream_data.txt")
+    LastLines is FileStream3.Skip(2).ToList()
+    Print LastLines
+
+    Print ""
+    Print "=== All advanced tests complete ==="

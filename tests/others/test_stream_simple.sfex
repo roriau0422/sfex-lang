@@ -1,0 +1,15 @@
+Story:
+    Print "Test 1"
+    Numbers is [1, 2, 3, 4, 5]
+    S1 is Stream.FromList(Numbers)
+
+    For each N in S1:
+        Print N
+
+    Print "Test 2"
+    S2 is Stream.Range(1, 5)
+
+    For each N in S2:
+        Print N
+
+    Print "Done"

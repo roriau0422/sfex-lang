@@ -1,0 +1,53 @@
+# Test that task errors are properly returned as Error values
+
+Concept: Printer
+    To Print:
+        Return "Printed"
+
+Story:
+    Print "=== Task Error Propagation Test ==="
+
+    # Test 1: Task with undefined variable error
+    Print ""
+    Print "1. Task with UndefinedVariable error:"
+    Task1 is Do in background:
+        Print "Task1: Trying to access undefined variable"
+        Return NonExistentVariable
+
+    Result1 is Task1.Await()
+    If Error.IsError(Result1):
+        Print "✅ Got error:"
+        Print Result1
+        Print "   Category: " + Error.GetCategory(Result1)
+        Print "   Subtype: " + Error.GetSubtype(Result1)
+    Else:
+        Print "❌ FAILED: Should have returned an error"
+
+    # Test 2: Task that completes successfully
+    Print ""
+    Print "2. Task that succeeds:"
+    Task2 is Do in background:
+        Return 42
+
+    Result2 is Task2.Await()
+    If Error.IsError(Result2):
+        Print "❌ FAILED: Should have returned 42, got error: " + Result2
+    Else:
+        Print "✅ Success: Got " + Result2
+
+    # Test 3: Task with logic error
+    Print ""
+    Print "3. Task with method not found:"
+    Create Printer Called P
+    Task3 is Do in background:
+        Return P.NonExistentMethod
+
+    Result3 is Task3.Await()
+    If Error.IsError(Result3):
+        Print "✅ Got error:"
+        Print Result3
+    Else:
+        Print "❌ FAILED: Should have returned an error"
+
+    Print ""
+    Print "=== All Task Error Tests Complete ==="

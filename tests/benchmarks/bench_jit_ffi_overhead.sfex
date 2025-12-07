@@ -1,0 +1,65 @@
+# Benchmark to measure FFI overhead in JIT
+
+Concept: Math
+    # Simple arithmetic - should be very fast in native code
+    To FastAdd with A and B:
+        Return A + B
+
+    To FastMul with A and B:
+        Return A * B
+
+    # More complex expression to see JIT benefit
+    To Formula with X:
+        Return X * X + X * 2 + 5
+
+Story:
+    Print "=== JIT FFI OVERHEAD BENCHMARK ==="
+    Print ""
+
+    Create Math Called M
+
+    Print "1. Testing FastAdd (1M calls)..."
+    StartTime is Time.Precise()
+
+    Result is 0
+    Repeat 1000000 times:
+        Result is M.FastAdd with 10 and 20
+
+    EndTime is Time.Precise()
+    Elapsed is EndTime - StartTime
+
+    Print "Result: " + Result
+    Print "Time: " + Elapsed + " seconds"
+    Print "Throughput: " + (1000000 / Elapsed) + " calls/sec"
+    Print ""
+
+    Print "2. Testing FastMul (1M calls)..."
+    StartTime2 is Time.Precise()
+
+    Result2 is 0
+    Repeat 1000000 times:
+        Result2 is M.FastMul with 7 and 8
+
+    EndTime2 is Time.Precise()
+    Elapsed2 is EndTime2 - StartTime2
+
+    Print "Result: " + Result2
+    Print "Time: " + Elapsed2 + " seconds"
+    Print "Throughput: " + (1000000 / Elapsed2) + " calls/sec"
+    Print ""
+
+    Print "3. Testing Formula (1M calls)..."
+    StartTime3 is Time.Precise()
+
+    Result3 is 0
+    Repeat 1000000 times:
+        Result3 is M.Formula with 10
+
+    EndTime3 is Time.Precise()
+    Elapsed3 is EndTime3 - StartTime3
+
+    Print "Result: " + Result3
+    Print "Time: " + Elapsed3 + " seconds"
+    Print "Throughput: " + (1000000 / Elapsed3) + " calls/sec"
+    Print ""
+    Print "Note: Most overhead is FFI boundary (Value conversion, function dispatch)"

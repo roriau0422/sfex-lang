@@ -1,0 +1,15 @@
+Story:
+    Score is 100
+    InnerScore is 150
+    When Score:
+        is 100:
+            Print "Perfect"
+            When InnerScore:
+                is 150:
+                    Print "Inner Score is 150"
+        is 90:
+            Print "Great"
+        Otherwise:
+            Print "Other"
+
+    Print "Done"

@@ -1,0 +1,67 @@
+Story:
+    Print "=== Trace Compilation Benchmark ==="
+    Print ""
+    Print "Testing method inlining across call boundaries"
+    Print ""
+
+    # Create test object
+    Create MathOps Called M
+    Set M.X to 5.5
+    Set M.Y to 3.3
+
+    # Interpreter (99 calls)
+    Print "1. Interpreter (99 calls):"
+    Start is Time.Precise()
+    Repeat 99 times:
+        Result is M.ComplexCalc
+    End is Time.Precise()
+    Time1 is End - Start
+    Rate1 is 99 / Time1
+    Print "   Rate: " + Rate1 + " calls/sec"
+    Print ""
+
+    # JIT (1M calls)
+    Create MathOps Called M2
+    Set M2.X to 5.5
+    Set M2.Y to 3.3
+
+    Print "2. JIT (1,000,000 calls):"
+    Start is Time.Precise()
+    Repeat 1000000 times:
+        Result is M2.ComplexCalc
+    End is Time.Precise()
+    Time2 is End - Start
+    Rate2 is 1000000 / Time2
+    Print "   Rate: " + Rate2 + " calls/sec"
+    Print ""
+
+    # Results
+    Print "=== Results ==="
+    Speedup is Rate2 / Rate1
+    Print "Speedup: " + Speedup + "x"
+    Print "Result: " + Result
+
+Concept: MathOps
+    X
+    Y
+
+    # Helper method that should be inlined
+    To Square with Value:
+        Result is Value * Value
+        Return Result
+
+    # Helper method with multiple statements (tests trace compilation)
+    To AddSquares:
+        A is This.X * This.X
+        B is This.Y * This.Y
+        Sum is A + B
+        Return Sum
+
+    # Main method that calls helpers
+    To ComplexCalc:
+        # Call helper methods - should be inlined with trace compilation
+        XSq is This.Square with This.X
+        YSq is This.Square with This.Y
+        Sum is This.AddSquares
+        Result is XSq + YSq + Sum
+        Return Result

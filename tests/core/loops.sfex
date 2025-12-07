@@ -1,0 +1,5 @@
+Story:
+    Print "Test: Calling Stream.Range(1, 5)"
+    R is Stream.Range(1, 5)
+    Print R
+    Print "Success!"

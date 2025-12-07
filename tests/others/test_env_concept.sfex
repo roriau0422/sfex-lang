@@ -1,0 +1,76 @@
+# Test: Environment variables in Concepts
+
+Concept: ApiClient
+    Endpoint
+    ApiKey
+    Timeout
+
+    To LoadConfig:
+        # Reading env vars from within a Concept method
+        Set This.Endpoint to Env.Get("API_ENDPOINT", "https://api.example.com")
+        Set This.ApiKey to Env.Get("API_KEY", "default_key")
+        Set This.Timeout to Env.Get("TIMEOUT", "30")
+
+    To ShowConfig:
+        Print "API Configuration:"
+        Print "  Endpoint: " + This.Endpoint
+        Print "  API Key: " + This.ApiKey
+        Print "  Timeout: " + This.Timeout + " seconds"
+
+    To MakeRequest:
+        # Env.Get() is safe to call during runtime (even in methods)
+        Debug is Env.Get("DEBUG", "False")
+
+        Print "Making request to: " + This.Endpoint
+
+        If Debug = "True":
+            Print "(Debug mode enabled)"
+
+        # Simulate API call
+        Print "✓ Request completed"
+
+Story:
+    Print "=== Environment Variables in Concepts Test ==="
+    Print ""
+
+    # SAFE: Load at startup (top of Story)
+    Print "Step 1: Loading .env file at startup"
+    Count is Env.Load("tests/assets/test.env")
+    Print "Loaded " + Count + " variables"
+    Print ""
+
+    # Create concept instance
+    Print "Step 2: Creating ApiClient instance"
+    Create ApiClient called Client
+    Print "✓ ApiClient created"
+    Print ""
+
+    # Load config from env (reading from Concept method)
+    Print "Step 3: Loading config from environment"
+    Client.LoadConfig
+    Print "✓ Config loaded"
+    Print ""
+
+    # Show config
+    Print "Step 4: Displaying configuration"
+    Client.ShowConfig
+    Print ""
+
+    # Make request (using env vars during runtime)
+    Print "Step 5: Making API request"
+    Client.MakeRequest
+    Print ""
+
+    # Test: Direct env access from Story (still works)
+    Print "Step 6: Direct env access from Story"
+    AppName is Env.Get("TEST_APP_NAME")
+    Print "TEST_APP_NAME: " + AppName
+    Print ""
+
+    Print "=== Test completed! ==="
+    Print ""
+    Print "Conclusions:"
+    Print "✓ Env.Get() works inside Concept methods"
+    Print "✓ Env.Get() works in Story"
+    Print "✓ Env.Load() should still be called at top of Story"
+    Print "✓ Concept methods can read env vars safely at runtime"

@@ -1,0 +1,36 @@
+Story:
+    # Test 1: Triple double quotes
+    MultiLine1 is """This is line 1
+This is line 2
+This is line 3"""
+    Print "Test 1 - Triple double quotes:"
+    Print MultiLine1
+    Print ""
+
+    # Test 2: Triple single quotes
+    MultiLine2 is '''Another multiline
+string with single quotes
+and multiple lines'''
+    Print "Test 2 - Triple single quotes:"
+    Print MultiLine2
+    Print ""
+
+    # Test 3: Escape sequences still work
+    EscapeTest is "Line 1\nLine 2\nLine 3"
+    Print "Test 3 - Escape sequences:"
+    Print EscapeTest
+    Print ""
+
+    # Test 4: Triple quotes with embedded quotes
+    WithQuotes is """He said "Hello"
+She replied 'Hi'
+That's great!"""
+    Print "Test 4 - Embedded quotes:"
+    Print WithQuotes
+    Print ""
+
+    # Test 5: Empty triple-quoted string
+    Empty is """"""
+    Print "Test 5 - Empty string length: " + Empty.Length
+
+    Print "All tests completed!"

@@ -1,0 +1,52 @@
+Story:
+    Print "=== WHEN STATEMENT TESTS (Part 1) ==="
+    Print ""
+
+    # Test 1: Basic When with numbers
+    Print "[Test 1] When with numbers:"
+    Score is 100
+
+    When Score:
+        is 100:
+            Print "  Perfect score!"
+        is 90:
+            Print "  Great job!"
+        is 80:
+            Print "  Good!"
+        Otherwise:
+            Print "  Keep trying!"
+
+    Print ""
+
+    # Test 2: When with strings
+    Print "[Test 2] When with strings:"
+    Color is "red"
+
+    When Color:
+        is "red":
+            Print "  Stop"
+        is "yellow":
+            Print "  Caution"
+        is "green":
+            Print "  Go"
+        Otherwise:
+            Print "  Unknown color"
+
+    Print ""
+
+    # Test 3: When with Otherwise case
+    Print "[Test 3] When with Otherwise (no match):"
+    Value is 42
+
+    When Value:
+        is 1:
+            Print "  One"
+        is 2:
+            Print "  Two"
+        is 3:
+            Print "  Three"
+        Otherwise:
+            Print "  Not 1, 2, or 3 (it's 42)"
+
+    Print ""
+    Print "=== TESTS COMPLETED ==="

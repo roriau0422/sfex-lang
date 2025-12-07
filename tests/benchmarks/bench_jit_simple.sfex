@@ -1,0 +1,39 @@
+Story:
+    Print "=== JIT Performance Demonstration ==="
+    Print ""
+    Print "This benchmark calls a method 1 million times."
+    Print "You'll see JIT compilation kick in at call 100."
+    Print ""
+
+    Create Calculator Called C
+    Set C.X to 10
+    Set C.Y to 5
+
+    Start is Time.Precise()
+
+    Repeat 1000000 times:
+        Result is C.Compute
+
+    End is Time.Precise()
+    Elapsed is End - Start
+
+    Print ""
+    Print "=== Results ==="
+    Print "Total calls: 1,000,000"
+    Print "Time: " + Elapsed + " seconds"
+
+    If Elapsed > 0:
+        Rate is 1000000 / Elapsed
+        Print "Throughput: " + Rate + " calls/second"
+        Print ""
+        Print "Note: First 99 calls used interpreter,"
+        Print "      remaining 999,901 calls used JIT!"
+
+Concept: Calculator
+    X
+    Y
+
+    To Compute:
+        # Pure arithmetic with Set - perfect for JIT
+        Set This.X to This.X * This.Y + This.X - This.Y
+        Return This.X

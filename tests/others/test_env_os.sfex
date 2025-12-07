@@ -1,0 +1,101 @@
+Story:
+    Print "=== Environment Variables: OS vs .env Test ==="
+    Print ""
+
+    # Test 1: Access OS environment variables (without loading .env)
+    Print "Test 1: Access OS environment variables directly"
+    Print "----------------------------------------------"
+
+    # These come from the operating system, not .env files
+    Path is Env.Get("PATH", "not_found")
+    ComSpec is Env.Get("COMSPEC", "not_found")  # Windows command processor
+    UserProfile is Env.Get("USERPROFILE", "not_found")  # Windows user dir
+    Home is Env.Get("HOME", "not_found")  # Unix home directory
+
+    Print "Operating System Environment Variables:"
+    Print "  PATH exists: " + Env.Has("PATH")
+    If Env.Has("PATH"):
+        Print "  PATH length: " + Path.Length
+
+    Print "  COMSPEC exists: " + Env.Has("COMSPEC")
+    If Env.Has("COMSPEC"):
+        Print "  COMSPEC: " + ComSpec
+
+    Print "  USERPROFILE exists: " + Env.Has("USERPROFILE")
+    If Env.Has("USERPROFILE"):
+        Print "  USERPROFILE: " + UserProfile
+
+    Print "  HOME exists: " + Env.Has("HOME")
+    If Env.Has("HOME"):
+        Print "  HOME: " + Home
+    Print ""
+
+    # Test 2: Load .env file adds to OS environment
+    Print "Test 2: .env file ADDS to OS environment"
+    Print "----------------------------------------"
+
+    BeforeLoad is Env.Has("TEST_API_KEY")
+    Print "Before Env.Load():"
+    Print "  TEST_API_KEY exists: " + BeforeLoad
+
+    Count is Env.Load("tests/assets/test.env")
+    Print ""
+    Print "After Env.Load() - loaded " + Count + " variables"
+
+    AfterLoad is Env.Has("TEST_API_KEY")
+    ApiKey is Env.Get("TEST_API_KEY")
+    Print "  TEST_API_KEY exists: " + AfterLoad
+    Print "  TEST_API_KEY value: " + ApiKey
+    Print ""
+    Print "✓ .env variables are now part of OS environment"
+    Print ""
+
+    # Test 3: All() includes both OS and .env variables
+    Print "Test 3: Env.All() includes OS + .env variables"
+    Print "----------------------------------------------"
+    AllVars is Env.All()
+
+    HasPath is Env.Has("PATH")
+    HasTestKey is Env.Has("TEST_API_KEY")
+
+    Print "Environment contains:"
+    Print "  OS variable (PATH): " + HasPath
+    Print "  .env variable (TEST_API_KEY): " + HasTestKey
+    Print ""
+    Print "✓ Both OS and .env variables accessible"
+    Print ""
+
+    # Test 4: Demonstrate why runtime modification is dangerous
+    Print "Test 4: Why runtime modification is dangerous"
+    Print "---------------------------------------------"
+    Print "Scenario simulation (conceptual):"
+    Print ""
+    Print "1. Program starts:"
+    Print "   - OS sets PATH, HOME, etc."
+    Print "   - Env.Load('config.env') at startup ✓ SAFE"
+    Print ""
+    Print "2. Program runs networking:"
+    Print "   - Connection is HTTP.Get('https://...')"
+    Print "   - Tokio spawns background threads"
+    Print "   - Those threads might read env vars"
+    Print ""
+    Print "3. If Env.Load() called NOW (at runtime):"
+    Print "   - Main thread: Writing to env vars"
+    Print "   - Tokio thread: Reading from env vars"
+    Print "   - Result: DATA RACE! 💥"
+    Print ""
+    Print "4. Safe pattern:"
+    Print "   - Call Env.Load() FIRST (at startup)"
+    Print "   - THEN do networking/async operations"
+    Print "   - Only Env.Get() during runtime ✓ SAFE"
+    Print ""
+
+    Print "=== Test completed! ==="
+    Print ""
+    Print "Summary:"
+    Print "--------"
+    Print "• Env.Get() reads from OS environment variables"
+    Print "• Env.Load() ADDS variables to OS environment"
+    Print "• OS environment = System vars + .env vars"
+    Print "• Runtime modification = UNSAFE (data races)"
+    Print "• Safe pattern: Load at startup, Get at runtime"

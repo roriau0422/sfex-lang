@@ -1,0 +1,106 @@
+Story:
+    Print "=== SFX 1 TEST ==="
+    Print ""
+
+    # 1. MATHEMATICAL HONESTY TEST
+    Print "[1/6] Testing Math..."
+    ValA is 0.1
+    ValB is 0.2
+    Result is ValA + ValB
+    
+    If Result = 0.3:
+        Print "Math is Honest: 0.1 + 0.2 = " + Result
+    Else:
+        Print "Math Failed: Got " + Result
+
+    # 2. HUMAN INDEXING & EMOJI TEST
+    Print ""
+    Print "[2/6] Testing Indexing..."
+    
+    # List Indexing (1-based)
+    Nums is [10, 20, 30]
+    FirstNum is Nums[1]
+    
+    # String/Emoji Indexing (Graphemes)
+    Flag is "🇲🇳Mongolia"
+    FirstChar is Flag[1]
+    
+    If FirstNum = 10 and FirstChar = "🇲🇳":
+        Print "Indexing is Human: List[1]=10, Flag[1]=🇲🇳"
+    Else:
+        Print "Indexing Failed"
+
+    # 3. CONTROL FLOW TEST
+    Print ""
+    Print "[3/6] Testing Loops..."
+    Counter is 0
+    
+    Repeat 5 times:
+        Counter is Counter + 1
+        
+    If Counter = 5:
+        Print "Repeat Loop: Counted to 5"
+    Else:
+        Print "Repeat Loop Failed"
+
+# 4. OBJECT MODEL (CONCEPTS)
+Concept: Spaceship
+    Name
+    Fuel
+    Integrity
+
+    To ReportStatus:
+        Print "Ship: " + This.Name + " | Fuel: " + This.Fuel + "%"
+
+    To Launch:
+        If This.Fuel > 90:
+            Print This.Name + " has launched successfully!"
+            Set This.Fuel to This.Fuel - 10
+        Else:
+            Print "Not enough fuel to launch."
+
+# 5. CONTEXT MODEL (SITUATIONS)
+Situation: EmergencyMode
+    Adjust Spaceship:
+        To ReportStatus:
+            Print "MAYDAY! " + This.Name + " INTEGRITY CRITICAL: " + This.Integrity + "%"
+        
+        To Launch:
+            Print "LAUNCH ABORTED due to Emergency Protocol."
+
+# 6. THE INTEGRATION STORY
+Story:
+    Print ""
+    Print "[4/6] Testing Creation & State..."
+    
+    Create Spaceship Called Voyager
+    Set Voyager.Name to "Voyager 1"
+    Set Voyager.Fuel to 100
+    Set Voyager.Integrity to 45
+    
+    Voyager.ReportStatus
+    Voyager.Launch
+    
+    # Verify State Change (Fuel should be 90 now)
+    If Voyager.Fuel = 90:
+        Print "State Mutation: Fuel decreased correctly."
+    Else:
+        Print "State Mutation Failed: Fuel is " + Voyager.Fuel
+
+    Print ""
+    Print "[5/6] Testing Context Switch..."
+    
+    Switch on EmergencyMode
+    
+    # Behavior should change completely
+    Voyager.ReportStatus
+    Voyager.Launch
+    
+    Switch off EmergencyMode
+    
+    Print ""
+    Print "[6/6] Testing Context Return..."
+    Voyager.ReportStatus
+    
+    Print ""
+    Print "=== CERTIFICATION COMPLETE ==="

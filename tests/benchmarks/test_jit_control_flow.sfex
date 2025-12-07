@@ -1,0 +1,74 @@
+# Test JIT compilation of control flow (If/Else and Repeat)
+
+Concept: Logic
+    To Max with A and B:
+        If A > B:
+            Return A
+        Else:
+            Return B
+
+    To IsPositive with X:
+        If X > 0:
+            Return 1
+        Else:
+            Return 0
+
+    To Factorial with N:
+        Result is 1
+        Counter is 1
+        Repeat N times:
+            Result is Result * Counter
+            Counter is Counter + 1
+        Return Result
+
+    To Sum with N:
+        Total is 0
+        Repeat N times:
+            Total is Total + 1
+        Return Total
+
+Story:
+    Print "=== JIT CONTROL FLOW TEST ==="
+    Print ""
+
+    Create Logic Called L
+
+    # Test If/Else (trigger JIT after 100 calls)
+    Print "1. Testing If/Else (Max function)..."
+    Result is 0
+    Repeat 120 times:
+        Result is L.Max with 10 and 20
+
+    Print "Max(10, 20): " + Result + " (expected: 20)"
+
+    Result2 is 0
+    Repeat 120 times:
+        Result2 is L.Max with 30 and 15
+
+    Print "Max(30, 15): " + Result2 + " (expected: 30)"
+
+    Print ""
+    Print "2. Testing IsPositive..."
+    Pos is 0
+    Repeat 120 times:
+        Pos is L.IsPositive with 5
+
+    Print "IsPositive(5): " + Pos + " (expected: 1)"
+
+    Neg is 0
+    Repeat 120 times:
+        Neg is L.IsPositive with -3
+
+    Print "IsPositive(-3): " + Neg + " (expected: 0)"
+
+    Print ""
+    Print "3. Testing Repeat loop (Sum function)..."
+    SumResult is 0
+    Repeat 120 times:
+        SumResult is L.Sum with 10
+
+    Print "Sum(10): " + SumResult + " (expected: 10)"
+
+    Print ""
+    Print "All control flow tests complete!"
+    Print "(Note: Factorial requires Assignment support which isn't implemented yet)"

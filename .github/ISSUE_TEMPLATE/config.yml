@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: GitHub Discussions
+    url: https://github.com/roriau0422/sfex-lang/discussions
+    about: For general questions and community discussions
+  - name: Documentation
+    url: https://github.com/roriau0422/sfex-lang/blob/main/README.md
+    about: Read the official SFX documentation

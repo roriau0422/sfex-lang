@@ -1,0 +1,140 @@
+Story:
+    Print "=========================================="
+    Print "Testing Try/Catch/Always"
+    Print "=========================================="
+    Print ""
+
+    # Test 1: Basic Try with no error
+    Print "Test 1: Try block with no error"
+    Try:
+        Print "  Inside Try block"
+        Result is 10 + 20
+        Print "  Result: " + Result
+    Catch error:
+        Print "  ERROR: This should not execute"
+    Always:
+        Print "  Always block executed"
+    Print "Test 1 passed!"
+    Print ""
+
+    # Test 2: Try with error and Catch (using division by zero simulation)
+    Print "Test 2: Try with error, Catch handles it"
+    Try:
+        Print "  Attempting operation..."
+        # Simulate error by accessing undefined variable
+        BadValue is UnknownVar
+        Print "  This should not print"
+    Catch err:
+        Print "  Caught error: " + err.type + " - " + err.message
+    Always:
+        Print "  Cleanup in Always"
+    Print "Test 2 passed!"
+    Print ""
+
+    # Test 3: Always executes even without error
+    Print "Test 3: Always executes when Try succeeds"
+    Counter is 0
+    Try:
+        Counter is Counter + 1
+        Print "  Try succeeded, Counter: " + Counter
+    Always:
+        Counter is Counter + 10
+        Print "  Always executed, Counter: " + Counter
+    Print "Final Counter: " + Counter
+    Print "Test 3 passed!"
+    Print ""
+
+    # Test 4: Try without Catch, but with Always
+    Print "Test 4: Try with Always but no Catch"
+    Try:
+        Value is 42
+        Print "  Value: " + Value
+    Always:
+        Print "  Always runs without Catch"
+    Print "Test 4 passed!"
+    Print ""
+
+    # Test 5: Multiple operations in Try
+    Print "Test 5: Multiple operations in Try/Catch"
+    Try:
+        A is 10
+        B is 20
+        C is A + B
+        Print "  A + B = " + C
+        D is C * 2
+        Print "  C * 2 = " + D
+    Catch error:
+        Print "  Error: " + error.type + " - " + error.message
+    Always:
+        Print "  Cleanup complete"
+    Print "Test 5 passed!"
+    Print ""
+
+    # Test 6: Nested Try/Catch
+    Print "Test 6: Nested Try/Catch"
+    Try:
+        Print "  Outer Try"
+        Try:
+            Print "    Inner Try"
+            Inner is 100
+            Print "    Inner value: " + Inner
+        Catch inner_err:
+            Print "    Inner Catch: " + inner_err.type + " - " + inner_err.message
+        Always:
+            Print "    Inner Always"
+        Print "  Back to outer Try"
+    Catch outer_err:
+        Print "  Outer Catch: " + outer_err.type + " - " + outer_err.message
+    Always:
+        Print "  Outer Always"
+    Print "Test 6 passed!"
+    Print ""
+
+    # Test 7: Catch without error variable
+    Print "Test 7: Catch without error variable name"
+    Try:
+        Safe is 123
+        Print "  Safe value: " + Safe
+    Catch:
+        Print "  Caught something (no error variable)"
+    Always:
+        Print "  Always block"
+    Print "Test 7 passed!"
+    Print ""
+
+    # Test 8: Try/Catch with List operations
+    Print "Test 8: Try/Catch with List operations"
+    Try:
+        Items is [1, 2, 3, 4, 5]
+        First is Items[1]
+        Print "  First item: " + First
+        Last is Items[5]
+        Print "  Last item: " + Last
+    Catch list_err:
+        Print "  List error: " + list_err.type + " - " + list_err.message
+    Always:
+        Print "  List operations complete"
+    Print "Test 8 passed!"
+    Print ""
+
+    # Test 9: Continue execution after Try/Catch
+    Print "Test 9: Execution continues after Try/Catch"
+    Before is "Before Try"
+    Print "  " + Before
+
+    Try:
+        During is "During Try"
+        Print "  " + During
+    Catch:
+        Print "  Error handling"
+    Always:
+        Print "  Always cleanup"
+
+    After is "After Try/Catch/Always"
+    Print "  " + After
+    Print "Test 9 passed!"
+    Print ""
+
+    Print "=========================================="
+    Print "All Try/Catch/Always tests completed!"
+    Print "=========================================="

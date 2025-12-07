@@ -1,0 +1,72 @@
+Story:
+    Print "=== JIT vs Interpreter Performance ==="
+    Print ""
+
+    # Strategy: Use different methods for each benchmark
+    # - SlowCompute: Call only 99 times (stays in interpreter)
+    # - FastCompute: Call 100,000 times (JIT kicks in at call 100)
+
+    # Benchmark 1: Pure Interpreter (99 calls * 1000 objects = all interpreter)
+    Print "1. Pure Interpreter (99,000 total calls, all in interpreter):"
+    Print "   Strategy: Create 1,000 objects, call each method 99 times"
+
+    Start is Time.Now()
+    Repeat 1000 times:
+        Create Calculator Called C
+        Set C.X to 10
+        Set C.Y to 5
+        Repeat 99 times:
+            Result is C.SlowCompute
+    End is Time.Now()
+    Time1 is End - Start
+
+    Print "   Total calls: 99,000 (all interpreter)"
+    Print "   Time: " + Time1 + " seconds"
+    Print ""
+
+    # Benchmark 2: With JIT (1,000,000 calls - JIT compiles at 100)
+    Print "2. With JIT (1,000,000 calls, JIT compiles at call 100):"
+    Create Calculator Called C2
+    Set C2.X to 10
+    Set C2.Y to 5
+
+    Start is Time.Now()
+    Repeat 1000000 times:
+        Result is C2.FastCompute
+    End is Time.Now()
+    Time2 is End - Start
+
+    Print "   Calls: 1,000,000"
+    Print "   Time: " + Time2 + " seconds"
+    Print ""
+
+    # Results
+    Print "=== Analysis ==="
+    Print "Interpreter: 50,000 calls in " + Time1 + " sec"
+    Print "JIT: 1,000,000 calls in " + Time2 + " sec"
+    Print ""
+
+    If Time1 > 0:
+        If Time2 > 0:
+            Rate1 is 99 / Time1
+            Rate2 is 100000 / Time2
+            Print "Interpreter rate: " + Rate1 + " calls/sec"
+            Print "JIT rate: " + Rate2 + " calls/sec"
+            Speedup is Rate2 / Rate1
+            Print ""
+            Print "JIT Speedup: " + Speedup + "x faster!"
+
+Concept: Calculator
+    X
+    Y
+
+    To SlowCompute:
+        # This method will stay in interpreter (< 100 calls)
+        Set This.X to This.X * This.Y + This.X - This.Y
+        Return This.X
+
+    To FastCompute:
+        # This method will be JIT compiled (>= 100 calls)
+        # Same logic as SlowCompute
+        Set This.X to This.X * This.Y + This.X - This.Y
+        Return This.X

@@ -1,0 +1,26 @@
+Story:
+    Print "=== WHEN STATEMENT TESTS (Part 3) ==="
+    Print ""
+
+    # Test 7: Nested When statements
+    Print "[Test 7] Nested When:"
+    Category is "fruit"
+    Item is "apple"
+
+    When Category:
+        is "fruit":
+            Print "  Category: Fruit"
+            When Item:
+                is "apple":
+                    Print "    It's an apple!"
+                is "banana":
+                    Print "    It's a banana!"
+                Otherwise:
+                    Print "    Unknown fruit"
+        is "vegetable":
+            Print "  Category: Vegetable"
+        Otherwise:
+            Print "  Unknown category"
+
+    Print ""
+    Print "=== TESTS COMPLETED ==="

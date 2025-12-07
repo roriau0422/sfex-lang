@@ -1,0 +1,23 @@
+Concept: Product
+    To IsAvailable:
+        Return This.stock > 0
+    
+    To ApplyDiscount with percent:
+        Set This.price to This.price * (1 - percent / 100)
+    
+    To Summary:
+        Print This.name + " - ₮" + This.price
+
+Situation: SaleMode
+    Adjust Product:
+        To Summary:
+            Print "SALE! " + This.name + " - ₮" + This.price
+
+Story:
+    Phone is { _concept: "Product", name: "iPhone 15", price: 4500000, stock: 3 }
+    
+    Print Phone.IsAvailable   # true
+    Phone.Summary             # iPhone 15 - ₮4500000
+    
+    Switch on SaleMode
+    Phone.Summary             # SALE! iPhone 15 - ₮4500000

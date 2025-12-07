@@ -1,0 +1,65 @@
+Story:
+    Print "=== TRUE Interpreter vs JIT Comparison ==="
+    Print ""
+    Print "Strategy: Use 2 different methods (different JIT profiles)"
+    Print "- Method A: Called 99 times (stays in interpreter)"
+    Print "- Method B: Called 1,000,000 times (JIT compiles)"
+    Print ""
+
+    # Part 1: Pure Interpreter (method called < 100 times)
+    Print "1. Pure Interpreter (SlowAdd called 99 times, no JIT):"
+
+    Create Counter Called C1
+    Set C1.Value to 0
+
+    Start is Time.Precise()
+    Repeat 99 times:
+        Result is C1.SlowAdd
+    End is Time.Precise()
+    Time1 is End - Start
+
+    Print "   Calls: 99"
+    Print "   Time: " + Time1 + " sec"
+    Rate1 is 99 / Time1
+    Print "   Rate: " + Rate1 + " calls/sec"
+    Print ""
+
+    # Part 2: With JIT (method called 1M times)
+    Print "2. With JIT (FastAdd called 1,000,000 times):"
+
+    Create Counter Called C2
+    Set C2.Value to 0
+
+    Start is Time.Precise()
+    Repeat 1000000 times:
+        Result is C2.FastAdd
+    End is Time.Precise()
+    Time2 is End - Start
+
+    Print "   Calls: 1,000,000"
+    Print "   Time: " + Time2 + " sec"
+    Rate2 is 1000000 / Time2
+    Print "   Rate: " + Rate2 + " calls/sec"
+    Print ""
+
+    # Analysis
+    Print "=== Results ==="
+    Speedup is Rate2 / Rate1
+    Print "JIT Speedup: " + Speedup + "x faster!"
+    Print ""
+    Print "Interpreter: " + Rate1 + " calls/sec"
+    Print "JIT:         " + Rate2 + " calls/sec"
+
+Concept: Counter
+    Value
+
+    To SlowAdd:
+        # This method stays in interpreter (< 100 calls)
+        Set This.Value to This.Value + 1
+        Return This.Value
+
+    To FastAdd:
+        # This method gets JIT compiled (>= 100 calls)
+        # Same operation as SlowAdd
+        Set This.Value to This.Value + 1
+        Return This.Value

@@ -1,0 +1,52 @@
+Story:
+    Print "=== SFX BENCHMARK START ==="
+
+    # -----------------------------------------------
+    # TEST 1: Pure Loop & Math (1,000,000 iterations)
+    # -----------------------------------------------
+    Print "1. Running Loop (1,000,000 iterations)..."
+    
+    Sum is 0
+    Counter is 0
+    
+    Repeat 1000000 times:
+        Sum is Sum + 1
+        
+    Print "   Result: " + Sum
+
+    # -----------------------------------------------
+    # TEST 2: Object Creation & Memory (5,000 objects)
+    # -----------------------------------------------
+    Print "2. Creating 5,000 Objects..."
+
+# --- BREAK STORY TO DEFINE CONCEPT ---
+Concept: Item
+    Value
+
+# --- RESUME STORY ---
+Story:
+    Repeat 5000 times:
+        Create Item called Thing
+        Set Thing.Value to 100
+
+    # -----------------------------------------------
+    # TEST 3: Method Dispatch (10,000 calls)
+    # -----------------------------------------------
+    Print "3. Method Dispatch (10,000 calls)..."
+
+# --- BREAK STORY TO DEFINE CONCEPT ---
+Concept: Processor
+    Count
+    To Process:
+        Set This.Count to This.Count + 1
+
+# --- RESUME STORY ---
+Story:
+    Create Processor called CPU
+    Set CPU.Count to 0
+    
+    Repeat 10000 times:
+        CPU.Process
+        
+    Print "   Result: " + CPU.Count
+    Print "=== FINISHED ==="

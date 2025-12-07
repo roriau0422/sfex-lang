@@ -1,0 +1,31 @@
+Story:
+    Print "Example 1: Basic error handling"
+    Try:
+        Result is 42
+        Print "Result computed: " + Result
+    Catch error:
+        Print "Failed: " + error.type + " - " + error.message
+    Always:
+        Print "Cleanup done"
+
+    Print "Continuing..."
+    Print ""
+
+    Print "Example 2: Catching specific error types"
+    Try:
+        X is UndefinedVar
+        Print "Should not reach here"
+    Catch error:
+        When error.type:
+            is "UndefinedVariable":
+                Print "Variable not found: " + error.message
+            is "IndexError":
+                Print "Index out of bounds: " + error.message
+            is "TypeError":
+                Print "Type mismatch: " + error.message
+            Otherwise:
+                Print "Unknown error: " + error.type
+    Always:
+        Print "Cleanup done"
+
+    Print "Continuing..."

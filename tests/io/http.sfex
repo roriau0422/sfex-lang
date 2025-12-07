@@ -1,0 +1,65 @@
+Story:
+    Print "=== HTTP/HTTPS Networking Tests ==="
+    Print ""
+
+    # Test 1: Simple GET request
+    Print "Test 1: HTTP GET Request"
+    Response is HTTP.Get("https://httpbin.org/get")
+    Print "Status: " + Response["Status"]
+    Print "Status Text: " + Response["StatusText"]
+    Body is Response["Body"]
+    Data is JSON.Parse(Body)
+    Print "URL: " + Data["url"]
+    Print ""
+
+    # Test 2: GET with headers
+    Print "Test 2: GET with custom headers"
+    Headers is { UserAgent: "SFX/0.2.0", Accept: "application/json" }
+    Response is HTTP.Get("https://httpbin.org/headers", Headers)
+    Print "Status: " + Response["Status"]
+    Body is Response["Body"]
+    Data is JSON.Parse(Body)
+    UserAgent is Data["headers"]["Useragent"]
+    Print "User-Agent echoed: " + UserAgent
+    Print ""
+
+    # Test 3: POST with JSON body
+    Print "Test 3: HTTP POST with JSON"
+    PostBody is '{"name": "SFX", "version": "0.2.0", "feature": "networking"}'
+    Response is HTTP.Post("https://httpbin.org/post", PostBody)
+    Print "Status: " + Response["Status"]
+    Body is Response["Body"]
+    Data is JSON.Parse(Body)
+    EchoedData is Data["data"]
+    Print "Echoed data: " + EchoedData
+    Print ""
+
+    # Test 4: PUT request
+    Print "Test 4: HTTP PUT"
+    PutBody is '{"updated": true}'
+    Response is HTTP.Put("https://httpbin.org/put", PutBody)
+    Print "Status: " + Response["Status"]
+    Print ""
+
+    # Test 5: DELETE request
+    Print "Test 5: HTTP DELETE"
+    Response is HTTP.Delete("https://httpbin.org/delete")
+    Print "Status: " + Response["Status"]
+    Print ""
+
+    # Test 6: PATCH request
+    Print "Test 6: HTTP PATCH"
+    PatchBody is '{"patched": true}'
+    Response is HTTP.Patch("https://httpbin.org/patch", PatchBody)
+    Print "Status: " + Response["Status"]
+    Print ""
+
+    # Test 7: Response headers
+    Print "Test 7: Reading response headers"
+    Response is HTTP.Get("https://httpbin.org/get")
+    Headers is Response["Headers"]
+    ContentType is Headers["content-type"]
+    Print "Content-Type header retrieved"
+    Print ""
+
+    Print "=== All HTTP tests completed! ==="

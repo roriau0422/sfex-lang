@@ -1,0 +1,48 @@
+# Test Channel.TryReceive with timeout
+
+Story:
+    Print "=== Channel Timeout Test ==="
+
+    Ch is Channel.Create(5)
+
+    # Test 1: Successful receive before timeout
+    Print "Test 1: Send then TryReceive (should succeed)"
+    Ch.Send(42)
+    Result1 is Ch.TryReceive(2)  # 2 second timeout
+    If Result1.IsSome:
+        Print "✅ Received: " + Result1.Unwrap()
+    Else:
+        Print "❌ FAILED: Should have received value"
+
+    # Test 2: Timeout when no sender
+    Print ""
+    Print "Test 2: TryReceive with no sender (should timeout)"
+    Result2 is Ch.TryReceive(1)  # 1 second timeout
+    If Result2.IsNone:
+        Print "✅ Timeout worked (returned None)"
+    Else:
+        Print "❌ FAILED: Should have timed out"
+
+    # Test 3: Task crashes before sending
+    Print ""
+    Print "Test 3: Task crashes before sending (should timeout)"
+    Ch2 is Channel.Create(5)
+
+    Task is Do in background:
+        # Simulate work then crash
+        Counter is 0
+        Repeat 10000 times:
+            Counter is Counter + 1
+        # Exit without sending - simulates crash
+        Return False
+
+    Result3 is Ch2.TryReceive(1)  # Try to receive with 1 sec timeout
+    TaskResult is Task.Await()
+
+    If Result3.IsNone:
+        Print "✅ Timeout prevented hang when sender died"
+    Else:
+        Print "❌ FAILED: Should have timed out"
+
+    Print ""
+    Print "=== All Tests Complete ==="

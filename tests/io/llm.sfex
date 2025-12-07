@@ -1,0 +1,205 @@
+# Test: LLM Module - OpenAI Chat Completions API
+# Demonstrates AI/LLM integration with OpenAI
+
+Story:
+    Print "=== LLM Module Tests (OpenAI) ==="
+    Print ""
+    Print "Note: This test requires OPENAI_API_KEY environment variable"
+    Print "Set it in .env file or via Env.Load() before running"
+    Print ""
+
+    # Check for API key
+    If Env.Has("OPENAI_API_KEY"):
+        Print "✓ OPENAI_API_KEY found"
+    Else:
+        Print "✗ OPENAI_API_KEY not found!"
+        Print "  Set it via: Env.Load(\".env\") or export OPENAI_API_KEY=sk-..."
+        Print "  Skipping tests."
+        Print ""
+        # Exit early if no API key
+        Print "=== Tests Skipped ==="
+        Print ""
+
+    Print ""
+
+    # Test 1: LLM.Simple() - Single prompt (simplest interface)
+    Print "Test 1: LLM.Simple() - Single Prompt"
+    Print "----------------------------------------"
+    Print "Sending simple prompt to GPT-4o-mini..."
+
+    Prompt is "What is 2+2? Answer in one word only."
+    Options is { model: "gpt-4o-mini", temperature: 0.7, max_tokens: 10 }
+
+    Response is LLM.Simple(Prompt, Options)
+
+    Print "Model: " + Response["Model"]
+    Print "Response: " + Response["Content"]
+    Print "Finish Reason: " + Response["FinishReason"]
+
+    Usage is Response["Usage"]
+    PromptTokens is Usage["PromptTokens"]
+    CompletionTokens is Usage["CompletionTokens"]
+    TotalTokens is Usage["TotalTokens"]
+
+    Print "Usage: " + PromptTokens + " prompt + " + CompletionTokens + " completion = " + TotalTokens + " total tokens"
+    Print "✓ Simple prompt completed"
+    Print ""
+
+    # Test 2: LLM.Chat() - Full messages array (advanced control)
+    Print "Test 2: LLM.Chat() - Full Messages Array"
+    Print "----------------------------------------"
+    Print "Building conversation with multiple messages..."
+
+    Message1 is { role: "user", content: "Hello! I'm learning about programming." }
+    Message2 is { role: "assistant", content: "Great! I'd be happy to help you learn programming. What would you like to know?" }
+    Message3 is { role: "user", content: "What is a variable? Explain in one sentence." }
+
+    Messages is [Message1, Message2, Message3]
+    ChatOptions is { model: "gpt-5-nano", temperature: 0.5, max_tokens: 50 }
+
+    ChatResponse is LLM.Chat(Messages, ChatOptions)
+
+    Print "Model: " + ChatResponse["Model"]
+    Print "Response: " + ChatResponse["Content"]
+
+    ChatUsage is ChatResponse["Usage"]
+    Print "Tokens used: " + ChatUsage["TotalTokens"]
+    Print "✓ Multi-turn conversation completed"
+    Print ""
+
+    # Test 3: LLM.ChatWithSystem() - System prompt + user prompt
+    Print "Test 3: LLM.ChatWithSystem() - System Prompt Pattern"
+    Print "----------------------------------------"
+    Print "Using system prompt to control behavior..."
+
+    SystemPrompt is "You are a helpful math tutor. Always explain your reasoning step by step."
+    UserPrompt is "What is 15 * 8?"
+
+    SystemOptions is { model: "gpt-4o-mini", temperature: 0.3, max_tokens: 100 }
+
+    SystemResponse is LLM.ChatWithSystem(SystemPrompt, UserPrompt, SystemOptions)
+
+    Print "Model: " + SystemResponse["Model"]
+    Print "Response: " + SystemResponse["Content"]
+    Print "✓ System prompt pattern completed"
+    Print ""
+
+    # Test 4: Different models
+    Print "Test 4: Model Selection"
+    Print "----------------------------------------"
+
+    # GPT-4o-mini (fast, cheap)
+    QuickPrompt is "Say 'Hello' in French"
+    QuickOptions is { model: "gpt-4o-mini", max_tokens: 10 }
+    QuickResponse is LLM.Simple(QuickPrompt, QuickOptions)
+    Print "gpt-4o-mini: " + QuickResponse["Content"]
+
+    # GPT-4o (more capable, slower, more expensive)
+    # Uncomment to test if you have credits:
+    # AdvancedOptions is { model: "gpt-4o", max_tokens: 20 }
+    # AdvancedResponse is LLM.Simple("Say 'Hello' in Japanese", AdvancedOptions)
+    # Print "gpt-4o: " + AdvancedResponse["Content"]
+
+    Print "✓ Model selection works"
+    Print ""
+
+    # Test 5: Temperature control
+    Print "Test 5: Temperature Control (Creativity)"
+    Print "----------------------------------------"
+
+    CreativePrompt is "Complete this sentence: The sky is"
+
+    # Low temperature = more deterministic
+    LowTempOptions is { model: "gpt-4o-mini", temperature: 0.1, max_tokens: 10 }
+    LowTempResponse is LLM.Simple(CreativePrompt, LowTempOptions)
+    Print "Low temp (0.1): " + LowTempResponse["Content"]
+
+    # High temperature = more creative/random
+    HighTempOptions is { model: "gpt-4o-mini", temperature: 1.5, max_tokens: 10 }
+    HighTempResponse is LLM.Simple(CreativePrompt, HighTempOptions)
+    Print "High temp (1.5): " + HighTempResponse["Content"]
+
+    Print "✓ Temperature control works"
+    Print ""
+
+    # Test 6: Token limits
+    Print "Test 6: Token Limits (max_tokens)"
+    Print "----------------------------------------"
+
+    LongPrompt is "Write a haiku about programming"
+
+    # Very small token limit
+    SmallLimitOptions is { model: "gpt-4o-mini", max_tokens: 5 }
+    SmallResponse is LLM.Simple(LongPrompt, SmallLimitOptions)
+    Print "Max 5 tokens: " + SmallResponse["Content"]
+    Print "Finish reason: " + SmallResponse["FinishReason"]
+
+    # Reasonable token limit
+    NormalLimitOptions is { model: "gpt-4o-mini", max_tokens: 50 }
+    NormalResponse is LLM.Simple(LongPrompt, NormalLimitOptions)
+    Print "Max 50 tokens: " + NormalResponse["Content"]
+    Print "Finish reason: " + NormalResponse["FinishReason"]
+
+    Print "✓ Token limits work"
+    Print ""
+
+    # Test 7: Role-based conversation (realistic chatbot)
+    Print "Test 7: Role-Based Conversation"
+    Print "----------------------------------------"
+
+    UserMsg1 is { role: "user", content: "My code has a bug" }
+    AssistantMsg1 is { role: "assistant", content: "I can help debug that. What error are you seeing?" }
+    UserMsg2 is { role: "user", content: "NameError: name 'x' is not defined" }
+
+    ConversationMessages is [UserMsg1, AssistantMsg1, UserMsg2]
+    ConversationOptions is { model: "gpt-4o-mini", max_tokens: 100 }
+
+    DebugResponse is LLM.Chat(ConversationMessages, ConversationOptions)
+    Print "AI Debug Response:"
+    Print DebugResponse["Content"]
+    Print "✓ Role-based conversation works"
+    Print ""
+
+    # Test 8: API error handling (invalid model)
+    Print "Test 8: Error Handling"
+    Print "----------------------------------------"
+
+    # This should fail gracefully with an error message
+    # Uncomment to test error handling:
+    # InvalidOptions is { model: "nonexistent-model-xyz" }
+    # ErrorResponse is LLM.Simple("Test", InvalidOptions)
+    # This will throw a runtime error with the API error message
+
+    Print "✓ Error handling implemented (test commented out)"
+    Print ""
+
+    Print "=== Summary ==="
+    Print "✓ LLM.Simple(prompt, options) - Simplest interface"
+    Print "✓ LLM.Chat(messages, options) - Full control over conversation"
+    Print "✓ LLM.ChatWithSystem(system, user, options) - System prompt pattern"
+    Print "✓ Model selection (gpt-4o-mini, gpt-4o, etc.)"
+    Print "✓ Temperature control (0.0 - 2.0)"
+    Print "✓ Token limits (max_tokens)"
+    Print "✓ Usage tracking (prompt/completion/total tokens)"
+    Print "✓ Multi-turn conversations"
+    Print "✓ Role-based messages (system, user, assistant)"
+    Print ""
+    Print "Available Models:"
+    Print "  - gpt-4o-mini (fast, cheap, recommended default)"
+    Print "  - gpt-4o (most capable, slower, more expensive)"
+    Print "  - gpt-3.5-turbo (legacy, still supported)"
+    Print ""
+    Print "Options:"
+    Print "  - model: String (default: gpt-4o-mini)"
+    Print "  - temperature: Number 0.0-2.0 (default: 1.0)"
+    Print "  - max_tokens: Number (default: unlimited)"
+    Print "  - api_key: String (overrides OPENAI_API_KEY env var)"
+    Print ""
+    Print "Response Fields:"
+    Print "  - Content: The AI's text response"
+    Print "  - Model: Model used (e.g., gpt-4o-mini-2024-07-18)"
+    Print "  - Role: Response role (usually 'assistant')"
+    Print "  - FinishReason: stop, length, or content_filter"
+    Print "  - Usage: Map with PromptTokens, CompletionTokens, TotalTokens"
+    Print "  - Id: Unique response ID"
+    Print "  - Status: HTTP status code (200 = success)"

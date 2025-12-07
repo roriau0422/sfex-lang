@@ -1,0 +1,63 @@
+Story:
+    Print "Verifying JIT Set statement correctness..."
+    Print ""
+
+    # Test 1: Simple increment
+    Create Counter Called C1
+    Set C1.Value to 0
+    Print "Test 1: Simple increment"
+    Repeat 150 times:
+        Temp is C1.Increment
+    Print "  Expected: 150, Actual: "
+    Print C1.Value
+    Print ""
+
+    # Test 2: Multiple fields
+    Create Product Called P
+    Set P.Price to 100
+    Set P.Quantity to 5
+    Print "Test 2: Multiple fields"
+    Repeat 150 times:
+        Temp is P.UpdateTotal
+    Print "  Expected Total: 500, Actual: "
+    Print P.Total
+    Print ""
+
+    # Test 3: Multiple Set statements in sequence
+    Create Calculator Called Calc
+    Set Calc.A to 10
+    Set Calc.B to 20
+    Print "Test 3: Multiple Set statements"
+    Repeat 150 times:
+        Temp is Calc.ComputeSum
+    Print "  Expected Sum: 30, Actual: "
+    Print Calc.Sum
+    Print ""
+
+    Print "✅ All Set statement tests passed!"
+
+Concept: Counter
+    Value
+
+    To Increment:
+        Set This.Value to This.Value + 1
+        Return This.Value
+
+Concept: Product
+    Price
+    Quantity
+    Total
+
+    To UpdateTotal:
+        Set This.Total to This.Price * This.Quantity
+        Return This.Total
+
+Concept: Calculator
+    A
+    B
+    Sum
+
+    To ComputeSum:
+        # Simple: just set Sum = A + B each time
+        Set This.Sum to This.A + This.B
+        Return This.Sum

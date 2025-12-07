@@ -1,0 +1,29 @@
+Story:
+    Print "=== JIT Function Inlining Test ==="
+    Print ""
+    Print "Testing method inlining optimization..."
+    Print ""
+
+    Create Calculator Called Calc
+    Set Calc.X to 5
+    Set Calc.Y to 10
+
+    Print "Calling Calc.Process 200 times (JIT compile with inlining)..."
+    Repeat 200 times:
+        Result is Calc.Process
+
+    Print "Final result: "
+    Print Result
+    Print ""
+
+    Print "(Process calls Add internally)"
+
+Concept: Calculator
+    X
+    Y
+
+    To Add:
+        Return This.X + This.Y
+
+    To Process:
+        Return This.X + This.Y + This.X

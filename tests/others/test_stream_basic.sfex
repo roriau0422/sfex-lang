@@ -1,0 +1,52 @@
+Story:
+    Print "=== Test 1: Stream.FromList with ForEach ==="
+    Numbers is [1, 2, 3, 4, 5]
+    StreamObj is Stream.FromList(Numbers)
+
+    For each N in StreamObj:
+        Print N
+
+    Print ""
+    Print "=== Test 2: Stream.Range with ForEach ==="
+    RangeStream is Stream.Range(1, 5)
+
+    For each N in RangeStream:
+        Print N
+
+    Print ""
+    Print "=== Test 3: Manual iteration with .Next() ==="
+    ManualStream is Stream.Range(10, 13)
+
+    Repeat while ManualStream.HasMore():
+        Item is ManualStream.Next()
+        If Item.IsSome:
+            Value is Item.Unwrap()
+            Print Value
+
+    Print ""
+    Print "=== Test 4: Stream with Break ==="
+    BreakStream is Stream.Range(1, 100)
+
+    For each N in BreakStream:
+        Print N
+        If N = 5:
+            Break
+
+    Print ""
+    Print "=== Test 5: Stream.ToList() ==="
+    Numbers2 is [10, 20, 30, 40, 50]
+    Stream2 is Stream.FromList(Numbers2)
+    Collected is Stream2.ToList()
+    Print Collected
+
+    Print ""
+    Print "=== Test 6: Empty stream ==="
+    EmptyList is []
+    EmptyStream is Stream.FromList(EmptyList)
+
+    HasMore is EmptyStream.HasMore()
+    Print "HasMore on empty stream:"
+    Print HasMore
+
+    Print ""
+    Print "=== All basic tests complete ==="

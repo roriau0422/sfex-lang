@@ -1,0 +1,49 @@
+Story:
+    Print "=== WebSocket Tests ==="
+    Print ""
+
+    # Test 1: Connect to WebSocket echo server
+    Print "Test 1: Connecting to WebSocket echo server"
+    Connection is WebSocket.Connect("wss://echo.websocket.org")
+    Print "✓ Connected to wss://echo.websocket.org"
+    Print ""
+
+    # Test 2: Send and receive message
+    Print "Test 2: Send and receive echo"
+    Connection.Send("Hello from SFX!")
+    Response is Connection.Receive()
+    Print "Sent: Hello from SDSFG!"
+    Print "Received: " + Response
+    Print ""
+
+    # Test 3: Multiple messages
+    Print "Test 3: Multiple messages"
+    Connection.Send("Message 1")
+    Msg1 is Connection.Receive()
+    Print "Echo 1: " + Msg1
+
+    Connection.Send("Message 2")
+    Msg2 is Connection.Receive()
+    Print "Echo 2: " + Msg2
+
+    Connection.Send("Message 3")
+    Msg3 is Connection.Receive()
+    Print "Echo 3: " + Msg3
+    Print ""
+
+    # Test 4: Send JSON
+    Print "Test 4: Send JSON message"
+    JsonMsg is '{"type":"test","data":"networking"}'
+    Connection.Send(JsonMsg)
+    JsonResponse is Connection.Receive()
+    Print "Sent JSON: " + JsonMsg
+    Print "Received: " + JsonResponse
+    Print ""
+
+    # Test 5: Close connection
+    Print "Test 5: Close connection"
+    Connection.Close()
+    Print "✓ Connection closed"
+    Print ""
+
+    Print "=== All WebSocket tests completed! ==="

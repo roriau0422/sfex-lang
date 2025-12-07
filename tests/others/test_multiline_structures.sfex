@@ -1,0 +1,38 @@
+Story:
+    Print "=== Testing Multiline Structures ==="
+
+    # Multiline List
+    Numbers is [
+        1,
+        2,
+        3,
+        4,
+        5
+    ]
+    Print "List length: " + Numbers.Length
+
+    # Multiline Map
+    User is {
+        name: "Alice",
+        age: 30,
+        city: "Tokyo",
+        active: True
+    }
+    Print "User: " + User.name + " from " + User.city
+
+    # Nested structures
+    Config is {
+        database: {
+            host: "localhost",
+            port: 5432
+        },
+        features: [
+            "auth",
+            "logging",
+            "caching"
+        ]
+    }
+    Print "DB Host: " + Config.database.host
+    Print "Features: " + Config.features.Length
+
+    Print "=== All Tests Passed! ==="

@@ -1,0 +1,4 @@
+Story:
+    Name is "Temka"
+    Score is 100
+    Print "User {Name} has score {Score}"

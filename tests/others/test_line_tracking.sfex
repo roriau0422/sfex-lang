@@ -1,0 +1,32 @@
+Story:
+    Print "Line Tracking Test"
+    Print "=================="
+    Print ""
+
+    Print "Statement 1"
+    Print "Statement 2"
+    Print "Statement 3"
+
+    Try:
+        Print "Inside Try (statement 8)"
+        X is UndefinedVariable
+        Print "Should not reach here"
+    Catch error:
+        Print "Error at line: " + error.line
+        Print "Error type: " + error.type
+
+    Print ""
+    Print "More statements..."
+
+    Try:
+        A is 1
+        B is 2
+        C is 3
+        BadList is [1, 2, 3]
+        Item is BadList[0]
+    Catch err:
+        Print "Error at line: " + err.line
+        Print "Error: " + err.type + " - " + err.message
+
+    Print ""
+    Print "Final statement"

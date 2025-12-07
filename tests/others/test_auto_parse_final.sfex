@@ -1,0 +1,24 @@
+Story:
+    Print "=== Auto-Parse Test (with improved detection) ==="
+    Print ""
+
+    # Test 1: Auto-parse JSON
+    Print "Test 1: Auto-parse JSON"
+    Products is Data.Parse("tests/assets/products.json")
+    Product1 is Products[1]
+    Name is Product1["name"]
+    Price is Product1["price"]
+    Print "  Product: " + Name + " - $" + Price
+    Print "✓ JSON auto-parse works!"
+    Print ""
+
+    # Test 2: Auto-parse XML
+    Print "Test 2: Auto-parse XML"
+    XmlDoc is Data.Parse("tests/assets/books.xml")
+    Titles is XmlDoc.XPath("//title")
+    Title1 is Titles[1]
+    Print "  Book: " + Title1
+    Print "✓ XML auto-parse works!"
+    Print ""
+
+    Print "=== Success! Auto-detection and parsing working! ==="

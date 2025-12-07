@@ -1,0 +1,41 @@
+Story:
+    Print "=== SFX ASYNC CRAWLER ==="
+    
+    # 1. Setup Communication
+    Results is Channel.Create(5)
+    
+    # 2. Define Targets (Free APIs)
+    Urls is [
+        "https://jsonplaceholder.typicode.com/todos/1",
+        "https://jsonplaceholder.typicode.com/todos/2",
+        "https://jsonplaceholder.typicode.com/todos/3"
+    ]
+    
+    Print "Starting 3 crawlers..."
+    
+    Vector is []
+
+    # 3. Spawn Workers (The "Fan-Out")
+    For each Url in Urls:
+        Worker is Do in background:
+            Print "Fetching: " + Url
+
+            # Fetch & Parse in one go
+            Raw is HTTP.Get(Url)
+            Body is Raw.Body
+            Data is JSON.Parse(Body)
+
+            # Send just the title back
+            Title is Data.title
+            Results.Send(Title)
+    
+    # 4. Collect Results (The "Fan-In")
+    Print "Waiting for results..."
+    
+    Counter is 0
+    Repeat 3 times:
+        Title is Results.Receive()
+        Counter is Counter + 1
+        Print "✅ [" + Counter + "] Received: " + Title
+        
+    Print "=== CRAWL COMPLETE ==="

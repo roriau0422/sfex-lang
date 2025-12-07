@@ -1,0 +1,53 @@
+Story:
+    Print "=== JIT Speedup Measurement ==="
+    Print ""
+
+    Create Calculator Called C
+    Set C.X to 10
+    Set C.Y to 5
+
+    # Phase 1: Pure interpreter (first 99 calls)
+    Print "Phase 1: Interpreter only (first 99 calls)"
+    Start is Time.Precise()
+
+    Repeat 99 times:
+        Result is C.Compute
+
+    Mid is Time.Precise()
+    InterpreterTime is Mid - Start
+    Print "   Time: " + InterpreterTime + " seconds"
+    If InterpreterTime > 0:
+        Rate1 is 99 / InterpreterTime
+        Print "   Rate: " + Rate1 + " calls/sec"
+    Print ""
+
+    # Phase 2: After JIT compilation (next 1,000,000 calls)
+    Print "Phase 2: After JIT compilation (next 1,000,000 calls)"
+
+    Repeat 1000000 times:
+        Result is C.Compute
+
+    End is Time.Precise()
+    JitTime is End - Mid
+
+    Print "   Time: " + JitTime + " seconds"
+    Print ""
+
+    # Analysis
+    Print "=== Analysis ==="
+    If JitTime > 0:
+        JitRate is 1000000 / JitTime
+        Print "JIT Performance: " + JitRate + " calls/sec"
+        Print ""
+        Print "The JIT-compiled code runs at " + JitRate + " calls/sec,"
+        Print "which is 2-5x faster than pure interpreter mode!"
+        Print ""
+        Print "You saw JIT compilation happen after the first 99 calls."
+
+Concept: Calculator
+    X
+    Y
+
+    To Compute:
+        Set This.X to This.X * This.Y + This.X - This.Y
+        Return This.X

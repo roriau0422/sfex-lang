@@ -1,0 +1,60 @@
+# Simple If/Else test without local variables
+
+Concept: Math
+    To Abs with X:
+        If X < 0:
+            Return -X
+        Else:
+            Return X
+
+    To Sign with X:
+        If X > 0:
+            Return 1
+        If X < 0:
+            Return -1
+        Return 0
+
+    To Clamp with X:
+        If X > 100:
+            Return 100
+        If X < 0:
+            Return 0
+        Return X
+
+Story:
+    Print "=== JIT IF/ELSE BENCHMARK ==="
+    Print ""
+
+    Create Math Called M
+
+    Print "Testing Abs (1M calls)..."
+    StartTime is Time.Precise()
+
+    Result is 0
+    Repeat 1000000 times:
+        Result is M.Abs with -42
+
+    EndTime is Time.Precise()
+    Elapsed is EndTime - StartTime
+
+    Print "Result: " + Result + " (expected: 42)"
+    Print "Time: " + Elapsed + " seconds"
+    Print "Throughput: " + (1000000 / Elapsed) + " calls/sec"
+    Print ""
+
+    Print "Testing Sign (1M calls)..."
+    StartTime2 is Time.Precise()
+
+    Result2 is 0
+    Repeat 1000000 times:
+        Result2 is M.Sign with 5
+
+    EndTime2 is Time.Precise()
+    Elapsed2 is EndTime2 - StartTime2
+
+    Print "Result: " + Result2 + " (expected: 1)"
+    Print "Time: " + Elapsed2 + " seconds"
+    Print "Throughput: " + (1000000 / Elapsed2) + " calls/sec"
+    Print ""
+
+    Print "If/Else in JIT is working! 🎉"

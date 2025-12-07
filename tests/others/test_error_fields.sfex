@@ -1,0 +1,74 @@
+Story:
+    Print "=========================================="
+    Print "Testing Complete Error Object"
+    Print "=========================================="
+    Print ""
+
+    # Test 1: All error fields
+    Print "Test 1: Complete error object"
+    Try:
+        X is UndefinedVariable
+    Catch error:
+        Print "Error Details:"
+        Print "  Type: " + error.type
+        Print "  Message: " + error.message
+        Print "  Line: " + error.line
+    Print ""
+
+    # Test 2: Pattern matching with multiple fields
+    Print "Test 2: Pattern matching on error type"
+    Try:
+        Items is [1, 2, 3]
+        Item is Items[0]
+    Catch err:
+        Print "Error Information:"
+        Print "  Type: " + err.type
+        Print "  Message: " + err.message
+        Print "  Line: " + err.line
+
+        When err.type:
+            is "IndexError":
+                Print "  -> Index error detected!"
+                Print "  -> Using fallback value"
+                Item is 0
+            is "UndefinedVariable":
+                Print "  -> Variable not found!"
+            Otherwise:
+                Print "  -> Other error"
+    Print ""
+
+    # Test 3: Logging errors
+    Print "Test 3: Error logging format"
+    Try:
+        Result is MissingFunction()
+    Catch e:
+        # Format like a log entry
+        LogEntry is "[ERROR] " + e.type + " at line " + e.line + ": " + e.message
+        Print LogEntry
+    Print ""
+
+    # Test 4: Error reporting with all fields
+    Print "Test 4: Detailed error report"
+    Try:
+        Data is {}
+        Value is Data.NonExistentProperty
+    Catch error:
+        Print "=== ERROR REPORT ==="
+        Print "Type:    " + error.type
+        Print "Message: " + error.message
+        Print "Line:    " + error.line
+        Print "===================="
+
+        # Handle based on type
+        When error.type:
+            is "UndefinedMethod":
+                Print "Action: Method not found, using default"
+            is "TypeError":
+                Print "Action: Type mismatch, converting types"
+            Otherwise:
+                Print "Action: Unknown error, logging and continuing"
+    Print ""
+
+    Print "=========================================="
+    Print "All error field tests completed!"
+    Print "=========================================="

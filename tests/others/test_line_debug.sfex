@@ -1,0 +1,5 @@
+Story:
+    Try:
+        X is Bad
+    Catch error:
+        Print error.line

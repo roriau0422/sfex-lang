@@ -1,0 +1,24 @@
+Story:
+    Print "Testing JIT with Set statements (field mutation)..."
+    Print ""
+
+    Create Counter Called C
+    Set C.Value to 0
+
+    Print "Incrementing counter 200 times (should trigger JIT at ~100)..."
+    Repeat 200 times:
+        Temp is C.Increment
+
+    Print "Final count: "
+    Print C.Value
+    Print ""
+
+    Print "If you saw '🔥 JIT: Compiling...' above, Set statements work in JIT!"
+    Print "If not, the method fell back to interpreter (Set not yet optimized)"
+
+Concept: Counter
+    Value
+
+    To Increment:
+        Set This.Value to This.Value + 1
+        Return This.Value

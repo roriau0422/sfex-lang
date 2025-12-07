@@ -1,0 +1,93 @@
+Story:
+    Print "=========================================="
+    Print "Error Object API Demo"
+    Print "=========================================="
+    Print ""
+
+    Print "The error object has three fields:"
+    Print "  • error.type    - Error type (string)"
+    Print "  • error.message - Human-readable description"
+    Print "  • error.line    - Line number (0 = not tracked yet)"
+    Print ""
+
+    # Example 1: Simple error inspection
+    Print "Example 1: Inspecting error fields"
+    Try:
+        X is NonExistent
+    Catch error:
+        Print "Caught: " + error.type
+        Print "Details: " + error.message
+        Print "At line: " + error.line
+    Print ""
+
+    # Example 2: Pattern matching on error types
+    Print "Example 2: Different handlers for different errors"
+    Try:
+        List is [10, 20, 30]
+        Item is List[0]  # Will fail (0-based indexing)
+    Catch error:
+        When error.type:
+            is "IndexError":
+                Print "✗ INDEX ERROR"
+                Print "  → " + error.message
+                Print "  → Using default value: 0"
+                Item is 0
+            is "TypeError":
+                Print "✗ TYPE ERROR"
+                Print "  → " + error.message
+                Print "  → Converting types"
+            is "UndefinedVariable":
+                Print "✗ UNDEFINED VARIABLE"
+                Print "  → " + error.message
+                Print "  → Initializing with default"
+            Otherwise:
+                Print "✗ " + error.type
+                Print "  → " + error.message
+    Print ""
+
+    # Example 3: Structured error logging
+    Print "Example 3: Structured error logging"
+    Try:
+        Result is Calculate()
+    Catch err:
+        # Log in structured format
+        Print "{"
+        Print '  "error": {'
+        Print '    "type": "' + err.type + '",'
+        Print '    "message": "' + err.message + '",'
+        Print '    "line": ' + err.line
+        Print "  }"
+        Print "}"
+    Print ""
+
+    # Example 4: Error categorization
+    Print "Example 4: Error severity levels"
+    Try:
+        Data is AccessDatabase()
+    Catch error:
+        When error.type:
+            is "IndexError":
+                Severity is "WARNING"
+                Print "[" + Severity + "] " + error.type + ": " + error.message
+            is "TypeError":
+                Severity is "ERROR"
+                Print "[" + Severity + "] " + error.type + ": " + error.message
+            is "UndefinedVariable":
+                Severity is "CRITICAL"
+                Print "[" + Severity + "] " + error.type + ": " + error.message
+            Otherwise:
+                Severity is "UNKNOWN"
+                Print "[" + Severity + "] " + error.type + ": " + error.message
+    Print ""
+
+    Print "=========================================="
+    Print "Error API Demo Complete!"
+    Print "=========================================="
+    Print ""
+    Print "Available Error Types:"
+    Print "  • UndefinedVariable"
+    Print "  • UndefinedConcept"
+    Print "  • UndefinedMethod"
+    Print "  • TypeError"
+    Print "  • IndexError"
+    Print "  • Custom"

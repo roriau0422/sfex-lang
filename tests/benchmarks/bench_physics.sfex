@@ -1,0 +1,53 @@
+Story:
+    Print "=== Physics Simulation Benchmark ==="
+    Print ""
+
+    # Create particle
+    Create Particle Called P
+    Set P.X to 0, Set P.Y to 0, Set P.VX to 10, Set P.VY to 5, Set P.Mass to 1.5, Set P.ForceX to 2.0,
+    Set P.ForceY to -9.8
+
+    # Interpreter (99 calls - 100 deer warm up ehlene.)
+    Print "1. Interpreter (99 calls):"
+    Start is Time.Precise()
+    Repeat 99 times:
+        Result is P.UpdatePhysics with 0.016
+    End is Time.Precise()
+    Time1 is End - Start
+    Rate1 is 99 / Time1
+    Print "   Rate: " + Rate1 + " calls/sec"
+    Print ""
+
+    # JIT (1M calls)
+    Create Particle Called P2
+    Set P2.X to 0, Set P2.Y to 0, Set P2.VX to 10
+    Set P2.VY to 5, Set P2.Mass to 1.5, Set P2.ForceX to 2.0
+    Set P2.ForceY to -9.8
+
+    Print "2. JIT (1,000,000 calls):"
+    Start is Time.Precise()
+    Repeat 1000000 times:
+        Result is P2.UpdatePhysics with 0.016
+    End is Time.Precise()
+    Time2 is End - Start
+    Rate2 is 1000000 / Time2
+    Print "   Rate: " + Rate2 + " calls/sec"
+    Print ""
+
+    # Results
+    Print "=== Results ==="
+    Speedup is Rate2 / Rate1
+    Print "Speedup: " + Speedup + "x"
+    Print "Final position: (" + P2.X + ", " + P2.Y + ")"
+
+Concept: Particle
+    X, Y, VX, VY, Mass, ForceX, ForceY
+
+    To UpdatePhysics with DeltaTime:
+        AccelX is This.ForceX / This.Mass
+        AccelY is This.ForceY / This.Mass
+        Set This.VX to This.VX + AccelX * DeltaTime
+        Set This.VY to This.VY + AccelY * DeltaTime
+        Set This.X to This.X + This.VX * DeltaTime
+        Set This.Y to This.Y + This.VY * DeltaTime
+        Return This.X

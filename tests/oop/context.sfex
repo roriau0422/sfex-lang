@@ -1,0 +1,24 @@
+Concept: User
+    To Greet:
+        Print "Hello, I am a normal User."
+
+Situation: AdminMode
+    Adjust User:
+        To Greet:
+            Print "⚠️  SYSTEM ADMIN DETECTED ⚠️"
+
+Story:
+    # Phase 1 Hack: We simulate an object instance using a Map
+    # In Phase 2, we will add 'Create User'
+    Me is { _concept: "User", name: "Temka" }
+    
+    Print "--- Context: Default ---"
+    Me.Greet
+    
+    Switch on AdminMode
+    Print "--- Context: AdminMode ---"
+    Me.Greet
+    
+    Switch off AdminMode
+    Print "--- Context: Default ---"
+    Me.Greet

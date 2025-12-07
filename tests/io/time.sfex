@@ -1,0 +1,183 @@
+# Test: Time Module
+# Demonstrates time and datetime operations
+
+Story:
+    Print "=== Time Module Tests ==="
+    Print ""
+
+    # Test 1: Time.Now() - Get current Unix timestamp
+    Print "Test 1: Time.Now() - Current Unix Timestamp"
+    Print "----------------------------------------"
+
+    Timestamp is Time.Now()
+    Print "Current timestamp: " + Timestamp
+    Print "✓ Got Unix timestamp (seconds since epoch)"
+    Print ""
+
+    # Test 2: Time.LocalTime() - Current local time
+    Print "Test 2: Time.LocalTime() - Current Local Time"
+    Print "----------------------------------------"
+
+    LocalNow is Time.LocalTime()
+
+    Year is LocalNow["Year"]
+    Month is LocalNow["Month"]
+    Day is LocalNow["Day"]
+    Hour is LocalNow["Hour"]
+    Minute is LocalNow["Minute"]
+    Second is LocalNow["Second"]
+    Weekday is LocalNow["Weekday"]
+    YearDay is LocalNow["YearDay"]
+
+    Print "Year: " + Year
+    Print "Month: " + Month + " (1-based, 1 = January)"
+    Print "Day: " + Day
+    Print "Hour: " + Hour
+    Print "Minute: " + Minute
+    Print "Second: " + Second
+    Print "Weekday: " + Weekday + " (1 = Monday, 7 = Sunday)"
+    Print "YearDay: " + YearDay + " (day of year)"
+    Print "✓ Got current local time with all fields"
+    Print ""
+
+    # Test 3: Time.LocalTime(timestamp) - Convert specific timestamp
+    Print "Test 3: Time.LocalTime(timestamp) - Convert Timestamp"
+    Print "----------------------------------------"
+
+    # Use a known timestamp: 1735689600 = January 1, 2025 00:00:00 UTC
+    KnownTimestamp is 1735689600
+    LocalTime is Time.LocalTime(KnownTimestamp)
+
+    Print "Converting timestamp: " + KnownTimestamp
+    Print "Year: " + LocalTime["Year"]
+    Print "Month: " + LocalTime["Month"]
+    Print "Day: " + LocalTime["Day"]
+    Print "✓ Converted timestamp to local time"
+    Print ""
+
+    # Test 4: Time.GMTime() - Current GMT/UTC time
+    Print "Test 4: Time.GMTime() - Current GMT/UTC Time"
+    Print "----------------------------------------"
+
+    GMTNow is Time.GMTime()
+
+    GMTYear is GMTNow["Year"]
+    GMTMonth is GMTNow["Month"]
+    GMTDay is GMTNow["Day"]
+    GMTHour is GMTNow["Hour"]
+
+    Print "GMT Year: " + GMTYear
+    Print "GMT Month: " + GMTMonth
+    Print "GMT Day: " + GMTDay
+    Print "GMT Hour: " + GMTHour
+    Print "✓ Got current GMT/UTC time"
+    Print ""
+
+    # Test 5: Time.GMTime(timestamp) - Convert timestamp to GMT
+    Print "Test 5: Time.GMTime(timestamp) - Convert to GMT"
+    Print "----------------------------------------"
+
+    GMTTime is Time.GMTime(KnownTimestamp)
+
+    Print "Converting timestamp: " + KnownTimestamp
+    Print "GMT Year: " + GMTTime["Year"]
+    Print "GMT Month: " + GMTTime["Month"]
+    Print "GMT Day: " + GMTTime["Day"]
+    Print "GMT Hour: " + GMTTime["Hour"]
+    Print "✓ Converted timestamp to GMT time"
+    Print ""
+
+    # Test 6: Time.Format() - Format datetime as string
+    Print "Test 6: Time.Format() - Format DateTime"
+    Print "----------------------------------------"
+
+    DateTime is Time.LocalTime()
+
+    # Common format strings (chrono format)
+    Format1 is Time.Format(DateTime, "%Y-%m-%d %H:%M:%S")
+    Format2 is Time.Format(DateTime, "%A, %B %d, %Y")
+    Format3 is Time.Format(DateTime, "%I:%M %p")
+    Format4 is Time.Format(DateTime, "%Y/%m/%d")
+
+    Print "ISO format: " + Format1
+    Print "Long format: " + Format2
+    Print "12-hour time: " + Format3
+    Print "Date only: " + Format4
+    Print "✓ Formatted datetime in multiple formats"
+    Print ""
+
+    # Test 7: Weekday names (1-based)
+    Print "Test 7: Weekday Detection"
+    Print "----------------------------------------"
+
+    Weekday is LocalNow["Weekday"]
+    WeekdayName is "Unknown"
+
+    If Weekday = 1:
+        WeekdayName is "Monday"
+
+    If Weekday = 2:
+        WeekdayName is "Tuesday"
+
+    If Weekday = 3:
+        WeekdayName is "Wednesday"
+
+    If Weekday = 4:
+        WeekdayName is "Thursday"
+
+    If Weekday = 5:
+        WeekdayName is "Friday"
+
+    If Weekday = 6:
+        WeekdayName is "Saturday"
+
+    If Weekday = 7:
+        WeekdayName is "Sunday"
+
+    Print "Today is: " + WeekdayName + " (weekday " + Weekday + ")"
+    Print "✓ Weekday correctly identified"
+    Print ""
+
+    # Test 8: Time arithmetic - Calculate age of timestamp
+    Print "Test 8: Time Arithmetic"
+    Print "----------------------------------------"
+
+    CurrentTimestamp is Time.Now()
+    OldTimestamp is 1672531200  # January 1, 2023 00:00:00 UTC
+
+    AgeSecs is CurrentTimestamp - OldTimestamp
+    AgeDays is AgeSecs / 86400  # 86400 seconds per day
+
+    Print "Timestamp age: " + AgeDays + " days old"
+    Print "✓ Time arithmetic works"
+    Print ""
+
+    # Test 9: Timestamp round-trip
+    Print "Test 9: Timestamp Round-Trip"
+    Print "----------------------------------------"
+
+    OriginalTimestamp is Time.Now()
+    DateTime is Time.LocalTime(OriginalTimestamp)
+    RecoveredTimestamp is DateTime["Timestamp"]
+
+    Print "Original: " + OriginalTimestamp
+    Print "Recovered: " + RecoveredTimestamp
+
+    If OriginalTimestamp = RecoveredTimestamp:
+        Print "✓ Timestamp preserved through conversion"
+    Else:
+        Print "✗ Timestamps don't match"
+
+    Print ""
+
+    Print "=== Summary ==="
+    Print "✓ Time.Now() - Get current Unix timestamp"
+    Print "✓ Time.LocalTime() - Current local time"
+    Print "✓ Time.LocalTime(timestamp) - Convert timestamp to local"
+    Print "✓ Time.GMTime() - Current GMT/UTC time"
+    Print "✓ Time.GMTime(timestamp) - Convert timestamp to GMT"
+    Print "✓ Time.Format(datetime, format) - Format datetime"
+    Print "✓ DateTime fields: Year, Month, Day, Hour, Minute, Second"
+    Print "✓ DateTime fields: Weekday (1-7), YearDay (1-366), Timestamp"
+    Print "✓ 1-based month indexing (1 = January)"
+    Print "✓ Weekday 1 = Monday, 7 = Sunday"

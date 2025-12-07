@@ -1,0 +1,7 @@
+Concept: User
+    Name
+    Score
+
+    To Promote:
+        Print Name + " promoted!"
+        Set Score to Score + 10

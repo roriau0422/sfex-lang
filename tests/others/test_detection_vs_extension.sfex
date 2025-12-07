@@ -1,0 +1,28 @@
+Story:
+    Print "=== Content-Based Detection (ignores extensions) ==="
+    Print ""
+
+    # Test: File named .json but contains XML
+    Print "Test: lol.json (misleading name)"
+    Info is Data.Detect("tests/assets/lol.json")
+    Format is Info["Format"]
+    MediaType is Info["MediaType"]
+    Print "  File extension: .json"
+    Print "  Actual format: " + Format
+    Print "  Media type: " + MediaType
+    Print ""
+
+    # Parse it - should treat as XML
+    Print "Parsing as detected format (XML):"
+    Doc is Data.Parse("tests/assets/lol.json")
+    Titles is Doc.XPath("//title")
+    Title1 is Titles[1]
+    Print "  First book: " + Title1
+    Print ""
+
+    Print "✓ Content-based detection protects against:"
+    Print "  - Misnamed files"
+    Print "  - Wrong extensions"
+    Print "  - Format spoofing"
+    Print ""
+    Print "This is a FEATURE, not a bug!"

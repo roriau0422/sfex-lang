@@ -1,0 +1,3839 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>SFX Language Guide</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="SFX (Situation Framework eXchange) - Programming the way humans think">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-5a0bae54.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-1c381763.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">SFX Language Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/roriau0422/sfex-lang" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<blockquote>
+<p><strong>“Programming the way humans think, not the way computers think”</strong></p>
+</blockquote>
+<p>Welcome to SFX (Situation Framework eXchange) - a beginner-friendly, context-oriented programming language designed for the 2025 AI era. With <strong>JIT compilation</strong>, <strong>reactive observers</strong>, and <strong>mathematical honesty</strong>, SFX makes programming intuitive and powerful.</p>
+<h2 id="what-is-sfx"><a class="header" href="#what-is-sfx">What is SFX?</a></h2>
+<p>SFX is a programming language that fixes 50 years of accumulated lies in programming:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>The Lie</th><th>The Truth (SFX)</th></tr>
+</thead>
+<tbody>
+<tr><td><code>0.1 + 0.2 ≠ 0.3</code></td><td><strong>0.1 + 0.2 = 0.3</strong> (arbitrary precision)</td></tr>
+<tr><td>List[0] is first</td><td><strong>List[1] is first</strong> (1-based indexing)</td></tr>
+<tr><td>Null pointer errors</td><td><strong>No null</strong> (safe defaults: 0, “”, False, [])</td></tr>
+<tr><td>“👨‍👩‍👧‍👦”.Length = 7</td><td><strong>“👨‍👩‍👧‍👦”.Length = 1</strong> (grapheme clustering)</td></tr>
+<tr><td>Objects are static</td><td><strong>Context-oriented</strong> (Situations modify behavior)</td></tr>
+<tr><td>Manual cache updates</td><td><strong>Reactive observers</strong> (self-healing data)</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="your-first-sfx-program"><a class="header" href="#your-first-sfx-program">Your First SFX Program</a></h2>
+<pre><code class="language-sfex">Story:
+    Print "Hello, SFX!"
+
+    # Mathematical honesty - no float errors!
+    Result is 0.1 + 0.2
+    Print Result  # 0.3 ✓
+
+    # 1-based indexing - List[1] is first
+    Numbers is [10, 20, 30]
+    First is Numbers[1]  # 10 ✓
+    Print "First number: " + First
+</code></pre>
+<h2 id="key-features-at-a-glance"><a class="header" href="#key-features-at-a-glance">Key Features at a Glance</a></h2>
+<ul>
+<li><strong>JIT Compilation</strong>: Automatic 2-5x performance boost with Cranelift</li>
+<li><strong>Reactive Observers</strong>: Self-healing data that maintains consistency automatically</li>
+<li><strong>Context-Oriented</strong>: Objects behave differently in different Situations</li>
+<li><strong>Mathematical Honesty</strong>: Arbitrary precision arithmetic by default</li>
+<li><strong>1-Based Indexing</strong>: Lists start at 1, not 0</li>
+<li><strong>No Null Pointers</strong>: Safe defaults prevent null reference errors</li>
+<li><strong>Grapheme Clustering</strong>: Emoji counted correctly as single characters</li>
+<li><strong>Powerful Standard Library</strong>: Data parsing, networking, concurrency, LLM integration</li>
+</ul>
+<h2 id="current-version"><a class="header" href="#current-version">Current Version</a></h2>
+<p><strong>Version 0.3.2</strong> - All core features complete including:</p>
+<ul>
+<li>Core language with interpreter</li>
+<li>Full standard library (21 modules)</li>
+<li>JIT compilation with trace optimization</li>
+<li>Context system (Situations)</li>
+<li>Reactive When observers</li>
+<li>Concurrency (Tasks, Channels)</li>
+<li>LLM integration</li>
+</ul>
+<h2 id="whats-next"><a class="header" href="#whats-next">What’s Next?</a></h2>
+<p>Ready to get started? Check out:</p>
+<ul>
+<li><a href="#installation">Installation</a> - Set up SFX on your system</li>
+<li><a href="#quick-start">Quick Start</a> - Learn the basics in 5 minutes</li>
+<li><a href="#your-first-program">Your First Program</a> - Write your first SFX application</li>
+<li><a href="#why-sfx">Why SFX?</a> - Understand the philosophy behind SFX</li>
+</ul>
+<h2 id="license"><a class="header" href="#license">License</a></h2>
+<p>SFX is open source under the Apache License 2.0.</p>
+<hr>
+<p><em>“Programming should be as natural as telling a story”</em> - SFX</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="installation"><a class="header" href="#installation">Installation</a></h1>
+<p>This guide will help you install SFX on your system.</p>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<ul>
+<li><strong>Rust 1.75+</strong> - SFX is written in Rust and requires Cargo to build</li>
+<li><strong>Git</strong> - For cloning the repository</li>
+</ul>
+<h2 id="installing-rust"><a class="header" href="#installing-rust">Installing Rust</a></h2>
+<p>If you don’t have Rust installed, get it from <a href="https://rustup.rs/">rustup.rs</a>:</p>
+<pre><code class="language-bash"># Unix/Linux/macOS
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Windows
+# Download and run rustup-init.exe from https://rustup.rs/
+</code></pre>
+<h2 id="installing-sfx"><a class="header" href="#installing-sfx">Installing SFX</a></h2>
+<h3 id="from-source-current-method"><a class="header" href="#from-source-current-method">From Source (Current Method)</a></h3>
+<pre><code class="language-bash"># Clone the repository
+git clone https://github.com/roriau0422/sfex-lang.git
+cd sfex-lang
+
+# Build in release mode
+cargo build --release
+
+# The sfex binary will be at target/release/sfex
+</code></pre>
+<h3 id="add-to-path-optional"><a class="header" href="#add-to-path-optional">Add to PATH (Optional)</a></h3>
+<p>To run <code>sfex</code> from anywhere:</p>
+<p><strong>Unix/Linux/macOS:</strong></p>
+<pre><code class="language-bash"># Add to ~/.bashrc or ~/.zshrc
+export PATH="$PATH:/path/to/sfex-lang/target/release"
+</code></pre>
+<p><strong>Windows:</strong></p>
+<pre><code class="language-powershell"># Add to system PATH:
+# Settings → System → About → Advanced system settings → Environment Variables
+# Add: C:\path\to\sfex-lang\target\release
+</code></pre>
+<h2 id="verify-installation"><a class="header" href="#verify-installation">Verify Installation</a></h2>
+<p>Test that SFX is working:</p>
+<pre><code class="language-bash">./target/release/sfex --version
+# Should print: sfex 0.3.2
+
+# Run a test script
+./target/release/sfex run tests/core/hello.sfex
+</code></pre>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
+<ul>
+<li><a href="#quick-start">Quick Start</a> - Learn the basics</li>
+<li><a href="#your-first-program">Your First Program</a> - Write your first SFX script</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="quick-start"><a class="header" href="#quick-start">Quick Start</a></h1>
+<p>Get up and running with SFX in 5 minutes!</p>
+<h2 id="hello-world"><a class="header" href="#hello-world">Hello World</a></h2>
+<p>Create a file called <code>hello.sfex</code>:</p>
+<pre><code class="language-sfex">Story:
+    Print "Hello, SFX!"
+</code></pre>
+<p>Run it:</p>
+<pre><code class="language-bash">sfex run hello.sfex
+# Output: Hello, SFX!
+</code></pre>
+<h2 id="mathematical-honesty"><a class="header" href="#mathematical-honesty">Mathematical Honesty</a></h2>
+<p>SFX uses arbitrary precision arithmetic - no more float errors:</p>
+<pre><code class="language-sfex">Story:
+    Result is 0.1 + 0.2
+    Print Result  # 0.3 ✓ (not 0.30000000000000004)
+</code></pre>
+<h2 id="1-based-indexing"><a class="header" href="#1-based-indexing">1-Based Indexing</a></h2>
+<p>Lists start at 1, not 0:</p>
+<pre><code class="language-sfex">Story:
+    Numbers is [10, 20, 30]
+    First is Numbers[1]   # 10 (first element)
+    Second is Numbers[2]  # 20
+    Third is Numbers[3]   # 30
+    Print "First: " + First
+</code></pre>
+<h2 id="variables-and-assignment"><a class="header" href="#variables-and-assignment">Variables and Assignment</a></h2>
+<p>Use <code>is</code> for assignment:</p>
+<pre><code class="language-sfex">Story:
+    Name is "Alice"
+    Age is 25
+    Score is 95.5
+    IsActive is True
+
+    Print Name
+    Print "Age: " + Age
+</code></pre>
+<h2 id="control-flow"><a class="header" href="#control-flow">Control Flow</a></h2>
+<h3 id="ifelse"><a class="header" href="#ifelse">If/Else</a></h3>
+<pre><code class="language-sfex">Story:
+    Score is 85
+
+    If Score &gt;= 90:
+        Print "A grade"
+    Else If Score &gt;= 80:
+        Print "B grade"
+    Else:
+        Print "Keep trying"
+</code></pre>
+<h3 id="loops"><a class="header" href="#loops">Loops</a></h3>
+<pre><code class="language-sfex">Story:
+    # Repeat a fixed number of times
+    Repeat 3 times:
+        Print "Hello!"
+
+    # Loop over a list
+    Colors is ["red", "green", "blue"]
+    For each Color in Colors:
+        Print Color
+</code></pre>
+<h2 id="working-with-lists"><a class="header" href="#working-with-lists">Working with Lists</a></h2>
+<pre><code class="language-sfex">Story:
+    # Create a list
+    Items is [1, 2, 3, 4, 5]
+
+    # Access elements (1-based)
+    First is Items[1]
+
+    # Get length
+    Count is Items.Length
+    Print "Count: " + Count  # 5
+
+    # Add elements
+    Items.Add(6)
+</code></pre>
+<h2 id="working-with-maps"><a class="header" href="#working-with-maps">Working with Maps</a></h2>
+<pre><code class="language-sfex">Story:
+    # Create a map
+    User is { name: "Bob", age: 30, city: "New York" }
+
+    # Access values
+    Name is User["name"]
+    Age is User["age"]
+
+    Print "Name: " + Name
+    Print "Age: " + Age
+</code></pre>
+<h2 id="creating-objects-concepts"><a class="header" href="#creating-objects-concepts">Creating Objects (Concepts)</a></h2>
+<pre><code class="language-sfex">Concept: Person
+    Name
+    Age
+
+    To Greet:
+        Print "Hello, I'm " + This.Name
+
+    To Birthday:
+        Set This.Age to This.Age + 1
+
+Story:
+    Create Person Called Alice
+    Set Alice.Name to "Alice"
+    Set Alice.Age to 30
+
+    Alice.Greet           # Hello, I'm Alice
+    Alice.Birthday
+    Print Alice.Age       # 31
+</code></pre>
+<h2 id="file-operations"><a class="header" href="#file-operations">File Operations</a></h2>
+<pre><code class="language-sfex">Story:
+    # Write to a file
+    Content is "Hello from SFX!"
+    File.Write("output.txt", Content)
+
+    # Read from a file
+    Data is File.Read("output.txt")
+    Print Data
+</code></pre>
+<h2 id="http-requests"><a class="header" href="#http-requests">HTTP Requests</a></h2>
+<pre><code class="language-sfex">Story:
+    # Make an HTTP GET request
+    Response is HTTP.Get("https://api.github.com/users/octocat")
+
+    Print Response["Status"]  # 200
+    Print Response["Body"]    # JSON response
+</code></pre>
+<h2 id="whats-next-1"><a class="header" href="#whats-next-1">What’s Next?</a></h2>
+<p>Now that you know the basics, dive deeper:</p>
+<ul>
+<li><a href="#your-first-program">Your First Program</a> - Build a complete application</li>
+<li><a href="#why-sfx">Core Concepts</a> - Understand SFX’s philosophy</li>
+<li><a href="#basic-syntax">Language Syntax</a> - Complete syntax reference</li>
+<li><a href="#hello-world-1">Examples</a> - More code examples</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="your-first-program"><a class="header" href="#your-first-program">Your First Program</a></h1>
+<p>Let’s build a complete To-Do list application to learn SFX fundamentals.</p>
+<h2 id="the-to-do-list-app"><a class="header" href="#the-to-do-list-app">The To-Do List App</a></h2>
+<p>Create a file called <code>todo.sfex</code>:</p>
+<pre><code class="language-sfex"># To-Do List Application
+
+Concept: TodoItem
+    Title
+    IsDone
+
+    To Display:
+        If This.IsDone:
+            Print "✓ " + This.Title
+        Else:
+            Print "☐ " + This.Title
+
+Concept: TodoList
+    Items
+
+    To Initialize:
+        Set This.Items to []
+
+    To AddTask with Title:
+        Create TodoItem Called NewItem
+        Set NewItem.Title to Title
+        Set NewItem.IsDone to False
+        Set This.Items to This.Items + [NewItem]
+        Print "Added: " + Title
+
+    To ShowAll:
+        Print "\n=== My To-Do List ==="
+        If This.Items.Length = 0:
+            Print "No tasks yet!"
+        Else:
+            For each Item in This.Items:
+                Item.Display
+
+    To CompleteTask with Index:
+        If Index &gt;= 1 and Index &lt;= This.Items.Length:
+            Task is This.Items[Index]
+            Set Task.IsDone to True
+            Print "✓ Completed: " + Task.Title
+            # Update the item in the list
+            NewItems is []
+            Counter is 1
+            For each Item in This.Items:
+                If Counter = Index:
+                    Set NewItems to NewItems + [Task]
+                Else:
+                    Set NewItems to NewItems + [Item]
+                Set Counter to Counter + 1
+            Set This.Items to NewItems
+        Else:
+            Print "Invalid task number!"
+
+Story:
+    # Create the to-do list
+    Create TodoList Called MyTodos
+    MyTodos.Initialize
+
+    # Add some tasks
+    MyTodos.AddTask with "Buy groceries"
+    MyTodos.AddTask with "Write documentation"
+    MyTodos.AddTask with "Learn SFX"
+    MyTodos.AddTask with "Build an app"
+
+    # Show all tasks
+    MyTodos.ShowAll
+
+    # Complete some tasks
+    Print "\n--- Completing tasks ---"
+    MyTodos.CompleteTask with 1
+    MyTodos.CompleteTask with 3
+
+    # Show updated list
+    MyTodos.ShowAll
+</code></pre>
+<h2 id="run-the-program"><a class="header" href="#run-the-program">Run the Program</a></h2>
+<pre><code class="language-bash">sfex run todo.sfex
+</code></pre>
+<p>Expected output:</p>
+<pre><code>Added: Buy groceries
+Added: Write documentation
+Added: Learn SFX
+Added: Build an app
+
+=== My To-Do List ===
+☐ Buy groceries
+☐ Write documentation
+☐ Learn SFX
+☐ Build an app
+
+--- Completing tasks ---
+✓ Completed: Buy groceries
+✓ Completed: Learn SFX
+
+=== My To-Do List ===
+✓ Buy groceries
+☐ Write documentation
+✓ Learn SFX
+☐ Build an app
+</code></pre>
+<h2 id="what-did-we-learn"><a class="header" href="#what-did-we-learn">What Did We Learn?</a></h2>
+<h3 id="1-concepts-classes"><a class="header" href="#1-concepts-classes">1. Concepts (Classes)</a></h3>
+<pre><code class="language-sfex">Concept: TodoItem
+    Title          # Field declaration
+    IsDone
+
+    To MarkDone:   # Method definition
+        # Method body
+</code></pre>
+<p>Concepts are SFX’s version of classes. They contain:</p>
+<ul>
+<li><strong>Fields</strong> - Data storage (Title, IsDone)</li>
+<li><strong>Methods</strong> - Functions that operate on the object</li>
+</ul>
+<h3 id="2-creating-instances"><a class="header" href="#2-creating-instances">2. Creating Instances</a></h3>
+<pre><code class="language-sfex">Create TodoList Called MyTodos
+</code></pre>
+<p>The <code>Create</code> statement creates a new instance of a Concept.</p>
+<h3 id="3-setting-field-values"><a class="header" href="#3-setting-field-values">3. Setting Field Values</a></h3>
+<pre><code class="language-sfex">Set NewItem.Title to Title
+Set NewItem.IsDone to False
+</code></pre>
+<p>The <code>Set</code> statement modifies object fields.</p>
+<h3 id="4-method-calls"><a class="header" href="#4-method-calls">4. Method Calls</a></h3>
+<pre><code class="language-sfex">MyTodos.AddTask with "Buy groceries"
+Item.Display
+</code></pre>
+<ul>
+<li>Methods without parameters: <code>Item.Display</code></li>
+<li>Methods with parameters: <code>MyTodos.AddTask with "Buy groceries"</code></li>
+</ul>
+<h3 id="5-this-keyword"><a class="header" href="#5-this-keyword">5. This Keyword</a></h3>
+<pre><code class="language-sfex">To AddTask with Title:
+    Set This.Items to This.Items + [NewItem]  # 'This' refers to current object
+</code></pre>
+<p>Inside methods, <code>This</code> refers to the current instance.</p>
+<h3 id="6-lists"><a class="header" href="#6-lists">6. Lists</a></h3>
+<pre><code class="language-sfex">Set This.Items to []                      # Create empty list
+Set This.Items to This.Items + [NewItem]  # Add element (concatenation)
+Count is This.Items.Length                # Get length
+Task is This.Items[Index]                 # Access by index (1-based!)
+</code></pre>
+<p>Lists in SFX:</p>
+<ul>
+<li>Created with <code>[]</code></li>
+<li><strong>1-based indexing</strong> - first element is at index 1</li>
+<li>Dynamic - grow by concatenating with <code>+</code></li>
+<li>Have <code>.Length</code> property</li>
+</ul>
+<h3 id="7-control-flow"><a class="header" href="#7-control-flow">7. Control Flow</a></h3>
+<pre><code class="language-sfex">If This.Items.Length = 0:
+    Print "No tasks yet!"
+Else:
+    For each Item in This.Items:
+        Item.Display
+</code></pre>
+<ul>
+<li><code>If/Else</code> for conditionals</li>
+<li><code>For each</code> for iterating over lists</li>
+</ul>
+<h3 id="8-parameters"><a class="header" href="#8-parameters">8. Parameters</a></h3>
+<pre><code class="language-sfex">To AddTask with Title:
+    # 'Title' is the parameter
+</code></pre>
+<p>Methods can take parameters using <code>with ParameterName</code>.</p>
+<h3 id="9-value-semantics"><a class="header" href="#9-value-semantics">9. Value Semantics</a></h3>
+<pre><code class="language-sfex">To CompleteTask with Index:
+    Task is This.Items[Index]   # Gets a copy of the item
+    Set Task.IsDone to True     # Modifies the copy
+    # Need to update the original in the list
+    NewItems is []
+    Counter is 1
+    For each Item in This.Items:
+        If Counter = Index:
+            Set NewItems to NewItems + [Task]  # Use modified copy
+        Else:
+            Set NewItems to NewItems + [Item]
+        Set Counter to Counter + 1
+    Set This.Items to NewItems
+</code></pre>
+<p><strong>Important</strong>: When you get an item from a list, you get a copy, not a reference. To update an item in a list:</p>
+<ol>
+<li>Get the item (creates a copy)</li>
+<li>Modify the copy</li>
+<li>Rebuild the list with the modified copy</li>
+</ol>
+<p>This “value semantics” approach ensures data safety - changes to copies don’t accidentally affect originals elsewhere.</p>
+<h2 id="enhancing-the-program"><a class="header" href="#enhancing-the-program">Enhancing the Program</a></h2>
+<h3 id="add-task-priority"><a class="header" href="#add-task-priority">Add Task Priority</a></h3>
+<pre><code class="language-sfex">Concept: TodoItem
+    Title
+    IsDone
+    Priority  # New field: 1=High, 2=Medium, 3=Low
+
+    To Display:
+        PriorityText is ""
+        When This.Priority:
+            is 1:
+                PriorityText is "[HIGH] "
+            is 2:
+                PriorityText is "[MEDIUM] "
+            is 3:
+                PriorityText is "[LOW] "
+
+        If This.IsDone:
+            Print "✓ " + PriorityText + This.Title
+        Else:
+            Print "☐ " + PriorityText + This.Title
+</code></pre>
+<h3 id="add-due-dates"><a class="header" href="#add-due-dates">Add Due Dates</a></h3>
+<pre><code class="language-sfex">Concept: TodoItem
+    Title
+    IsDone
+    DueDate
+
+    To IsOverdue:
+        Now is Time.Now()
+        If This.DueDate &lt; Now:
+            Return True
+        Else:
+            Return False
+</code></pre>
+<h2 id="whats-next-2"><a class="header" href="#whats-next-2">What’s Next?</a></h2>
+<p>You’ve learned the fundamentals! Continue with:</p>
+<ul>
+<li><a href="#why-sfx">Core Concepts</a> - Deep dive into SFX philosophy</li>
+<li><a href="#basic-syntax">Language Syntax</a> - Complete syntax reference</li>
+<li><a href="#concepts-classes">Object-Oriented Programming</a> - Advanced OOP features</li>
+<li><a href="#when-observers">Reactive Programming</a> - Self-healing data</li>
+<li><a href="#situations-1">Context-Oriented Programming</a> - Dynamic behavior changes</li>
+<li><a href="#hello-world-1">Examples</a> - More practical examples</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="why-sfx"><a class="header" href="#why-sfx">Why SFX?</a></h1>
+<h2 id="the-problem-with-traditional-programming"><a class="header" href="#the-problem-with-traditional-programming">The Problem with Traditional Programming</a></h2>
+<p>For 50 years, programming languages have taught us lies that have become “normal”:</p>
+<ul>
+<li>“Don’t worry that 0.1 + 0.2 ≠ 0.3, you’ll get used to it”</li>
+<li>“Arrays start at 0 because… reasons”</li>
+<li>“Null pointer exceptions are just part of programming”</li>
+<li>“Emoji taking 7 characters is technically correct”</li>
+</ul>
+<p>These aren’t features - they’re <strong>historical accidents</strong> that have become normalized.</p>
+<h2 id="the-sfx-philosophy"><a class="header" href="#the-sfx-philosophy">The SFX Philosophy</a></h2>
+<p>SFX takes a different approach: <strong>Programming should match human intuition, not computer architecture.</strong></p>
+<blockquote>
+<p>“Programming the way humans think, not the way computers think”</p>
+</blockquote>
+<h3 id="1-mathematical-honesty"><a class="header" href="#1-mathematical-honesty">1. Mathematical Honesty</a></h3>
+<p><strong>The Problem:</strong></p>
+<pre><code class="language-javascript">// JavaScript, Python, Java, C++, etc.
+0.1 + 0.2  // 0.30000000000000004 ❌
+</code></pre>
+<p><strong>The SFX Solution:</strong></p>
+<pre><code class="language-sfex">Result is 0.1 + 0.2
+Print Result  # 0.3 ✓
+</code></pre>
+<p>SFX uses arbitrary precision arithmetic by default. Math works the way you learned in school.</p>
+<h3 id="2-human-friendly-indexing"><a class="header" href="#2-human-friendly-indexing">2. Human-Friendly Indexing</a></h3>
+<p><strong>The Problem:</strong></p>
+<pre><code class="language-python"># Most languages
+items = [10, 20, 30]
+first = items[0]  # Why 0? Humans count from 1!
+</code></pre>
+<p><strong>The SFX Solution:</strong></p>
+<pre><code class="language-sfex">Items is [10, 20, 30]
+First is Items[1]  # First item is 1, naturally!
+</code></pre>
+<h3 id="3-no-null-pointers"><a class="header" href="#3-no-null-pointers">3. No Null Pointers</a></h3>
+<p><strong>The Problem:</strong></p>
+<pre><code class="language-java">// Java - the billion-dollar mistake
+String name = null;
+name.length();  // NullPointerException! 💥
+</code></pre>
+<p><strong>The SFX Solution:</strong></p>
+<pre><code class="language-sfex"># All types have safe defaults:
+# Numbers → 0
+# Strings → ""
+# Booleans → False
+# Lists → []
+# Maps → {}
+
+# For optional values, use Option type:
+Result is Some(42)
+NoResult is None
+
+If Result.IsSome:
+    Value is Result.Unwrap()
+</code></pre>
+<h3 id="4-grapheme-clustering"><a class="header" href="#4-grapheme-clustering">4. Grapheme Clustering</a></h3>
+<p><strong>The Problem:</strong></p>
+<pre><code class="language-python"># Python, JavaScript, etc.
+emoji = "👨‍👩‍👧‍👦"
+len(emoji)  # 7 ❌ (Why? It's ONE emoji!)
+</code></pre>
+<p><strong>The SFX Solution:</strong></p>
+<pre><code class="language-sfex">Emoji is "👨‍👩‍👧‍👦"
+Length is Emoji.Length  # 1 ✓ (One emoji = one character)
+</code></pre>
+<h3 id="5-reactive-programming"><a class="header" href="#5-reactive-programming">5. Reactive Programming</a></h3>
+<p><strong>The Problem:</strong></p>
+<pre><code class="language-javascript">// Manual updates everywhere
+class Product {
+  constructor() {
+    this.price = 0;
+    this.tax = 0;
+    this.total = 0;
+  }
+
+  setPrice(price) {
+    this.price = price;
+    this.updateTax();      // Don't forget!
+    this.updateTotal();    // Don't forget!
+  }
+
+  updateTax() {
+    this.tax = this.price * 0.1;
+    this.updateTotal();    // Don't forget!
+  }
+}
+</code></pre>
+<p><strong>The SFX Solution:</strong></p>
+<pre><code class="language-sfex">Concept: Product
+    Price, Tax, Total
+
+    # Automatic - no manual updates needed!
+    When Price changes:
+        Set This.Tax to This.Price * 0.1
+        Set This.Total to This.Price + This.Tax
+</code></pre>
+<h3 id="6-context-oriented-programming"><a class="header" href="#6-context-oriented-programming">6. Context-Oriented Programming</a></h3>
+<p><strong>The Problem:</strong></p>
+<pre><code class="language-java">// Traditional OOP - behavior is fixed
+class User {
+  String getPermissions() {
+    return "read";
+  }
+}
+
+// To change behavior, you need inheritance, decorators,
+// or manual if-checks everywhere
+</code></pre>
+<p><strong>The SFX Solution:</strong></p>
+<pre><code class="language-sfex">Concept: User
+    To GetPermissions:
+        Return "read"
+
+Situation: AdminMode
+    Adjust User:
+        To GetPermissions:
+            Return "admin,write,delete"
+
+Story:
+    Create User Called Bob
+    Print Bob.GetPermissions  # "read"
+
+    Switch on AdminMode
+    Print Bob.GetPermissions  # "admin,write,delete"
+</code></pre>
+<h2 id="design-principles"><a class="header" href="#design-principles">Design Principles</a></h2>
+<h3 id="1-beginner-friendly"><a class="header" href="#1-beginner-friendly">1. Beginner-Friendly</a></h3>
+<p>SFX is designed for people learning to program:</p>
+<ul>
+<li><strong>Natural syntax</strong>: <code>Name is "Alice"</code> instead of <code>name = "Alice"</code></li>
+<li><strong>Clear keywords</strong>: <code>Repeat 10 times</code> instead of <code>for(i=0; i&lt;10; i++)</code></li>
+<li><strong>No surprises</strong>: Math works correctly, lists start at 1, no null crashes</li>
+</ul>
+<h3 id="2-powerful-when-needed"><a class="header" href="#2-powerful-when-needed">2. Powerful When Needed</a></h3>
+<p>Despite being beginner-friendly, SFX has advanced features:</p>
+<ul>
+<li><strong>JIT Compilation</strong>: 2-5x automatic speedup</li>
+<li><strong>Concurrency</strong>: Tasks and channels</li>
+<li><strong>Networking</strong>: HTTP, WebSocket, TCP, UDP</li>
+<li><strong>LLM Integration</strong>: Built-in OpenAI support</li>
+<li><strong>Reactive Observers</strong>: Self-healing data</li>
+</ul>
+<h3 id="3-no-legacy-baggage"><a class="header" href="#3-no-legacy-baggage">3. No Legacy Baggage</a></h3>
+<p>SFX was designed in 2024, not 1970. We don’t have to maintain backwards compatibility with mistakes from 50 years ago.</p>
+<h2 id="who-is-sfx-for"><a class="header" href="#who-is-sfx-for">Who is SFX For?</a></h2>
+<h3 id="perfect-for"><a class="header" href="#perfect-for">Perfect For:</a></h3>
+<ul>
+<li><strong>Beginners</strong> learning to program</li>
+<li><strong>Educators</strong> teaching programming concepts</li>
+<li><strong>Rapid prototyping</strong> where correctness matters</li>
+<li><strong>Business logic</strong> with financial calculations</li>
+<li><strong>Scripts and automation</strong> that should “just work”</li>
+</ul>
+<h3 id="maybe-not-for"><a class="header" href="#maybe-not-for">Maybe Not For:</a></h3>
+<ul>
+<li><strong>Systems programming</strong> (use Rust, C)</li>
+<li><strong>Embedded systems</strong> with tight memory constraints</li>
+<li><strong>High-frequency trading</strong> where microseconds matter (though JIT helps!)</li>
+<li><strong>Large legacy codebases</strong> (migration would be significant)</li>
+</ul>
+<h2 id="the-ai-era-design"><a class="header" href="#the-ai-era-design">The “AI Era” Design</a></h2>
+<p>SFX is designed for the AI era where:</p>
+<ol>
+<li><strong>LLMs write a lot of code</strong> - SFX’s natural syntax is easier for AI to generate correctly</li>
+<li><strong>Correctness matters</strong> - When AI generates financial calculations, 0.1 + 0.2 should equal 0.3</li>
+<li><strong>Rapid iteration</strong> - JIT compilation means you get interpreter speed + compiler performance</li>
+</ol>
+<h2 id="comparison"><a class="header" href="#comparison">Comparison</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Feature</th><th>SFX</th><th>Python</th><th>JavaScript</th><th>Java</th></tr>
+</thead>
+<tbody>
+<tr><td>Math correctness</td><td>✓</td><td>✗</td><td>✗</td><td>✗</td></tr>
+<tr><td>1-based indexing</td><td>✓</td><td>✗</td><td>✗</td><td>✗</td></tr>
+<tr><td>No null crashes</td><td>✓</td><td>✗</td><td>✗</td><td>✗</td></tr>
+<tr><td>Grapheme-aware</td><td>✓</td><td>✗</td><td>✗</td><td>✗</td></tr>
+<tr><td>Reactive observers</td><td>✓</td><td>✗</td><td>✗</td><td>✗</td></tr>
+<tr><td>Context-oriented</td><td>✓</td><td>✗</td><td>✗</td><td>✗</td></tr>
+<tr><td>JIT compilation</td><td>✓</td><td>✗</td><td>✓</td><td>✓</td></tr>
+<tr><td>Easy concurrency</td><td>✓</td><td>~</td><td>~</td><td>~</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
+<p>Ready to try programming without the lies?</p>
+<ul>
+<li><a href="#mathematical-honesty-1">Mathematical Honesty</a> - Deep dive into correct math</li>
+<li><a href="#1-based-indexing-1">1-Based Indexing</a> - Why lists start at 1</li>
+<li><a href="#no-null-pointers">No Null Pointers</a> - Safe defaults and Option types</li>
+<li><a href="#grapheme-clustering">Grapheme Clustering</a> - Unicode done right</li>
+</ul>
+<hr>
+<p><em>Programming should be intuitive, not historical.</em></p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="mathematical-honesty-1"><a class="header" href="#mathematical-honesty-1">Mathematical Honesty</a></h1>
+<h2 id="the-floating-point-lie"><a class="header" href="#the-floating-point-lie">The Floating Point Lie</a></h2>
+<p>One of the most shocking things new programmers discover:</p>
+<pre><code class="language-python"># Python (same in JavaScript, Java, C++, C#, Ruby, etc.)
+result = 0.1 + 0.2
+print(result)  # 0.30000000000000004 ❌
+</code></pre>
+<p>Teachers say “don’t worry about it” or “you’ll get used to it.” But why should we?</p>
+<h2 id="why-does-this-happen"><a class="header" href="#why-does-this-happen">Why Does This Happen?</a></h2>
+<p>Most languages use IEEE 754 floating-point arithmetic, which represents numbers in binary:</p>
+<ul>
+<li>0.1 in binary is <code>0.0001100110011001100...</code> (infinite repeating)</li>
+<li>0.2 in binary is <code>0.001100110011001100...</code> (infinite repeating)</li>
+<li>Binary can’t represent these exactly, so they’re rounded</li>
+<li>Adding rounded numbers gives wrong answers</li>
+</ul>
+<p>This was a reasonable choice in 1970 when:</p>
+<ul>
+<li>Memory was expensive</li>
+<li>CPUs had hardware floating-point units</li>
+<li>Alternative precision libraries were slow</li>
+</ul>
+<p>But it’s 2025 now. We can do better.</p>
+<h2 id="the-sfx-solution"><a class="header" href="#the-sfx-solution">The SFX Solution</a></h2>
+<p>SFX uses <strong>arbitrary precision arithmetic</strong> by default:</p>
+<pre><code class="language-sfex">Story:
+    Result is 0.1 + 0.2
+    Print Result  # 0.3 ✓
+
+    # Financial calculations
+    Price is 99.99
+    Tax is Price * 0.08
+    Total is Price + Tax
+    Print Total  # 107.9892 (exact!)
+
+    # Very large numbers
+    Big is 123456789123456789123456789
+    Bigger is Big * 2
+    Print Bigger  # 246913578246913578246913578
+</code></pre>
+<h2 id="how-it-works"><a class="header" href="#how-it-works">How It Works</a></h2>
+<p>SFX uses the <code>BigDecimal</code> type for the default <code>Number</code> type:</p>
+<ul>
+<li>Numbers are stored as integers with a scale factor</li>
+<li>0.1 is stored as <code>1</code> with scale <code>-1</code> (meaning 1 × 10^-1)</li>
+<li>Operations maintain exact precision</li>
+<li>No rounding errors accumulate</li>
+</ul>
+<h3 id="example"><a class="header" href="#example">Example</a></h3>
+<pre><code class="language-sfex">Story:
+    # Exact decimal representation
+    A is 0.1        # Stored exactly
+    B is 0.2        # Stored exactly
+    C is A + B      # 0.3 exactly
+
+    # This always works:
+    If C = 0.3:
+        Print "Math works!"  # Always prints ✓
+</code></pre>
+<h2 id="when-you-need-speed-fastnumber"><a class="header" href="#when-you-need-speed-fastnumber">When You Need Speed: FastNumber</a></h2>
+<p>For performance-critical code (games, physics, graphics), use <code>FastNumber</code>:</p>
+<pre><code class="language-sfex">Story:
+    # IEEE 754 float for speed
+    Speed is FastNumber(299792458.0)
+    Time is FastNumber(2.5)
+    Distance is Speed * Time
+
+    # About 10x faster than Number
+    # But you get float errors again:
+    Test is FastNumber(0.1) + FastNumber(0.2)
+    # 0.30000000000000004
+</code></pre>
+<p><strong>When to use FastNumber:</strong></p>
+<ul>
+<li>Physics simulations</li>
+<li>Graphics/game engines</li>
+<li>High-frequency calculations</li>
+<li>When performance &gt; precision</li>
+</ul>
+<p><strong>When to use Number (default):</strong></p>
+<ul>
+<li>Financial calculations</li>
+<li>User-facing math</li>
+<li>Counting/indexing</li>
+<li>When correctness matters</li>
+<li>Learning/teaching programming</li>
+</ul>
+<h2 id="real-world-impact"><a class="header" href="#real-world-impact">Real-World Impact</a></h2>
+<h3 id="financial-software"><a class="header" href="#financial-software">Financial Software</a></h3>
+<pre><code class="language-sfex">Concept: Invoice
+    Subtotal, TaxRate, Tax, Total
+
+    When Subtotal changes:
+        Set This.Tax to This.Subtotal * This.TaxRate
+        Set This.Total to This.Subtotal + This.Tax
+
+Story:
+    Create Invoice Called Bill
+    Set Bill.Subtotal to 99.99
+    Set Bill.TaxRate to 0.08
+
+    # Exact: $107.9892
+    # Float: $107.98919999999999 (wrong!)
+    Print Bill.Total
+</code></pre>
+<p>With floats, multiply this error by millions of transactions, and you’re off by thousands of dollars.</p>
+<h3 id="scientific-computing"><a class="header" href="#scientific-computing">Scientific Computing</a></h3>
+<pre><code class="language-sfex">Story:
+    # Sum a series: 1 + 1/2 + 1/3 + 1/4 + ...
+    Sum is 0
+    Repeat 10000 times with I:
+        Sum is Sum + (1 / I)
+
+    # SFX: Exact answer
+    # Float: Accumulated rounding errors
+    Print Sum
+</code></pre>
+<h3 id="teaching-math"><a class="header" href="#teaching-math">Teaching Math</a></h3>
+<p>When teaching programming to kids, having <code>0.1 + 0.2 = 0.3</code> work correctly means:</p>
+<ul>
+<li>Less confusion</li>
+<li>Math matches what they learned in school</li>
+<li>One less “computers are weird” moment</li>
+<li>Focus on logic, not float quirks</li>
+</ul>
+<h2 id="performance-comparison"><a class="header" href="#performance-comparison">Performance Comparison</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Operation</th><th>Number (exact)</th><th>FastNumber (float)</th></tr>
+</thead>
+<tbody>
+<tr><td>Addition</td><td>100%</td><td>~1000% (10x faster)</td></tr>
+<tr><td>Multiplication</td><td>100%</td><td>~1000%</td></tr>
+<tr><td>Division</td><td>100%</td><td>~1000%</td></tr>
+</tbody>
+</table>
+</div>
+<p><strong>With JIT compilation</strong>, Number operations get optimized, narrowing the gap.</p>
+<h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
+<h3 id="banking"><a class="header" href="#banking">Banking</a></h3>
+<pre><code class="language-sfex">Concept: BankAccount
+    Balance
+
+    To Deposit with Amount:
+        Set This.Balance to This.Balance + Amount
+
+    To Withdraw with Amount:
+        Set This.Balance to This.Balance - Amount
+
+Story:
+    Create BankAccount Called Checking
+    Set Checking.Balance to 0
+
+    # Deposit cents
+    Checking.Deposit with 0.01
+    Repeat 100 times:
+        Checking.Deposit with 0.01
+
+    # Balance is exactly $1.01
+    Print Checking.Balance  # 1.01 ✓
+</code></pre>
+<p>With floats, you’d get <code>1.0100000000000007</code> or similar.</p>
+<h3 id="e-commerce"><a class="header" href="#e-commerce">E-commerce</a></h3>
+<pre><code class="language-sfex">Concept: ShoppingCart
+    Items, Subtotal, Discount, Tax, Total
+
+    To CalculateTotal:
+        ItemsSum is 0
+        For each Item in This.Items:
+            ItemsSum is ItemsSum + Item["price"]
+
+        Set This.Subtotal to ItemsSum
+        DiscountAmount is This.Subtotal * This.Discount
+        TaxableAmount is This.Subtotal - DiscountAmount
+        TaxAmount is TaxableAmount * This.Tax
+        Set This.Total to TaxableAmount + TaxAmount
+
+Story:
+    Create ShoppingCart Called Cart
+    Set Cart.Items to [
+        { name: "Item 1", price: 19.99 },
+        { name: "Item 2", price: 29.99 },
+        { name: "Item 3", price: 9.99 }
+    ]
+    Set Cart.Discount to 0.10  # 10% off
+    Set Cart.Tax to 0.08       # 8% tax
+
+    Cart.CalculateTotal
+    Print "Total: $" + Cart.Total  # Exact to the cent!
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<h3 id="1-use-number-by-default"><a class="header" href="#1-use-number-by-default">1. Use Number by Default</a></h3>
+<pre><code class="language-sfex"># Good - exact
+Price is 19.99
+Tax is Price * 0.08
+</code></pre>
+<h3 id="2-use-fastnumber-for-performance"><a class="header" href="#2-use-fastnumber-for-performance">2. Use FastNumber for Performance</a></h3>
+<pre><code class="language-sfex"># Physics engine
+Concept: Particle
+    X, Y, VX, VY
+
+    To Update with DT:
+        # Convert to FastNumber for speed
+        FDT is FastNumber(DT)
+        Set This.X to This.X + (This.VX * FDT)
+        Set This.Y to This.Y + (This.VY * FDT)
+</code></pre>
+<h3 id="3-dont-mix-types-unnecessarily"><a class="header" href="#3-dont-mix-types-unnecessarily">3. Don’t Mix Types Unnecessarily</a></h3>
+<pre><code class="language-sfex"># Avoid mixing Number and FastNumber
+A is 10
+B is FastNumber(20.0)
+C is A + B  # Works, but converts to FastNumber (loses precision)
+</code></pre>
+<h3 id="4-round-for-display"><a class="header" href="#4-round-for-display">4. Round for Display</a></h3>
+<pre><code class="language-sfex"># For user display, round to appropriate precision
+Price is 19.99
+Tax is Price * 0.085  # 1.69915
+Total is Price + Tax  # 21.68915
+
+# Display as currency (2 decimal places)
+DisplayTotal is Math.Round(Total * 100) / 100
+Print "$" + DisplayTotal  # $21.69
+</code></pre>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>SFX’s mathematical honesty means:</p>
+<p>✓ <strong>Correct by default</strong> - Math works like school taught you
+✓ <strong>No surprises</strong> - 0.1 + 0.2 = 0.3
+✓ <strong>Financial accuracy</strong> - Pennies don’t go missing
+✓ <strong>Easier to learn</strong> - No float quirks to explain
+✓ <strong>FastNumber available</strong> - Performance when you need it</p>
+<p>Programming languages should make correctness easy and performance opt-in, not the other way around.</p>
+<hr>
+<p>Next: <a href="#1-based-indexing-1">1-Based Indexing</a> - Why lists start at 1</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="1-based-indexing-1"><a class="header" href="#1-based-indexing-1">1-Based Indexing</a></h1>
+<h2 id="the-zero-based-confusion"><a class="header" href="#the-zero-based-confusion">The Zero-Based Confusion</a></h2>
+<p>Quick question: What’s the first item in this list?</p>
+<pre><code>Shopping List:
+1. Milk
+2. Eggs
+3. Bread
+</code></pre>
+<p>Everyone says “Milk” - it’s item #1.</p>
+<p>Now, in most programming languages:</p>
+<pre><code class="language-python"># Python, JavaScript, Java, C++, etc.
+shopping = ["Milk", "Eggs", "Bread"]
+first = shopping[0]  # 0? But we just said it's #1!
+</code></pre>
+<p>Why this disconnect?</p>
+<h2 id="historical-reasons"><a class="header" href="#historical-reasons">Historical Reasons</a></h2>
+<p>Zero-based indexing comes from C, where arrays are implemented as pointers:</p>
+<pre><code class="language-c">// C language
+int array[5];
+// array[0] means: "address of array + (0 * sizeof(int))"
+// array[3] means: "address of array + (3 * sizeof(int))"
+</code></pre>
+<p>This was a <strong>hardware optimization</strong> from the 1970s. The first element is offset by zero bytes, so accessing it is slightly faster.</p>
+<p>But that’s an implementation detail! Why should humans care about memory offsets?</p>
+<h2 id="the-sfx-solution-1"><a class="header" href="#the-sfx-solution-1">The SFX Solution</a></h2>
+<p>SFX uses <strong>1-based indexing</strong> because that’s how humans count:</p>
+<pre><code class="language-sfex">Story:
+    Shopping is ["Milk", "Eggs", "Bread"]
+
+    First is Shopping[1]   # Milk ✓
+    Second is Shopping[2]  # Eggs ✓
+    Third is Shopping[3]   # Bread ✓
+
+    # The length matches the last index!
+    Count is Shopping.Length  # 3
+    Last is Shopping[Count]   # Bread ✓
+</code></pre>
+<h2 id="why-1-based-is-better"><a class="header" href="#why-1-based-is-better">Why 1-Based is Better</a></h2>
+<h3 id="1-matches-human-counting"><a class="header" href="#1-matches-human-counting">1. Matches Human Counting</a></h3>
+<pre><code class="language-sfex">Story:
+    # Task: Print the first 3 items
+    Items is ["A", "B", "C", "D", "E"]
+
+    Repeat 3 times with I:
+        Print Items[I]  # I goes 1, 2, 3 - perfect!
+</code></pre>
+<p>Compare to zero-based:</p>
+<pre><code class="language-python"># Confusing: Print items 0, 1, 2 to get the "first 3"
+for i in range(3):  # range(3) means 0,1,2 - huh?
+    print(items[i])
+</code></pre>
+<h3 id="2-length-matches-last-index"><a class="header" href="#2-length-matches-last-index">2. Length Matches Last Index</a></h3>
+<pre><code class="language-sfex">Story:
+    Numbers is [10, 20, 30, 40, 50]
+    Count is Numbers.Length  # 5
+    Last is Numbers[Count]   # 50 ✓ Makes sense!
+</code></pre>
+<p>Zero-based:</p>
+<pre><code class="language-python">numbers = [10, 20, 30, 40, 50]
+count = len(numbers)  # 5
+last = numbers[count]  # ERROR! Out of bounds!
+last = numbers[count - 1]  # 50 (why -1?)
+</code></pre>
+<h3 id="3-fewer-off-by-one-errors"><a class="header" href="#3-fewer-off-by-one-errors">3. Fewer Off-By-One Errors</a></h3>
+<p>The infamous “off-by-one error” is often caused by zero-based thinking:</p>
+<pre><code class="language-python"># Bug-prone (0-based)
+for i in range(len(items)):  # 0 to length-1
+    # Easy to forget the -1 in range(start, end-1)
+
+# Or:
+for i in range(1, len(items)):  # Accidentally skips first item!
+</code></pre>
+<p>SFX:</p>
+<pre><code class="language-sfex"># Clear (1-based)
+Repeat Items.Length times with I:
+    Print Items[I]  # I goes 1, 2, 3... naturally
+</code></pre>
+<h3 id="4-clearer-slicing"><a class="header" href="#4-clearer-slicing">4. Clearer Slicing</a></h3>
+<pre><code class="language-sfex">Story:
+    Numbers is [10, 20, 30, 40, 50]
+
+    # Get items 2 through 4
+    Slice is Numbers.Slice(2, 4)  # [20, 30, 40] ✓
+    # Start at 2, end at 4, includes both!
+</code></pre>
+<p>Compare to zero-based (Python):</p>
+<pre><code class="language-python">numbers = [10, 20, 30, 40, 50]
+slice = numbers[1:4]  # [20, 30, 40]
+# Start at 1 (second item), end BEFORE 4 - confusing!
+</code></pre>
+<h2 id="common-scenarios"><a class="header" href="#common-scenarios">Common Scenarios</a></h2>
+<h3 id="looping-with-index"><a class="header" href="#looping-with-index">Looping with Index</a></h3>
+<pre><code class="language-sfex">Story:
+    Names is ["Alice", "Bob", "Charlie"]
+
+    # Natural counting
+    Repeat Names.Length times with I:
+        Print "Person " + I + ": " + Names[I]
+    # Output:
+    # Person 1: Alice
+    # Person 2: Bob
+    # Person 3: Charlie
+</code></pre>
+<h3 id="finding-an-index"><a class="header" href="#finding-an-index">Finding an Index</a></h3>
+<pre><code class="language-sfex">Story:
+    Items is ["apple", "banana", "cherry"]
+    Target is "banana"
+
+    Found is 0
+    Repeat Items.Length times with I:
+        If Items[I] = Target:
+            Found is I
+            Break
+
+    If Found &gt; 0:
+        Print "Found at position " + Found  # Position 2 ✓
+</code></pre>
+<h3 id="accessing-first-and-last"><a class="header" href="#accessing-first-and-last">Accessing First and Last</a></h3>
+<pre><code class="language-sfex">Story:
+    Numbers is [5, 10, 15, 20, 25]
+
+    First is Numbers[1]             # 5
+    Last is Numbers[Numbers.Length] # 25
+
+    # Middle element (for odd-length lists)
+    Middle is Numbers[(Numbers.Length + 1) / 2]
+</code></pre>
+<h2 id="frequently-asked-questions"><a class="header" href="#frequently-asked-questions">Frequently Asked Questions</a></h2>
+<h3 id="but-zero-based-is-more-efficient"><a class="header" href="#but-zero-based-is-more-efficient">“But zero-based is more efficient!”</a></h3>
+<p><strong>No.</strong> Modern compilers optimize both equally. The difference is nanoseconds.</p>
+<p>SFX’s JIT compiler generates the same machine code whether you write <code>array[1]</code> or <code>array[0]</code> - it just adjusts the offset.</p>
+<h3 id="zero-based-is-standard-everywhere"><a class="header" href="#zero-based-is-standard-everywhere">“Zero-based is standard everywhere!”</a></h3>
+<p>So were punch cards, GOTO statements, and null pointers. Just because something is common doesn’t make it right.</p>
+<p>Many successful languages use 1-based indexing:</p>
+<ul>
+<li>MATLAB (engineering/scientific computing)</li>
+<li>R (statistics)</li>
+<li>Lua (game scripting)</li>
+<li>Fortran (still used in supercomputing)</li>
+</ul>
+<h3 id="what-about-c-interop"><a class="header" href="#what-about-c-interop">“What about C interop?”</a></h3>
+<p>SFX’s stdlib handles the conversion. When you call a C library, SFX adjusts indices automatically.</p>
+<pre><code class="language-sfex"># You write (1-based)
+Result is SomeArray[1]
+
+# SFX internally (0-based for C interop)
+# result = some_array[0]
+</code></pre>
+<h3 id="ill-get-confused-switching-between-languages"><a class="header" href="#ill-get-confused-switching-between-languages">“I’ll get confused switching between languages!”</a></h3>
+<p>People switch between:</p>
+<ul>
+<li>Languages that start weeks on Sunday vs Monday</li>
+<li>Countries that drive on left vs right</li>
+<li>Date formats (MM/DD/YY vs DD/MM/YY)</li>
+</ul>
+<p>Programmers are smart. You can handle lists starting at 1 in SFX and 0 in Python.</p>
+<h2 id="examples-1"><a class="header" href="#examples-1">Examples</a></h2>
+<h3 id="ranking"><a class="header" href="#ranking">Ranking</a></h3>
+<pre><code class="language-sfex">Concept: Leaderboard
+    Scores
+
+    To ShowRankings:
+        # Sort in descending order
+        Sorted is This.Scores.Sort("desc")
+
+        Print "=== Rankings ==="
+        Repeat Sorted.Length times with Position:
+            Player is Sorted[Position]
+            Print "#" + Position + ": " + Player["name"] + " - " + Player["score"]
+
+Story:
+    Create Leaderboard Called Board
+    Set Board.Scores to [
+        { name: "Alice", score: 95 },
+        { name: "Bob", score: 87 },
+        { name: "Charlie", score: 92 }
+    ]
+
+    Board.ShowRankings
+    # Output:
+    # === Rankings ===
+    # #1: Alice - 95
+    # #2: Charlie - 92
+    # #3: Bob - 87
+</code></pre>
+<p>Notice how the rank matches the index naturally!</p>
+<h3 id="pagination"><a class="header" href="#pagination">Pagination</a></h3>
+<pre><code class="language-sfex">Story:
+    AllItems is [/* 100 items */]
+    PageSize is 10
+    CurrentPage is 1
+
+    # Page 1: items 1-10
+    # Page 2: items 11-20
+    # etc.
+    StartIndex is ((CurrentPage - 1) * PageSize) + 1
+    EndIndex is CurrentPage * PageSize
+
+    # Get items for current page
+    PageItems is AllItems.Slice(StartIndex, EndIndex)
+</code></pre>
+<h3 id="gridmatrix"><a class="header" href="#gridmatrix">Grid/Matrix</a></h3>
+<pre><code class="language-sfex">Story:
+    # 3x3 grid
+    Grid is [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9]
+    ]
+
+    # Access row 2, column 3
+    Value is Grid[2][3]  # 6 (second row, third item)
+
+    # Human-readable coordinates
+    Print "Row 1, Col 1: " + Grid[1][1]  # 1 ✓
+</code></pre>
+<h2 id="migration-from-0-based-languages"><a class="header" href="#migration-from-0-based-languages">Migration from 0-Based Languages</a></h2>
+<p>If you’re coming from Python/JavaScript/Java:</p>
+<pre><code class="language-python"># Python (0-based)
+first = items[0]
+second = items[1]
+last = items[len(items) - 1]
+</code></pre>
+<pre><code class="language-sfex"># SFX (1-based)
+First is Items[1]
+Second is Items[2]
+Last is Items[Items.Length]
+</code></pre>
+<p><strong>Tip:</strong> Think “first, second, third” not “zeroth, first, second.”</p>
+<h2 id="best-practices-1"><a class="header" href="#best-practices-1">Best Practices</a></h2>
+<h3 id="loop-from-1-to-length"><a class="header" href="#loop-from-1-to-length">Loop from 1 to Length</a></h3>
+<pre><code class="language-sfex"># Good
+Repeat List.Length times with I:
+    Print List[I]
+</code></pre>
+<h3 id="use-for-each-when-you-dont-need-index"><a class="header" href="#use-for-each-when-you-dont-need-index">Use For Each When You Don’t Need Index</a></h3>
+<pre><code class="language-sfex"># Even better when index isn't needed
+For each Item in List:
+    Print Item
+</code></pre>
+<h3 id="check-bounds"><a class="header" href="#check-bounds">Check Bounds</a></h3>
+<pre><code class="language-sfex"># Safe access
+Index is 5
+If Index &gt;= 1 and Index &lt;= List.Length:
+    Value is List[Index]
+Else:
+    Print "Index out of range"
+</code></pre>
+<h2 id="summary-1"><a class="header" href="#summary-1">Summary</a></h2>
+<p>SFX uses 1-based indexing because:</p>
+<p>✓ <strong>Natural</strong> - Matches how humans count
+✓ <strong>Clearer</strong> - First item is index 1, not 0
+✓ <strong>Consistent</strong> - Length equals last index
+✓ <strong>Fewer errors</strong> - Less off-by-one confusion
+✓ <strong>No performance cost</strong> - JIT optimizes equally</p>
+<p>Programming is for humans, not computers. Let’s count like humans.</p>
+<hr>
+<p>Next: <a href="#no-null-pointers">No Null Pointers</a> - Safe defaults and the Option type</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="no-null-pointers"><a class="header" href="#no-null-pointers">No Null Pointers</a></h1>
+<h2 id="the-billion-dollar-mistake"><a class="header" href="#the-billion-dollar-mistake">The Billion-Dollar Mistake</a></h2>
+<p>In 2009, Tony Hoare, inventor of null references, called it his “billion-dollar mistake”:</p>
+<blockquote>
+<p>“I call it my billion-dollar mistake… null references have led to innumerable errors, vulnerabilities, and system crashes, which have probably caused a billion dollars of pain and damage.”</p>
+</blockquote>
+<pre><code class="language-java">// Java - the typical null nightmare
+String name = null;
+int length = name.length();  // NullPointerException! 💥
+</code></pre>
+<pre><code class="language-javascript">// JavaScript
+let user = null;
+console.log(user.email);  // TypeError: Cannot read property 'email' of null 💥
+</code></pre>
+<pre><code class="language-python"># Python
+person = None
+age = person.age  # AttributeError: 'NoneType' object has no attribute 'age' 💥
+</code></pre>
+<p>These crashes happen because:</p>
+<ol>
+<li>Variables can be null</li>
+<li>You forget to check for null</li>
+<li>Program crashes at runtime</li>
+</ol>
+<h2 id="the-sfx-solution-2"><a class="header" href="#the-sfx-solution-2">The SFX Solution</a></h2>
+<p>SFX eliminates null pointers with two approaches:</p>
+<h3 id="1-safe-defaults"><a class="header" href="#1-safe-defaults">1. Safe Defaults</a></h3>
+<p><strong>Every type has a sensible default value:</strong></p>
+<pre><code class="language-sfex">Concept: Person
+    Name    # Defaults to "" (empty string)
+    Age     # Defaults to 0
+    Active  # Defaults to False
+    Tags    # Defaults to [] (empty list)
+    Meta    # Defaults to {} (empty map)
+
+Story:
+    Create Person Called Bob
+    # No need to initialize - safe defaults!
+
+    Print Bob.Name    # "" (empty, not null)
+    Print Bob.Age     # 0
+    Print Bob.Active  # False
+    Print Bob.Tags    # []
+
+    # Safe to use immediately
+    Length is Bob.Name.Length  # 0 (works! no crash!)
+</code></pre>
+<h3 id="2-option-type"><a class="header" href="#2-option-type">2. Option Type</a></h3>
+<p><strong>For values that might be absent, use Option:</strong></p>
+<pre><code class="language-sfex"># Some(value) or None
+Result is Some(42)
+NoResult is None
+
+# Check if present
+If Result.IsSome:
+    Print "Has value!"
+
+If NoResult.IsNone:
+    Print "No value!"
+
+# Extract value safely
+If Result.IsSome:
+    Value is Result.Unwrap()
+    Print Value  # 42
+
+# Provide fallback
+Default is NoResult.UnwrapOr(0)
+Print Default  # 0 (because NoResult is None)
+</code></pre>
+<h2 id="why-this-is-better"><a class="header" href="#why-this-is-better">Why This is Better</a></h2>
+<h3 id="no-null-pointer-crashes"><a class="header" href="#no-null-pointer-crashes">No Null Pointer Crashes</a></h3>
+<pre><code class="language-sfex"># SFX - always safe
+Concept: User
+    Email
+
+Story:
+    Create User Called Guest
+
+    # Email is "" (empty string), not null
+    Length is Guest.Email.Length  # 0 ✓ (no crash!)
+    If Guest.Email = "":
+        Print "No email provided"
+</code></pre>
+<p>Compare to:</p>
+<pre><code class="language-java">// Java - potential crash
+User guest = new User();
+int length = guest.email.length();  // NullPointerException if email is null!
+</code></pre>
+<h3 id="explicit-optional-values"><a class="header" href="#explicit-optional-values">Explicit Optional Values</a></h3>
+<pre><code class="language-sfex">Concept: SearchResult
+    Result  # Option type
+
+    To Find with Query:
+        # Simulate search
+        If Query = "found":
+            Set This.Result to Some("Item found!")
+        Else:
+            Set This.Result to None
+
+Story:
+    Create SearchResult Called Search
+
+    Search.Find with "found"
+    If Search.Result.IsSome:
+        Print Search.Result.Unwrap()  # "Item found!"
+
+    Search.Find with "missing"
+    If Search.Result.IsNone:
+        Print "Nothing found"  # This prints
+</code></pre>
+<h3 id="safe-method-chaining"><a class="header" href="#safe-method-chaining">Safe Method Chaining</a></h3>
+<pre><code class="language-sfex">Concept: Config
+    Database  # Map with database config
+
+Story:
+    Create Config Called Settings
+    Set Settings.Database to {}  # Empty map (not null!)
+
+    # Safe to access nested properties
+    Host is Settings.Database["host"]  # Returns "" if not set
+    Port is Settings.Database["port"]  # Returns 0 if not set
+
+    # No crashes!
+</code></pre>
+<h2 id="default-values-by-type"><a class="header" href="#default-values-by-type">Default Values by Type</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Type</th><th>Default Value</th><th>Example</th></tr>
+</thead>
+<tbody>
+<tr><td>Number</td><td>0</td><td><code>Age</code> defaults to <code>0</code></td></tr>
+<tr><td>FastNumber</td><td>0.0</td><td><code>Speed</code> defaults to <code>0.0</code></td></tr>
+<tr><td>String</td><td>“”</td><td><code>Name</code> defaults to <code>""</code></td></tr>
+<tr><td>Boolean</td><td>False</td><td><code>Active</code> defaults to <code>False</code></td></tr>
+<tr><td>List</td><td>[]</td><td><code>Items</code> defaults to <code>[]</code></td></tr>
+<tr><td>Map</td><td>{}</td><td><code>Config</code> defaults to <code>{}</code></td></tr>
+<tr><td>Option</td><td>None</td><td><code>Result</code> defaults to <code>None</code></td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="option-type-api"><a class="header" href="#option-type-api">Option Type API</a></h2>
+<h3 id="creating-options"><a class="header" href="#creating-options">Creating Options</a></h3>
+<pre><code class="language-sfex">Story:
+    HasValue is Some(42)
+    NoValue is None
+
+    # From expressions
+    Result is If Score &gt; 50 then Some(Score) else None
+</code></pre>
+<h3 id="checking-for-values"><a class="header" href="#checking-for-values">Checking for Values</a></h3>
+<pre><code class="language-sfex">Story:
+    Result is Some(100)
+
+    # Check if has value
+    If Result.IsSome:
+        Print "Has value"
+
+    If Result.IsNone:
+        Print "No value"
+</code></pre>
+<h3 id="extracting-values"><a class="header" href="#extracting-values">Extracting Values</a></h3>
+<pre><code class="language-sfex">Story:
+    Result is Some(42)
+
+    # Unwrap (crashes if None!)
+    Value is Result.Unwrap()
+    Print Value  # 42
+
+    # Unwrap with default (safe)
+    Value is Result.UnwrapOr(0)
+    Print Value  # 42 (or 0 if None)
+
+    NoResult is None
+    Value is NoResult.UnwrapOr(99)
+    Print Value  # 99 (fallback used)
+</code></pre>
+<h2 id="real-world-examples"><a class="header" href="#real-world-examples">Real-World Examples</a></h2>
+<h3 id="database-query"><a class="header" href="#database-query">Database Query</a></h3>
+<pre><code class="language-sfex">Concept: Database
+    To FindUser with Id:
+        # Returns Option - user might not exist
+        If Id = 1:
+            Return Some({ name: "Alice", age: 30 })
+        Else:
+            Return None
+
+Story:
+    Create Database Called DB
+
+    Result is DB.FindUser with 1
+    If Result.IsSome:
+        User is Result.Unwrap()
+        Print "Found: " + User["name"]
+    Else:
+        Print "User not found"
+
+    Result is DB.FindUser with 999
+    If Result.IsNone:
+        Print "User not found"  # This prints
+</code></pre>
+<h3 id="configuration"><a class="header" href="#configuration">Configuration</a></h3>
+<pre><code class="language-sfex">Concept: AppConfig
+    Settings  # Map
+
+    To GetSetting with Key:
+        # Return Option - setting might not exist
+        If This.Settings.HasKey(Key):
+            Return Some(This.Settings[Key])
+        Else:
+            Return None
+
+    To GetSettingWithDefault with Key and Default:
+        Result is This.GetSetting with Key
+        Return Result.UnwrapOr(Default)
+
+Story:
+    Create AppConfig Called Config
+    Set Config.Settings to { timeout: 30, retries: 3 }
+
+    # Get with Option
+    Timeout is Config.GetSetting with "timeout"
+    If Timeout.IsSome:
+        Print "Timeout: " + Timeout.Unwrap()
+
+    # Get with default
+    MaxConnections is Config.GetSettingWithDefault with "max_connections" and 100
+    Print "Max connections: " + MaxConnections  # 100 (default used)
+</code></pre>
+<h3 id="parsing"><a class="header" href="#parsing">Parsing</a></h3>
+<pre><code class="language-sfex">Concept: Parser
+    To ParseInt with Text:
+        # Try to parse, return Option
+        Try:
+            Number is Int.Parse(Text)
+            Return Some(Number)
+        Catch Error:
+            Return None
+
+Story:
+    Create Parser Called P
+
+    Result is P.ParseInt with "42"
+    If Result.IsSome:
+        Num is Result.Unwrap()
+        Print "Parsed: " + Num  # 42
+
+    Result is P.ParseInt with "not a number"
+    If Result.IsNone:
+        Print "Parse failed"  # This prints
+</code></pre>
+<h3 id="caching"><a class="header" href="#caching">Caching</a></h3>
+<pre><code class="language-sfex">Concept: Cache
+    Data  # Map
+
+    To Get with Key:
+        If This.Data.HasKey(Key):
+            Return Some(This.Data[Key])
+        Else:
+            Return None
+
+    To GetOrCompute with Key and ComputeFunc:
+        Cached is This.Get with Key
+        If Cached.IsSome:
+            Return Cached.Unwrap()
+        Else:
+            Value is ComputeFunc()
+            This.Data[Key] is Value
+            Return Value
+
+Story:
+    Create Cache Called MyCache
+    Set MyCache.Data to {}
+
+    # Cache miss - compute
+    Value is MyCache.GetOrCompute with "expensive" and ExpensiveCalculation
+    Print Value
+
+    # Cache hit - return cached
+    Value is MyCache.GetOrCompute with "expensive" and ExpensiveCalculation
+    Print Value  # Same value, no recomputation
+</code></pre>
+<h2 id="best-practices-2"><a class="header" href="#best-practices-2">Best Practices</a></h2>
+<h3 id="1-use-safe-defaults-for-always-present-data"><a class="header" href="#1-use-safe-defaults-for-always-present-data">1. Use Safe Defaults for Always-Present Data</a></h3>
+<pre><code class="language-sfex">Concept: Person
+    Name     # Always has a name (even if "")
+    Age      # Always has an age (even if 0)
+    Email    # Always has an email (even if "")
+
+    # Safe defaults, no null checks needed
+</code></pre>
+<h3 id="2-use-option-for-maybe-present-data"><a class="header" href="#2-use-option-for-maybe-present-data">2. Use Option for Maybe-Present Data</a></h3>
+<pre><code class="language-sfex">Concept: User
+    Username
+    ProfilePicture  # Option - might not have one
+
+    To GetProfilePicture:
+        # Return Option
+        If This.ProfilePicture.IsSome:
+            Return This.ProfilePicture
+        Else:
+            Return None
+</code></pre>
+<h3 id="3-provide-fallbacks-with-unwrapor"><a class="header" href="#3-provide-fallbacks-with-unwrapor">3. Provide Fallbacks with UnwrapOr</a></h3>
+<pre><code class="language-sfex">Story:
+    Config is LoadConfig()
+    Timeout is Config.GetSetting with "timeout"
+
+    # Use fallback if not set
+    ActualTimeout is Timeout.UnwrapOr(30)
+</code></pre>
+<h3 id="4-check-before-unwrap"><a class="header" href="#4-check-before-unwrap">4. Check Before Unwrap</a></h3>
+<pre><code class="language-sfex"># Good - safe
+If Result.IsSome:
+    Value is Result.Unwrap()
+
+# Risky - crashes if None
+Value is Result.Unwrap()
+</code></pre>
+<h3 id="5-use-option-for-return-values-that-can-fail"><a class="header" href="#5-use-option-for-return-values-that-can-fail">5. Use Option for Return Values That Can Fail</a></h3>
+<pre><code class="language-sfex">Concept: Finder
+    To Find with Query:
+        # Might not find anything
+        If Found:
+            Return Some(Result)
+        Else:
+            Return None  # Explicit: no result
+</code></pre>
+<h2 id="comparison-with-other-languages"><a class="header" href="#comparison-with-other-languages">Comparison with Other Languages</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Language</th><th>Null Handling</th></tr>
+</thead>
+<tbody>
+<tr><td>Java</td><td><code>null</code> everywhere, can crash anytime</td></tr>
+<tr><td>JavaScript</td><td><code>null</code> and <code>undefined</code>, both cause crashes</td></tr>
+<tr><td>Python</td><td><code>None</code>, causes crashes</td></tr>
+<tr><td>Rust</td><td><code>Option&lt;T&gt;</code>, must handle (like SFX)</td></tr>
+<tr><td>Kotlin</td><td>Nullable types <code>T?</code>, must check</td></tr>
+<tr><td>SFX</td><td>Safe defaults + Option type ✓</td></tr>
+</tbody>
+</table>
+</div>
+<p>SFX combines the best of both worlds:</p>
+<ul>
+<li><strong>Safe defaults</strong> for simplicity (beginners)</li>
+<li><strong>Option type</strong> for explicit optionality (advanced)</li>
+</ul>
+<h2 id="summary-2"><a class="header" href="#summary-2">Summary</a></h2>
+<p>SFX eliminates null pointer crashes through:</p>
+<p>✓ <strong>Safe defaults</strong> - Every type has a sensible default (0, “”, False, [], {})
+✓ <strong>Option type</strong> - Explicit handling of maybe-present values
+✓ <strong>No null crashes</strong> - Can’t access null, because there is no null
+✓ <strong>Clearer code</strong> - Intent is explicit (Some vs None)
+✓ <strong>Beginner-friendly</strong> - Safe by default, no crashes</p>
+<p>The result? <strong>Fewer bugs, clearer intent, safer code.</strong></p>
+<hr>
+<p>Next: <a href="#grapheme-clustering">Grapheme Clustering</a> - Unicode done right</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="grapheme-clustering"><a class="header" href="#grapheme-clustering">Grapheme Clustering</a></h1>
+<h2 id="the-emoji-problem"><a class="header" href="#the-emoji-problem">The Emoji Problem</a></h2>
+<p>Quick question: How many characters is this emoji?</p>
+<pre><code>👨‍👩‍👧‍👦
+</code></pre>
+<p>Most programming languages say:</p>
+<pre><code class="language-python"># Python
+emoji = "👨‍👩‍👧‍👦"
+len(emoji)  # 7 ❌
+</code></pre>
+<pre><code class="language-javascript">// JavaScript
+let emoji = "👨‍👩‍👧‍👦";
+emoji.length;  # 11 ❌
+</code></pre>
+<pre><code class="language-java">// Java
+String emoji = "👨‍👩‍👧‍👦";
+emoji.length();  // 11 ❌
+</code></pre>
+<p>But it’s <strong>ONE emoji</strong>! The “family” emoji is a single visual unit.</p>
+<p>SFX gets it right:</p>
+<pre><code class="language-sfex">Story:
+    Family is "👨‍👩‍👧‍👦"
+    Length is Family.Length  # 1 ✓
+</code></pre>
+<h2 id="what-are-grapheme-clusters"><a class="header" href="#what-are-grapheme-clusters">What Are Grapheme Clusters?</a></h2>
+<p>A <strong>grapheme cluster</strong> is what humans perceive as a single character:</p>
+<ul>
+<li><code>a</code> - Simple character (1 grapheme)</li>
+<li><code>é</code> - Can be one character OR <code>e</code> + combining accent (still 1 grapheme)</li>
+<li><code>👨‍👩‍👧‍👦</code> - Multiple Unicode code points (but 1 grapheme)</li>
+<li><code>🇺🇸</code> - Two code points (but 1 flag = 1 grapheme)</li>
+</ul>
+<h3 id="technical-details-optional"><a class="header" href="#technical-details-optional">Technical Details (Optional)</a></h3>
+<p>Unicode has different representations:</p>
+<ol>
+<li><strong>Code points</strong> - Individual Unicode values (U+0041, U+1F600, etc.)</li>
+<li><strong>Code units</strong> - UTF-8 bytes, UTF-16 words</li>
+<li><strong>Grapheme clusters</strong> - What humans see as characters ✓</li>
+</ol>
+<p>Most languages count code points or code units. SFX counts grapheme clusters.</p>
+<h2 id="why-this-matters"><a class="header" href="#why-this-matters">Why This Matters</a></h2>
+<h3 id="1-string-length"><a class="header" href="#1-string-length">1. String Length</a></h3>
+<pre><code class="language-sfex">Story:
+    # Simple ASCII
+    Name is "Alice"
+    Print Name.Length  # 5 ✓
+
+    # Emoji
+    Emoji is "🎉"
+    Print Emoji.Length  # 1 ✓
+
+    # Complex emoji
+    Family is "👨‍👩‍👧‍👦"
+    Print Family.Length  # 1 ✓
+
+    # Flag emoji
+    Flag is "🇺🇸"
+    Print Flag.Length  # 1 ✓
+
+    # Combining diacritics
+    Accented is "é"  # Can be one code point or e + ́
+    Print Accented.Length  # 1 ✓ (regardless of representation)
+</code></pre>
+<p>Compare to other languages:</p>
+<pre><code class="language-python"># Python counts code points
+"🎉".len()           # 1 (lucky - simple emoji)
+"👨‍👩‍👧‍👦".len()  # 7 ❌ (complex emoji)
+"🇺🇸".len()          # 2 ❌ (flag is 2 code points)
+</code></pre>
+<h3 id="2-string-slicing"><a class="header" href="#2-string-slicing">2. String Slicing</a></h3>
+<pre><code class="language-sfex">Story:
+    Text is "Hello 👋 World 🌍"
+
+    # Get first 7 graphemes
+    Slice is Text.Slice(1, 7)
+    Print Slice  # "Hello 👋" ✓ (emoji counts as 1)
+</code></pre>
+<p>Other languages:</p>
+<pre><code class="language-python"># Python
+text = "Hello 👋 World 🌍"
+slice = text[0:7]  # Might cut emoji in half! 💥
+</code></pre>
+<h3 id="3-text-truncation"><a class="header" href="#3-text-truncation">3. Text Truncation</a></h3>
+<pre><code class="language-sfex">Concept: TextTruncator
+    To Truncate with Text and MaxLength:
+        If Text.Length &lt;= MaxLength:
+            Return Text
+        Else:
+            Truncated is Text.Slice(1, MaxLength - 3)
+            Return Truncated + "..."
+
+Story:
+    Create TextTruncator Called T
+
+    Short is "Hello"
+    Print T.Truncate with Short and 10  # "Hello"
+
+    Long is "Hello 👋 World 🌍 Everyone 🎉"
+    Print T.Truncate with Long and 15  # "Hello 👋 World..." ✓
+    # Emoji not split!
+</code></pre>
+<h3 id="4-character-validation"><a class="header" href="#4-character-validation">4. Character Validation</a></h3>
+<pre><code class="language-sfex">Story:
+    # Validate username length
+    Username is "Alice🎮"
+    MinLength is 3
+    MaxLength is 20
+
+    If Username.Length &gt;= MinLength and Username.Length &lt;= MaxLength:
+        Print "Valid username"  # This prints ✓
+        # "Alice🎮" is 6 graphemes (A-l-i-c-e-🎮)
+</code></pre>
+<h3 id="5-display-width"><a class="header" href="#5-display-width">5. Display Width</a></h3>
+<pre><code class="language-sfex">Concept: TextRenderer
+    To PadRight with Text and Width:
+        # Pad with spaces to reach width
+        CurrentLength is Text.Length
+        If CurrentLength &gt;= Width:
+            Return Text
+        Else:
+            Padding is Width - CurrentLength
+            Spaces is ""
+            Repeat Padding times:
+                Spaces is Spaces + " "
+            Return Text + Spaces
+
+Story:
+    Create TextRenderer Called Renderer
+
+    # All aligned, even with emoji
+    Print Renderer.PadRight with "Name" and 15 + "| Status"
+    Print Renderer.PadRight with "Alice" and 15 + "| Active"
+    Print Renderer.PadRight with "Bob 🎮" and 15 + "| Offline"
+    # Output:
+    # Name           | Status
+    # Alice          | Active
+    # Bob 🎮         | Offline
+</code></pre>
+<h2 id="common-emoji-patterns"><a class="header" href="#common-emoji-patterns">Common Emoji Patterns</a></h2>
+<h3 id="simple-emoji"><a class="header" href="#simple-emoji">Simple Emoji</a></h3>
+<pre><code class="language-sfex">Story:
+    # Single code point emoji
+    Smile is "😀"     # 1 grapheme ✓
+    Heart is "❤️"     # 1 grapheme ✓
+    Star is "⭐"      # 1 grapheme ✓
+
+    Total is Smile.Length + Heart.Length + Star.Length
+    Print Total  # 3 ✓
+</code></pre>
+<h3 id="skin-tone-modifiers"><a class="header" href="#skin-tone-modifiers">Skin Tone Modifiers</a></h3>
+<pre><code class="language-sfex">Story:
+    # Emoji + skin tone = 1 grapheme
+    WaveLight is "👋🏻"   # 1 grapheme ✓
+    WaveDark is "👋🏿"    # 1 grapheme ✓
+
+    Print WaveLight.Length  # 1 ✓
+</code></pre>
+<h3 id="combined-emoji-zwj-sequences"><a class="header" href="#combined-emoji-zwj-sequences">Combined Emoji (ZWJ Sequences)</a></h3>
+<pre><code class="language-sfex">Story:
+    # Zero-Width Joiner combines emoji
+    Family is "👨‍👩‍👧‍👦"        # 1 grapheme ✓
+    Couple is "👨‍❤️‍👨"         # 1 grapheme ✓
+    FemaleFirefighter is "👩‍🚒"  # 1 grapheme ✓
+
+    Total is Family.Length + Couple.Length + FemaleFirefighter.Length
+    Print Total  # 3 ✓
+</code></pre>
+<h3 id="flag-emoji"><a class="header" href="#flag-emoji">Flag Emoji</a></h3>
+<pre><code class="language-sfex">Story:
+    # Two regional indicator symbols = 1 flag
+    US is "🇺🇸"      # 1 grapheme ✓
+    UK is "🇬🇧"      # 1 grapheme ✓
+    Japan is "🇯🇵"   # 1 grapheme ✓
+
+    Flags is US + UK + Japan
+    Print Flags.Length  # 3 ✓
+</code></pre>
+<h2 id="real-world-examples-1"><a class="header" href="#real-world-examples-1">Real-World Examples</a></h2>
+<h3 id="tweet-length-counter"><a class="header" href="#tweet-length-counter">Tweet Length Counter</a></h3>
+<pre><code class="language-sfex">Concept: TweetValidator
+    MaxLength is 280
+
+    To IsValid with Text:
+        Return Text.Length &lt;= This.MaxLength
+
+    To GetRemainingChars with Text:
+        Return This.MaxLength - Text.Length
+
+Story:
+    Create TweetValidator Called Validator
+
+    Tweet is "Hello world! 👋🌍🎉"
+
+    If Validator.IsValid with Tweet:
+        Remaining is Validator.GetRemainingChars with Tweet
+        Print "Valid! " + Remaining + " characters remaining"
+        # Counts emoji correctly!
+</code></pre>
+<h3 id="username-validation"><a class="header" href="#username-validation">Username Validation</a></h3>
+<pre><code class="language-sfex">Concept: UsernameValidator
+    MinLength is 3
+    MaxLength is 20
+
+    To Validate with Username:
+        Length is Username.Length
+
+        If Length &lt; This.MinLength:
+            Return "Username too short (min " + This.MinLength + " characters)"
+        Else If Length &gt; This.MaxLength:
+            Return "Username too long (max " + This.MaxLength + " characters)"
+        Else:
+            Return "Valid"
+
+Story:
+    Create UsernameValidator Called Validator
+
+    # All valid - emoji count as 1 character each
+    Print Validator.Validate with "Alice"      # Valid
+    Print Validator.Validate with "Bob🎮"      # Valid
+    Print Validator.Validate with "游戏玩家"    # Valid (Chinese characters)
+    Print Validator.Validate with "مستخدم"    # Valid (Arabic)
+</code></pre>
+<h3 id="text-editor"><a class="header" href="#text-editor">Text Editor</a></h3>
+<pre><code class="language-sfex">Concept: TextEditor
+    Content
+    CursorPosition
+
+    To MoveCursorRight:
+        If This.CursorPosition &lt; This.Content.Length:
+            Set This.CursorPosition to This.CursorPosition + 1
+
+    To MoveCursorLeft:
+        If This.CursorPosition &gt; 0:
+            Set This.CursorPosition to This.CursorPosition - 1
+
+    To DeleteCharacter:
+        # Delete character at cursor
+        Before is This.Content.Slice(1, This.CursorPosition - 1)
+        After is This.Content.Slice(This.CursorPosition + 1, This.Content.Length)
+        Set This.Content to Before + After
+        # Deletes entire grapheme cluster, not just one byte!
+
+Story:
+    Create TextEditor Called Editor
+    Set Editor.Content to "Hello 👨‍👩‍👧‍👦 World"
+    Set Editor.CursorPosition to 7
+
+    # Delete the family emoji
+    Editor.DeleteCharacter
+    Print Editor.Content  # "Hello World" ✓
+    # Entire emoji deleted, not corrupted!
+</code></pre>
+<h2 id="performance"><a class="header" href="#performance">Performance</a></h2>
+<p>Grapheme clustering is slightly slower than byte counting:</p>
+<pre><code class="language-sfex">Story:
+    # For ASCII-only strings, fast
+    Text is "Hello World"
+    Length is Text.Length  # Fast
+
+    # For Unicode strings, slightly slower
+    Text is "Hello 👨‍👩‍👧‍👦 World 🌍"
+    Length is Text.Length  # Slightly slower (but still fast!)
+</code></pre>
+<p><strong>But correctness &gt; speed</strong>. And with JIT compilation, the difference is minimal.</p>
+<h2 id="best-practices-3"><a class="header" href="#best-practices-3">Best Practices</a></h2>
+<h3 id="1-use-length-for-character-count"><a class="header" href="#1-use-length-for-character-count">1. Use .Length for Character Count</a></h3>
+<pre><code class="language-sfex"># Good - grapheme count
+Text is "Hello 👋"
+Count is Text.Length  # 7 (H-e-l-l-o-space-👋)
+</code></pre>
+<h3 id="2-use-bytesize-for-storage-size"><a class="header" href="#2-use-bytesize-for-storage-size">2. Use .ByteSize for Storage Size</a></h3>
+<pre><code class="language-sfex"># If you need byte count for storage/network
+Text is "Hello 👋"
+Bytes is Text.ByteSize  # More than 7 (UTF-8 bytes)
+</code></pre>
+<h3 id="3-slice-by-graphemes"><a class="header" href="#3-slice-by-graphemes">3. Slice by Graphemes</a></h3>
+<pre><code class="language-sfex"># SFX slices by graphemes
+Text is "Hello 👋 World"
+First7 is Text.Slice(1, 7)  # "Hello 👋" (emoji not split)
+</code></pre>
+<h3 id="4-validate-input-by-grapheme-count"><a class="header" href="#4-validate-input-by-grapheme-count">4. Validate Input by Grapheme Count</a></h3>
+<pre><code class="language-sfex"># Validate display length, not byte length
+Username is "User🎮"
+If Username.Length &gt; 20:
+    Print "Username too long"
+</code></pre>
+<h2 id="comparison-with-other-languages-1"><a class="header" href="#comparison-with-other-languages-1">Comparison with Other Languages</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Language</th><th>“👨‍👩‍👧‍👦”.Length</th><th>Method</th></tr>
+</thead>
+<tbody>
+<tr><td>SFX</td><td>1 ✓</td><td>Grapheme clusters</td></tr>
+<tr><td>Python</td><td>7</td><td>Code points</td></tr>
+<tr><td>JavaScript</td><td>11</td><td>UTF-16 code units</td></tr>
+<tr><td>Java</td><td>11</td><td>UTF-16 code units</td></tr>
+<tr><td>Go</td><td>25</td><td>UTF-8 bytes</td></tr>
+<tr><td>Rust</td><td>25</td><td>UTF-8 bytes (default)</td></tr>
+<tr><td>Swift</td><td>1 ✓</td><td>Grapheme clusters</td></tr>
+</tbody>
+</table>
+</div>
+<p>SFX and Swift get it right by default!</p>
+<h2 id="summary-3"><a class="header" href="#summary-3">Summary</a></h2>
+<p>SFX uses grapheme clustering for strings:</p>
+<p>✓ <strong>Human-centric</strong> - Counts what humans see as characters
+✓ <strong>Emoji-friendly</strong> - 👨‍👩‍👧‍👦 is 1 character, not 7
+✓ <strong>International</strong> - Works with all languages (Chinese, Arabic, emoji, etc.)
+✓ <strong>Safe slicing</strong> - Won’t split multi-byte characters
+✓ <strong>Correct validation</strong> - Username/tweet length validation works correctly</p>
+<p>When dealing with text in the 21st century, grapheme clustering is essential.</p>
+<hr>
+<p>Next: <a href="#basic-syntax">Basic Syntax</a> - Learn SFX syntax fundamentals</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="basic-syntax"><a class="header" href="#basic-syntax">Basic Syntax</a></h1>
+<p>SFX uses a clean, readable syntax inspired by natural language. This chapter covers the fundamental syntax rules.</p>
+<h2 id="program-structure"><a class="header" href="#program-structure">Program Structure</a></h2>
+<p>Every SFX program has a <code>Story</code> block - the main entry point:</p>
+<pre><code class="language-sfex">Story:
+    Print "Hello, SFX!"
+</code></pre>
+<p>A complete program can include:</p>
+<ul>
+<li><strong>Concepts</strong> - Classes/objects (defined before Story)</li>
+<li><strong>Situations</strong> - Context modifiers (defined before Story)</li>
+<li><strong>Story</strong> - Main entry point (required)</li>
+</ul>
+<pre><code class="language-sfex"># Complete program structure
+Concept: MyClass
+    Field1, Field2
+
+Situation: MyContext
+    Adjust MyClass:
+        # Adjustments here
+
+Story:
+    # Main program code here
+    Print "Starting program..."
+</code></pre>
+<h2 id="indentation"><a class="header" href="#indentation">Indentation</a></h2>
+<p>SFX uses <strong>significant indentation</strong> like Python:</p>
+<ul>
+<li>Use <strong>4 spaces</strong> per indentation level</li>
+<li><strong>DO NOT use tabs</strong> (use spaces only)</li>
+<li>Consistent indentation defines code blocks</li>
+</ul>
+<pre><code class="language-sfex">Story:
+    If True:
+        Print "This is indented"
+        Print "So is this"
+    Print "Back to outer level"
+</code></pre>
+<h2 id="comments"><a class="header" href="#comments">Comments</a></h2>
+<p>Use <code>#</code> for single-line comments:</p>
+<pre><code class="language-sfex"># This is a comment
+Story:
+    Print "Hello"  # Inline comment
+    # Another comment
+</code></pre>
+<p><strong>Note:</strong> SFX currently supports only single-line comments. Multi-line comments are not yet supported.</p>
+<h2 id="statements"><a class="header" href="#statements">Statements</a></h2>
+<p>Statements in SFX typically end at the end of the line:</p>
+<pre><code class="language-sfex">Story:
+    Name is "Alice"
+    Age is 25
+    Print Name
+</code></pre>
+<h2 id="keywords"><a class="header" href="#keywords">Keywords</a></h2>
+<p>SFX uses descriptive English keywords:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Category</th><th>Keywords</th></tr>
+</thead>
+<tbody>
+<tr><td>Structure</td><td><code>Story</code>, <code>Concept</code>, <code>Situation</code></td></tr>
+<tr><td>Assignment</td><td><code>is</code>, <code>Set</code>, <code>to</code></td></tr>
+<tr><td>Control Flow</td><td><code>If</code>, <code>Else</code>, <code>Repeat</code>, <code>For</code>, <code>each</code>, <code>in</code>, <code>When</code>, <code>Otherwise</code></td></tr>
+<tr><td>Object Creation</td><td><code>Create</code>, <code>Called</code></td></tr>
+<tr><td>Methods</td><td><code>To</code>, <code>with</code>, <code>and</code>, <code>Return</code></td></tr>
+<tr><td>Context</td><td><code>Switch</code>, <code>on</code>, <code>off</code>, <code>Adjust</code>, <code>Proceed</code></td></tr>
+<tr><td>Error Handling</td><td><code>Try</code>, <code>Catch</code>, <code>Always</code></td></tr>
+<tr><td>Concurrency</td><td><code>Do</code>, <code>in</code>, <code>background</code></td></tr>
+<tr><td>Logic</td><td><code>True</code>, <code>False</code>, <code>and</code>, <code>or</code>, <code>not</code></td></tr>
+<tr><td>Loops</td><td><code>Break</code>, <code>Continue</code>, <code>times</code>, <code>while</code></td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="case-sensitivity"><a class="header" href="#case-sensitivity">Case Sensitivity</a></h2>
+<p>SFX keywords are <strong>case-sensitive</strong>:</p>
+<pre><code class="language-sfex">Story:
+    # Correct
+    Print "Hello"
+
+    # Wrong (will cause error)
+    print "Hello"  # lowercase 'p'
+    PRINT "Hello"  # uppercase
+</code></pre>
+<p>Variable and concept names are also case-sensitive:</p>
+<pre><code class="language-sfex">Story:
+    Name is "Alice"
+    name is "Bob"
+    # 'Name' and 'name' are different variables
+</code></pre>
+<h2 id="line-continuation"><a class="header" href="#line-continuation">Line Continuation</a></h2>
+<p>Long statements can be continued on the next line within certain contexts:</p>
+<pre><code class="language-sfex"># Lists and maps can span multiple lines
+Items is [
+    "Item 1",
+    "Item 2",
+    "Item 3"
+]
+
+User is {
+    name: "Alice",
+    age: 30,
+    email: "alice@example.com"
+}
+</code></pre>
+<h2 id="naming-conventions"><a class="header" href="#naming-conventions">Naming Conventions</a></h2>
+<h3 id="variables-and-fields"><a class="header" href="#variables-and-fields">Variables and Fields</a></h3>
+<p>Use <strong>PascalCase</strong> for variable and field names:</p>
+<pre><code class="language-sfex">Story:
+    FirstName is "Alice"
+    LastName is "Smith"
+    UserAge is 25
+    IsActive is True
+</code></pre>
+<h3 id="concepts"><a class="header" href="#concepts">Concepts</a></h3>
+<p>Use <strong>PascalCase</strong> for concept names:</p>
+<pre><code class="language-sfex">Concept: Person
+Concept: ShoppingCart
+Concept: HttpClient
+</code></pre>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<p>Use <strong>PascalCase</strong> for method names:</p>
+<pre><code class="language-sfex">Concept: Calculator
+    To Add with X and Y:
+        Return X + Y
+
+    To CalculateTotal:
+        # Method code
+</code></pre>
+<h3 id="situations"><a class="header" href="#situations">Situations</a></h3>
+<p>Use <strong>PascalCase</strong> for situation names:</p>
+<pre><code class="language-sfex">Situation: AdminMode
+Situation: DebugMode
+Situation: VIPCustomer
+</code></pre>
+<h2 id="best-practices-4"><a class="header" href="#best-practices-4">Best Practices</a></h2>
+<h3 id="1-use-descriptive-names"><a class="header" href="#1-use-descriptive-names">1. Use Descriptive Names</a></h3>
+<pre><code class="language-sfex"># Good
+UserName is "Alice"
+ShoppingCart is []
+TotalPrice is 99.99
+
+# Less clear
+UN is "Alice"
+SC is []
+TP is 99.99
+</code></pre>
+<h3 id="2-keep-indentation-consistent"><a class="header" href="#2-keep-indentation-consistent">2. Keep Indentation Consistent</a></h3>
+<pre><code class="language-sfex"># Good
+Story:
+    If Condition:
+        DoSomething()
+        DoSomethingElse()
+
+# Bad (inconsistent indentation)
+Story:
+    If Condition:
+      DoSomething()
+        DoSomethingElse()  # Error!
+</code></pre>
+<h3 id="3-one-statement-per-line"><a class="header" href="#3-one-statement-per-line">3. One Statement Per Line</a></h3>
+<pre><code class="language-sfex"># Good
+Name is "Alice"
+Age is 25
+
+# Possible but discouraged
+Name is "Alice", Age is 25  # Works only with Set statements
+</code></pre>
+<h3 id="4-group-related-code"><a class="header" href="#4-group-related-code">4. Group Related Code</a></h3>
+<pre><code class="language-sfex">Story:
+    # Configuration
+    Host is "localhost"
+    Port is 8080
+
+    # User setup
+    Create User Called Admin
+    Set Admin.Name to "Administrator"
+    Set Admin.Role to "admin"
+
+    # Start server
+    Server.Start with Host and Port
+</code></pre>
+<h3 id="5-use-comments-for-clarity"><a class="header" href="#5-use-comments-for-clarity">5. Use Comments for Clarity</a></h3>
+<pre><code class="language-sfex">Story:
+    # Calculate tax (10% rate)
+    Price is 100
+    Tax is Price * 0.1
+    Total is Price + Tax
+
+    # Display result
+    Print "Total with tax: $" + Total
+</code></pre>
+<h2 id="example-complete-program"><a class="header" href="#example-complete-program">Example: Complete Program</a></h2>
+<pre><code class="language-sfex"># User Management System
+
+Concept: User
+    Name, Email, Role, IsActive
+
+    To Activate:
+        Set This.IsActive to True
+        Print This.Name + " has been activated"
+
+    To Deactivate:
+        Set This.IsActive to False
+        Print This.Name + " has been deactivated"
+
+    To UpdateEmail with NewEmail:
+        Set This.Email to NewEmail
+        Print "Email updated to: " + NewEmail
+
+Situation: AdminMode
+    Adjust User:
+        To UpdateEmail with NewEmail:
+            # Admin can force update
+            Set This.Email to NewEmail
+            Print "[ADMIN] Email forcefully updated to: " + NewEmail
+
+Story:
+    # Create users
+    Create User Called Alice
+    Set Alice.Name to "Alice Smith"
+    Set Alice.Email to "alice@example.com"
+    Set Alice.Role to "user"
+    Set Alice.IsActive to True
+
+    Create User Called Bob
+    Set Bob.Name to "Bob Jones"
+    Set Bob.Email to "bob@example.com"
+    Set Bob.Role to "admin"
+    Set Bob.IsActive to False
+
+    # Activate Bob
+    Bob.Activate
+
+    # Update Alice's email
+    Alice.UpdateEmail with "alice.smith@example.com"
+
+    # Admin mode - force update
+    Switch on AdminMode
+    Bob.UpdateEmail with "admin@example.com"
+    Switch off AdminMode
+
+    Print "=== User Summary ==="
+    Print Alice.Name + " - " + Alice.Email + " (Active: " + Alice.IsActive + ")"
+    Print Bob.Name + " - " + Bob.Email + " (Active: " + Bob.IsActive + ")"
+</code></pre>
+<h2 id="whats-next-3"><a class="header" href="#whats-next-3">What’s Next?</a></h2>
+<p>Now that you understand the basics, learn about:</p>
+<ul>
+<li><a href="#variables-and-assignment-1">Variables and Assignment</a> - How to work with variables</li>
+<li><a href="#data-types">Data Types</a> - Numbers, strings, lists, maps, and more</li>
+<li><a href="#operators">Operators</a> - Arithmetic, comparison, logical operators</li>
+<li><a href="#comments-1">Comments</a> - Documenting your code</li>
+<li><a href="#ifelse-1">Control Flow</a> - Making decisions and loops</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="variables-and-assignment-1"><a class="header" href="#variables-and-assignment-1">Variables and Assignment</a></h1>
+<p>Variables in SFX store data that can be used and modified throughout your program.</p>
+<h2 id="assignment-with-is"><a class="header" href="#assignment-with-is">Assignment with <code>is</code></a></h2>
+<p>Use the <code>is</code> keyword to assign values to variables:</p>
+<pre><code class="language-sfex">Story:
+    Name is "Alice"
+    Age is 25
+    Score is 95.5
+    IsActive is True
+</code></pre>
+<h2 id="naming-rules"><a class="header" href="#naming-rules">Naming Rules</a></h2>
+<p>Variable names in SFX:</p>
+<ol>
+<li><strong>Use PascalCase</strong> - Start with uppercase letter</li>
+<li><strong>Can contain letters, numbers, and underscores</strong></li>
+<li><strong>Case-sensitive</strong> - <code>Name</code> and <code>name</code> are different variables</li>
+<li><strong>Cannot start with a number</strong></li>
+<li><strong>Cannot be a reserved keyword</strong></li>
+</ol>
+<h3 id="valid-names"><a class="header" href="#valid-names">Valid Names</a></h3>
+<pre><code class="language-sfex">Story:
+    UserName is "Alice"
+    User2 is "Bob"
+    FirstName is "Charlie"
+    Total_Score is 100
+    IsActive is True
+    Age25 is 25
+</code></pre>
+<h3 id="invalid-names"><a class="header" href="#invalid-names">Invalid Names</a></h3>
+<pre><code class="language-sfex">Story:
+    # Error - starts with number
+    2User is "Invalid"
+
+    # Error - reserved keyword
+    If is "Invalid"
+
+    # Error - starts with lowercase (convention, not enforced)
+    userName is "Alice"  # Works but violates convention
+</code></pre>
+<h2 id="variable-scope"><a class="header" href="#variable-scope">Variable Scope</a></h2>
+<p>Variables have different scopes depending on where they’re declared:</p>
+<h3 id="story-level-variables-global"><a class="header" href="#story-level-variables-global">Story-Level Variables (Global)</a></h3>
+<pre><code class="language-sfex">Story:
+    GlobalVar is 100  # Visible throughout Story
+
+    If True:
+        Print GlobalVar  # Can access here
+        LocalVar is 50
+
+    # LocalVar not accessible here
+</code></pre>
+<h3 id="method-level-variables-local"><a class="header" href="#method-level-variables-local">Method-Level Variables (Local)</a></h3>
+<pre><code class="language-sfex">Concept: Calculator
+    To Calculate:
+        Result is 10 + 20  # Local to this method
+        Return Result
+
+Story:
+    Create Calculator Called Calc
+    Answer is Calc.Calculate
+    Print Answer  # 30
+
+    # Cannot access 'Result' here - it's local to Calculate method
+</code></pre>
+<h3 id="block-level-variables"><a class="header" href="#block-level-variables">Block-Level Variables</a></h3>
+<pre><code class="language-sfex">Story:
+    If True:
+        BlockVar is "Inside If"
+        Print BlockVar  # Works
+
+    # BlockVar not accessible here
+
+    Repeat 3 times:
+        LoopVar is "Inside Loop"
+        Print LoopVar  # Works
+
+    # LoopVar not accessible here
+</code></pre>
+<h2 id="reassignment"><a class="header" href="#reassignment">Reassignment</a></h2>
+<p>Variables can be reassigned with the <code>is</code> keyword:</p>
+<pre><code class="language-sfex">Story:
+    Counter is 0
+    Print Counter  # 0
+
+    Counter is 10
+    Print Counter  # 10
+
+    Counter is Counter + 5
+    Print Counter  # 15
+</code></pre>
+<h2 id="multiple-assignments"><a class="header" href="#multiple-assignments">Multiple Assignments</a></h2>
+<p>You can assign multiple variables in sequence:</p>
+<pre><code class="language-sfex">Story:
+    X is 10
+    Y is 20
+    Z is 30
+
+    # All separate statements
+</code></pre>
+<p>For object fields, you can use comma-separated <code>Set</code> statements:</p>
+<pre><code class="language-sfex">Concept: Point
+    X, Y, Z
+
+Story:
+    Create Point Called P
+    Set P.X to 1, Set P.Y to 2, Set P.Z to 3
+</code></pre>
+<h2 id="type-inference"><a class="header" href="#type-inference">Type Inference</a></h2>
+<p>SFX automatically determines the type of a variable from its value:</p>
+<pre><code class="language-sfex">Story:
+    # Number (BigDecimal)
+    Age is 25
+
+    # String
+    Name is "Alice"
+
+    # Boolean
+    Active is True
+
+    # List
+    Items is [1, 2, 3]
+
+    # Map
+    User is { name: "Bob", age: 30 }
+
+    # FastNumber (explicit)
+    Speed is FastNumber(299792458.0)
+</code></pre>
+<h2 id="default-values"><a class="header" href="#default-values">Default Values</a></h2>
+<p>When fields are declared in Concepts without initialization, they get safe defaults:</p>
+<pre><code class="language-sfex">Concept: Person
+    Name    # Defaults to ""
+    Age     # Defaults to 0
+    Active  # Defaults to False
+    Tags    # Defaults to []
+    Meta    # Defaults to {}
+
+Story:
+    Create Person Called User
+    Print User.Name   # ""
+    Print User.Age    # 0
+    Print User.Active # False
+</code></pre>
+<h2 id="constants"><a class="header" href="#constants">Constants</a></h2>
+<p>SFX doesn’t have a special <code>const</code> keyword, but by convention, use all-caps names for values that shouldn’t change:</p>
+<pre><code class="language-sfex">Story:
+    MAX_USERS is 100
+    API_KEY is "secret"
+    DEFAULT_TIMEOUT is 30
+
+    # Convention: don't reassign these
+</code></pre>
+<h2 id="variable-shadowing"><a class="header" href="#variable-shadowing">Variable Shadowing</a></h2>
+<p>Variables in inner scopes can shadow outer variables:</p>
+<pre><code class="language-sfex">Story:
+    X is 10
+    Print X  # 10
+
+    If True:
+        X is 20  # Shadows outer X
+        Print X  # 20
+
+    Print X  # Still 10 (outer X unchanged)
+</code></pre>
+<h2 id="working-with-different-types"><a class="header" href="#working-with-different-types">Working with Different Types</a></h2>
+<h3 id="numbers"><a class="header" href="#numbers">Numbers</a></h3>
+<pre><code class="language-sfex">Story:
+    # Integer-like
+    Count is 42
+
+    # Decimal
+    Price is 19.99
+
+    # Negative
+    Debt is -50
+
+    # Large numbers (arbitrary precision)
+    BigNum is 123456789123456789123456789
+</code></pre>
+<h3 id="strings"><a class="header" href="#strings">Strings</a></h3>
+<pre><code class="language-sfex">Story:
+    # Simple string
+    Name is "Alice"
+
+    # With escape sequences
+    Message is "Line 1\nLine 2"
+
+    # Multiline (triple quotes)
+    Text is """This is
+a multiline
+string"""
+
+    # Concatenation
+    Greeting is "Hello, " + Name
+</code></pre>
+<h3 id="booleans"><a class="header" href="#booleans">Booleans</a></h3>
+<pre><code class="language-sfex">Story:
+    IsActive is True
+    IsDeleted is False
+
+    # From comparisons
+    IsAdult is Age &gt;= 18
+    HasAccess is Role = "admin"
+</code></pre>
+<h3 id="lists"><a class="header" href="#lists">Lists</a></h3>
+<pre><code class="language-sfex">Story:
+    # Empty list
+    Items is []
+
+    # With values
+    Numbers is [1, 2, 3, 4, 5]
+
+    # Mixed types (not recommended)
+    Mixed is [1, "two", True]
+
+    # Multiline
+    Colors is [
+        "red",
+        "green",
+        "blue"
+    ]
+</code></pre>
+<h3 id="maps"><a class="header" href="#maps">Maps</a></h3>
+<pre><code class="language-sfex">Story:
+    # Empty map
+    Config is {}
+
+    # With values
+    User is { name: "Alice", age: 25 }
+
+    # Multiline
+    Settings is {
+        host: "localhost",
+        port: 8080,
+        debug: True
+    }
+</code></pre>
+<h2 id="common-patterns"><a class="header" href="#common-patterns">Common Patterns</a></h2>
+<h3 id="swap-variables"><a class="header" href="#swap-variables">Swap Variables</a></h3>
+<pre><code class="language-sfex">Story:
+    A is 10
+    B is 20
+
+    # Swap using temporary variable
+    Temp is A
+    A is B
+    B is Temp
+
+    Print A  # 20
+    Print B  # 10
+</code></pre>
+<h3 id="accumulator-pattern"><a class="header" href="#accumulator-pattern">Accumulator Pattern</a></h3>
+<pre><code class="language-sfex">Story:
+    Sum is 0
+    Numbers is [1, 2, 3, 4, 5]
+
+    For each Num in Numbers:
+        Sum is Sum + Num
+
+    Print Sum  # 15
+</code></pre>
+<h3 id="counter-pattern"><a class="header" href="#counter-pattern">Counter Pattern</a></h3>
+<pre><code class="language-sfex">Story:
+    Count is 0
+
+    Repeat 10 times:
+        Count is Count + 1
+
+    Print Count  # 10
+</code></pre>
+<h3 id="conditional-assignment"><a class="header" href="#conditional-assignment">Conditional Assignment</a></h3>
+<pre><code class="language-sfex">Story:
+    Score is 85
+
+    Grade is ""
+    If Score &gt;= 90:
+        Grade is "A"
+    Else If Score &gt;= 80:
+        Grade is "B"
+    Else:
+        Grade is "C"
+
+    Print Grade  # "B"
+</code></pre>
+<h2 id="best-practices-5"><a class="header" href="#best-practices-5">Best Practices</a></h2>
+<h3 id="1-use-descriptive-names-1"><a class="header" href="#1-use-descriptive-names-1">1. Use Descriptive Names</a></h3>
+<pre><code class="language-sfex"># Good
+TotalPrice is 99.99
+UserEmail is "alice@example.com"
+MaxRetries is 3
+
+# Bad
+TP is 99.99
+UE is "alice@example.com"
+MR is 3
+</code></pre>
+<h3 id="2-initialize-before-use"><a class="header" href="#2-initialize-before-use">2. Initialize Before Use</a></h3>
+<pre><code class="language-sfex"># Good
+Counter is 0
+Counter is Counter + 1
+
+# Bad
+Counter is Counter + 1  # Error if Counter doesn't exist
+</code></pre>
+<h3 id="3-keep-scope-minimal"><a class="header" href="#3-keep-scope-minimal">3. Keep Scope Minimal</a></h3>
+<pre><code class="language-sfex"># Good - declare where needed
+If Condition:
+    TempResult is Calculate()
+    Print TempResult
+
+# Less good - unnecessarily wide scope
+TempResult is 0
+If Condition:
+    TempResult is Calculate()
+    Print TempResult
+</code></pre>
+<h3 id="4-use-meaningful-initial-values"><a class="header" href="#4-use-meaningful-initial-values">4. Use Meaningful Initial Values</a></h3>
+<pre><code class="language-sfex"># Good - clear intent
+UserCount is 0
+IsLoggedIn is False
+ErrorMessage is ""
+
+# Less clear
+UserCount is -1  # Why -1?
+IsLoggedIn is 0  # Use Boolean!
+</code></pre>
+<h3 id="5-dont-reuse-variables-for-different-purposes"><a class="header" href="#5-dont-reuse-variables-for-different-purposes">5. Don’t Reuse Variables for Different Purposes</a></h3>
+<pre><code class="language-sfex"># Bad
+Temp is Calculate1()
+Print Temp
+Temp is Calculate2()  # Confusing - different meaning
+Print Temp
+
+# Good
+Result1 is Calculate1()
+Print Result1
+Result2 is Calculate2()
+Print Result2
+</code></pre>
+<h2 id="examples-2"><a class="header" href="#examples-2">Examples</a></h2>
+<h3 id="configuration-1"><a class="header" href="#configuration-1">Configuration</a></h3>
+<pre><code class="language-sfex">Story:
+    # Application settings
+    AppName is "My App"
+    Version is "1.0.0"
+    Debug is True
+
+    # Database config
+    DbHost is "localhost"
+    DbPort is 5432
+    DbName is "myapp_db"
+
+    # API settings
+    ApiTimeout is 30
+    MaxRetries is 3
+</code></pre>
+<h3 id="user-input-processing"><a class="header" href="#user-input-processing">User Input Processing</a></h3>
+<pre><code class="language-sfex">Story:
+    # Simulated user input
+    UserInput is "42"
+
+    # Parse to number
+    InputNumber is 0  # Default
+    Try:
+        InputNumber is Int.Parse(UserInput)
+    Catch Error:
+        Print "Invalid input, using default"
+
+    Print "Value: " + InputNumber
+</code></pre>
+<h3 id="data-transformation"><a class="header" href="#data-transformation">Data Transformation</a></h3>
+<pre><code class="language-sfex">Story:
+    # Original data
+    FirstName is "alice"
+    LastName is "smith"
+
+    # Transform
+    FullName is FirstName.ToUpper + " " + LastName.ToUpper
+    Print FullName  # "ALICE SMITH"
+
+    # Calculate derived values
+    Price is 100
+    TaxRate is 0.08
+    Tax is Price * TaxRate
+    Total is Price + Tax
+    Print "Total: $" + Total
+</code></pre>
+<h2 id="summary-4"><a class="header" href="#summary-4">Summary</a></h2>
+<ul>
+<li>Use <code>is</code> for assignment: <code>Name is "Alice"</code></li>
+<li>Variables are case-sensitive: <code>Name</code> ≠ <code>name</code></li>
+<li>PascalCase naming convention: <code>UserName</code>, <code>TotalScore</code></li>
+<li>Type inference: SFX determines types automatically</li>
+<li>Block scope: Variables live within their declaration block</li>
+<li>Safe defaults: Concept fields default to 0, “”, False, [], {}</li>
+</ul>
+<hr>
+<p>Next: <a href="#data-types">Data Types</a> - Learn about all SFX data types</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="data-types"><a class="header" href="#data-types">Data Types</a></h1>
+<p>SFX has a rich type system designed to be both beginner-friendly and powerful. All types are automatically inferred from values.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Type</th><th>Description</th><th>Example</th></tr>
+</thead>
+<tbody>
+<tr><td>Number</td><td>Arbitrary precision decimal</td><td><code>42</code>, <code>3.14</code></td></tr>
+<tr><td>FastNumber</td><td>IEEE 754 float (f64)</td><td><code>FastNumber(3.14)</code></td></tr>
+<tr><td>String</td><td>Grapheme-aware text</td><td><code>"Hello"</code>, <code>"""Multi-line"""</code></td></tr>
+<tr><td>Boolean</td><td>True or False</td><td><code>True</code>, <code>False</code></td></tr>
+<tr><td>List</td><td>1-indexed dynamic array</td><td><code>[1, 2, 3]</code></td></tr>
+<tr><td>Map</td><td>Key-value dictionary</td><td><code>{ name: "Alice" }</code></td></tr>
+<tr><td>Vector</td><td>f32 array for AI/embeddings</td><td><code>Vector([1.0, 2.0])</code></td></tr>
+<tr><td>Option</td><td>Some(value) or None</td><td><code>Some(42)</code>, <code>None</code></td></tr>
+<tr><td>WeakRef</td><td>Weak reference</td><td><code>WeakRef(object)</code></td></tr>
+<tr><td>TaskHandle</td><td>Concurrent task handle</td><td>From <code>Do in background</code></td></tr>
+<tr><td>Error</td><td>Error object</td><td>From <code>Try/Catch</code></td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="number-default"><a class="header" href="#number-default">Number (Default)</a></h2>
+<p><strong>Arbitrary precision decimal</strong> - the default numeric type.</p>
+<pre><code class="language-sfex">Story:
+    # Mathematical honesty
+    Result is 0.1 + 0.2
+    Print Result  # 0.3 ✓
+
+    # Large integers
+    BigInt is 123456789123456789123456789
+    Print BigInt
+
+    # Decimals
+    Price is 19.99
+    Tax is Price * 0.08
+    Total is Price + Tax
+    Print Total  # 21.5892 (exact)
+</code></pre>
+<p><strong>When to use:</strong> Financial calculations, counters, user-facing math, learning/teaching.</p>
+<p><strong>Properties:</strong></p>
+<ul>
+<li><code>.Sign</code> - Returns -1, 0, or 1</li>
+</ul>
+<p>See <a href="#numbers-1">Numbers</a> for details.</p>
+<h2 id="fastnumber"><a class="header" href="#fastnumber">FastNumber</a></h2>
+<p><strong>IEEE 754 f64 float</strong> - for performance-critical code.</p>
+<pre><code class="language-sfex">Story:
+    # Explicit creation
+    Speed is FastNumber(299792458.0)
+    Time is FastNumber(2.5)
+    Distance is Speed * Time
+
+    # About 10x faster than Number
+    # But float errors return:
+    Test is FastNumber(0.1) + FastNumber(0.2)
+    Print Test  # 0.30000000000000004
+</code></pre>
+<p><strong>When to use:</strong> Physics simulations, graphics, games, high-frequency calculations.</p>
+<p><strong>Mixed operations:</strong></p>
+<pre><code class="language-sfex">Story:
+    A is 10              # Number
+    B is FastNumber(20.0)  # FastNumber
+    C is A + B           # Result is FastNumber (loses precision)
+</code></pre>
+<p>See <a href="#fastnumber-1">FastNumber</a> for details.</p>
+<h2 id="string"><a class="header" href="#string">String</a></h2>
+<p><strong>Grapheme-aware Unicode text</strong> - emoji counted correctly.</p>
+<pre><code class="language-sfex">Story:
+    # Simple string
+    Name is "Alice"
+
+    # With escape sequences
+    Message is "Line 1\nLine 2\tTabbed"
+
+    # Multiline (triple quotes)
+    Text is """This is
+a multiline
+string"""
+
+    # Concatenation
+    Greeting is "Hello, " + Name
+    Print Greeting  # "Hello, Alice"
+
+    # Emoji counted correctly
+    Emoji is "👨‍👩‍👧‍👦"
+    Print Emoji.Length  # 1 ✓ (one grapheme cluster)
+</code></pre>
+<p><strong>Properties:</strong></p>
+<ul>
+<li><code>.Length</code> - Number of graphemes (human-perceived characters)</li>
+<li><code>.ByteSize</code> - Number of UTF-8 bytes</li>
+</ul>
+<p><strong>Methods:</strong></p>
+<ul>
+<li><code>.ToUpper</code> - Convert to uppercase</li>
+<li><code>.ToLower</code> - Convert to lowercase</li>
+<li><code>.Trim</code> - Remove leading/trailing whitespace</li>
+<li><code>.Contains</code> - Check if substring exists</li>
+<li><code>.Slice(start, end)</code> - Extract substring (1-based)</li>
+</ul>
+<p>See <a href="#strings-1">Strings</a> for details.</p>
+<h2 id="boolean"><a class="header" href="#boolean">Boolean</a></h2>
+<p><strong>True or False</strong> - for logical operations.</p>
+<pre><code class="language-sfex">Story:
+    IsActive is True
+    IsDeleted is False
+
+    # From comparisons
+    IsAdult is Age &gt;= 18
+    HasAccess is Role = "admin"
+
+    # Logical operations
+    CanEdit is IsActive and HasAccess
+    ShouldHide is IsDeleted or not IsActive
+</code></pre>
+<p><strong>Values:</strong> <code>True</code>, <code>False</code> (case-sensitive)</p>
+<p>See <a href="#boolean-1">Boolean</a> for details.</p>
+<h2 id="list"><a class="header" href="#list">List</a></h2>
+<p><strong>1-indexed dynamic array</strong> - the first element is at index 1.</p>
+<pre><code class="language-sfex">Story:
+    # Create empty list
+    Items is []
+
+    # Create with values
+    Numbers is [1, 2, 3, 4, 5]
+
+    # Multiline
+    Colors is [
+        "red",
+        "green",
+        "blue"
+    ]
+
+    # Access (1-based!)
+    First is Numbers[1]   # 1
+    Third is Numbers[3]   # 3
+
+    # Modify
+    Numbers[2] is 20
+    Print Numbers  # [1, 20, 3, 4, 5]
+
+    # Add elements
+    Numbers.Add(6)
+    Print Numbers  # [1, 20, 3, 4, 5, 6]
+
+    # Length
+    Count is Numbers.Length
+    Last is Numbers[Count]
+</code></pre>
+<p><strong>Properties:</strong></p>
+<ul>
+<li><code>.Length</code> or <code>.Size</code> - Number of elements</li>
+</ul>
+<p><strong>Methods:</strong></p>
+<ul>
+<li><code>.Add(item)</code> - Append element</li>
+<li><code>.Remove(index)</code> - Remove at index (1-based)</li>
+<li><code>.Contains(item)</code> - Check if element exists</li>
+<li><code>.Slice(start, end)</code> - Extract sublist (1-based, inclusive)</li>
+<li><code>.Sort()</code> - Sort in ascending order</li>
+<li><code>.Sort("desc")</code> - Sort in descending order</li>
+<li><code>.Reverse()</code> - Reverse order</li>
+<li><code>.Clear()</code> - Remove all elements</li>
+</ul>
+<p>See <a href="#lists-1">Lists</a> for details.</p>
+<h2 id="map"><a class="header" href="#map">Map</a></h2>
+<p><strong>Key-value dictionary</strong> - associative array.</p>
+<pre><code class="language-sfex">Story:
+    # Create empty map
+    Config is {}
+
+    # Create with values
+    User is { name: "Alice", age: 25, email: "alice@example.com" }
+
+    # Multiline
+    Settings is {
+        host: "localhost",
+        port: 8080,
+        debug: True
+    }
+
+    # Access
+    Name is User["name"]
+    Age is User["age"]
+
+    # Modify
+    User["age"] is 26
+
+    # Add new key
+    User["role"] is "admin"
+
+    # Check if key exists
+    If User.HasKey("email"):
+        Print "Email: " + User["email"]
+</code></pre>
+<p><strong>Properties:</strong></p>
+<ul>
+<li><code>.Size</code> or <code>.Length</code> - Number of key-value pairs</li>
+</ul>
+<p><strong>Methods:</strong></p>
+<ul>
+<li><code>.HasKey(key)</code> - Check if key exists</li>
+<li><code>.Keys()</code> - Get list of all keys</li>
+<li><code>.Values()</code> - Get list of all values</li>
+<li><code>.Remove(key)</code> - Remove key-value pair</li>
+<li><code>.Clear()</code> - Remove all entries</li>
+</ul>
+<p>See <a href="#maps-1">Maps</a> for details.</p>
+<h2 id="vector"><a class="header" href="#vector">Vector</a></h2>
+<p><strong>f32 array</strong> - for AI embeddings and numeric arrays.</p>
+<pre><code class="language-sfex">Story:
+    # Create vector
+    Embedding is Vector([0.1, 0.2, 0.3, 0.4, 0.5])
+
+    # For machine learning / AI
+    UserEmbedding is Vector([/* floats */])
+</code></pre>
+<p><strong>Use case:</strong> Storing embeddings from LLM API calls, neural network weights.</p>
+<h2 id="option"><a class="header" href="#option">Option</a></h2>
+<p><strong>Some(value) or None</strong> - explicit optionality, no null pointers.</p>
+<pre><code class="language-sfex">Story:
+    # Create options
+    HasValue is Some(42)
+    NoValue is None
+
+    # Check
+    If HasValue.IsSome:
+        Print "Has value!"
+
+    If NoValue.IsNone:
+        Print "No value!"
+
+    # Extract value
+    If HasValue.IsSome:
+        Value is HasValue.Unwrap()
+        Print Value  # 42
+
+    # Unwrap with default
+    Value1 is HasValue.UnwrapOr(0)  # 42
+    Value2 is NoValue.UnwrapOr(0)   # 0 (default)
+</code></pre>
+<p><strong>Properties:</strong></p>
+<ul>
+<li><code>.IsSome</code> - Returns True if has value</li>
+<li><code>.IsNone</code> - Returns True if no value</li>
+</ul>
+<p><strong>Methods:</strong></p>
+<ul>
+<li><code>.Unwrap()</code> - Extract value (crashes if None!)</li>
+<li><code>.UnwrapOr(default)</code> - Extract value or return default</li>
+</ul>
+<p>See <a href="#option-types">Option Types</a> for details.</p>
+<h2 id="weakref"><a class="header" href="#weakref">WeakRef</a></h2>
+<p><strong>Weak reference</strong> - reference that doesn’t prevent garbage collection.</p>
+<pre><code class="language-sfex">Story:
+    # Create strong reference
+    Items is [1, 2, 3]
+
+    # Create weak reference
+    WeakItems is WeakRef(Items)
+
+    # Check if still valid
+    If WeakItems.IsValid:
+        Print "Reference still alive"
+        # Restore is WeakItems.Get()  # Not yet implemented
+    Else:
+        Print "Reference was collected"
+</code></pre>
+<p><strong>Properties:</strong></p>
+<ul>
+<li><code>.IsValid</code> - Returns True if reference still alive</li>
+</ul>
+<p><strong>Use case:</strong> Caching, avoiding circular references.</p>
+<p>See <a href="#weak-references">Weak References</a> for details.</p>
+<h2 id="taskhandle"><a class="header" href="#taskhandle">TaskHandle</a></h2>
+<p><strong>Concurrent task handle</strong> - returned by <code>Do in background</code>.</p>
+<pre><code class="language-sfex">Story:
+    # Spawn background task
+    Task is Do in background:
+        Result is ExpensiveCalculation()
+        Return Result
+
+    # Do other work...
+    Print "Working..."
+
+    # Wait for result
+    Value is Task.Await()
+    Print "Result: " + Value
+</code></pre>
+<p><strong>Methods:</strong></p>
+<ul>
+<li><code>.Await()</code> - Wait for task to complete and get result</li>
+</ul>
+<p>See <a href="#task-handles">Concurrency</a> for details.</p>
+<h2 id="error"><a class="header" href="#error">Error</a></h2>
+<p><strong>Error object</strong> - from Try/Catch blocks.</p>
+<pre><code class="language-sfex">Story:
+    Try:
+        Result is RiskyOperation()
+    Catch Error:
+        Print "Error: " + Error.Message
+        Print "Type: " + Error.Type
+</code></pre>
+<p><strong>Properties:</strong></p>
+<ul>
+<li><code>.Message</code> - Error message string</li>
+<li><code>.Type</code> - Error type/category</li>
+</ul>
+<p>See <a href="#error-objects">Error Handling</a> for details.</p>
+<h2 id="type-conversion"><a class="header" href="#type-conversion">Type Conversion</a></h2>
+<h3 id="automatic-conversions"><a class="header" href="#automatic-conversions">Automatic Conversions</a></h3>
+<pre><code class="language-sfex">Story:
+    # Number to String (in concatenation)
+    Age is 25
+    Message is "Age: " + Age  # "Age: 25"
+
+    # Boolean to String
+    IsActive is True
+    Status is "Active: " + IsActive  # "Active: True"
+</code></pre>
+<h3 id="explicit-conversions"><a class="header" href="#explicit-conversions">Explicit Conversions</a></h3>
+<pre><code class="language-sfex">Story:
+    # String to Number
+    Text is "42"
+    Num is Int.Parse(Text)  # Use with Try/Catch!
+
+    # FastNumber to Number
+    Fast is FastNumber(3.14)
+    Regular is Number(Fast)
+</code></pre>
+<h2 id="type-checking"><a class="header" href="#type-checking">Type Checking</a></h2>
+<p>SFX doesn’t have explicit type checking operators, but you can check values:</p>
+<pre><code class="language-sfex">Story:
+    Value is 42
+
+    # Check for specific values
+    If Value = 42:
+        Print "It's 42!"
+
+    # Check empty list
+    Items is []
+    If Items.Length = 0:
+        Print "Empty list"
+
+    # Check empty string
+    Name is ""
+    If Name = "":
+        Print "Empty string"
+</code></pre>
+<h2 id="default-values-concept-fields"><a class="header" href="#default-values-concept-fields">Default Values (Concept Fields)</a></h2>
+<p>When declaring fields in Concepts without initialization:</p>
+<pre><code class="language-sfex">Concept: Example
+    NumberField    # 0
+    StringField    # ""
+    BoolField      # False
+    ListField      # []
+    MapField       # {}
+    OptionField    # None
+
+Story:
+    Create Example Called Ex
+    Print Ex.NumberField  # 0
+    Print Ex.BoolField    # False
+    Print Ex.ListField.Length  # 0
+</code></pre>
+<h2 id="nested-types"><a class="header" href="#nested-types">Nested Types</a></h2>
+<h3 id="list-of-lists"><a class="header" href="#list-of-lists">List of Lists</a></h3>
+<pre><code class="language-sfex">Story:
+    Grid is [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9]
+    ]
+
+    # Access: row 2, column 3
+    Value is Grid[2][3]  # 6
+</code></pre>
+<h3 id="list-of-maps"><a class="header" href="#list-of-maps">List of Maps</a></h3>
+<pre><code class="language-sfex">Story:
+    Users is [
+        { name: "Alice", age: 25 },
+        { name: "Bob", age: 30 },
+        { name: "Charlie", age: 35 }
+    ]
+
+    FirstUser is Users[1]
+    Name is FirstUser["name"]  # "Alice"
+</code></pre>
+<h3 id="map-with-lists"><a class="header" href="#map-with-lists">Map with Lists</a></h3>
+<pre><code class="language-sfex">Story:
+    Data is {
+        users: ["Alice", "Bob"],
+        scores: [95, 87],
+        active: True
+    }
+
+    Users is Data["users"]
+    FirstUser is Users[1]  # "Alice"
+</code></pre>
+<h2 id="best-practices-6"><a class="header" href="#best-practices-6">Best Practices</a></h2>
+<h3 id="1-use-number-by-default-1"><a class="header" href="#1-use-number-by-default-1">1. Use Number by Default</a></h3>
+<pre><code class="language-sfex"># Good - exact math
+Price is 19.99
+Tax is Price * 0.08
+</code></pre>
+<h3 id="2-use-fastnumber-for-performance-1"><a class="header" href="#2-use-fastnumber-for-performance-1">2. Use FastNumber for Performance</a></h3>
+<pre><code class="language-sfex"># Physics/graphics - performance matters
+Concept: Particle
+    X, Y, VX, VY
+
+    To Update with DT:
+        FDT is FastNumber(DT)
+        Set This.X to This.X + (This.VX * FDT)
+</code></pre>
+<h3 id="3-use-option-for-maybe-present-values"><a class="header" href="#3-use-option-for-maybe-present-values">3. Use Option for Maybe-Present Values</a></h3>
+<pre><code class="language-sfex"># Good - explicit optionality
+Concept: User
+    ProfilePicture  # Option type
+
+# Bad - using empty string to mean "no value"
+ProfilePicture is ""  # Confusing
+</code></pre>
+<h3 id="4-keep-lists-homogeneous"><a class="header" href="#4-keep-lists-homogeneous">4. Keep Lists Homogeneous</a></h3>
+<pre><code class="language-sfex"># Good - all same type
+Numbers is [1, 2, 3, 4, 5]
+Names is ["Alice", "Bob", "Charlie"]
+
+# Bad - mixed types
+Mixed is [1, "two", True]  # Confusing
+</code></pre>
+<h3 id="5-use-descriptive-map-keys"><a class="header" href="#5-use-descriptive-map-keys">5. Use Descriptive Map Keys</a></h3>
+<pre><code class="language-sfex"># Good
+User is { name: "Alice", email: "alice@example.com", age: 25 }
+
+# Less clear
+User is { n: "Alice", e: "alice@example.com", a: 25 }
+</code></pre>
+<h2 id="summary-5"><a class="header" href="#summary-5">Summary</a></h2>
+<ul>
+<li><strong>Number</strong> - Default, arbitrary precision, mathematically honest</li>
+<li><strong>FastNumber</strong> - Performance, IEEE 754 float</li>
+<li><strong>String</strong> - Grapheme-aware Unicode, emoji = 1 character</li>
+<li><strong>Boolean</strong> - True/False</li>
+<li><strong>List</strong> - 1-based dynamic array</li>
+<li><strong>Map</strong> - Key-value dictionary</li>
+<li><strong>Option</strong> - Explicit optionality (no null!)</li>
+<li><strong>WeakRef</strong> - Weak references for caching</li>
+<li><strong>Vector</strong> - f32 arrays for AI/ML</li>
+</ul>
+<hr>
+<p>Next: <a href="#operators">Operators</a> - Arithmetic, comparison, and logical operators</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="numbers-1"><a class="header" href="#numbers-1">Numbers</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="fastnumber-1"><a class="header" href="#fastnumber-1">FastNumber</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="strings-1"><a class="header" href="#strings-1">Strings</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="boolean-1"><a class="header" href="#boolean-1">Boolean</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="lists-1"><a class="header" href="#lists-1">Lists</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="maps-1"><a class="header" href="#maps-1">Maps</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="option-types"><a class="header" href="#option-types">Option Types</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="weak-references"><a class="header" href="#weak-references">Weak References</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="operators"><a class="header" href="#operators">Operators</a></h1>
+<p>SFX provides operators for arithmetic, comparison, logical operations, and more.</p>
+<h2 id="arithmetic-operators"><a class="header" href="#arithmetic-operators">Arithmetic Operators</a></h2>
+<p>Perform mathematical calculations:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Operator</th><th>Operation</th><th>Example</th><th>Result</th></tr>
+</thead>
+<tbody>
+<tr><td><code>+</code></td><td>Addition</td><td><code>10 + 5</code></td><td><code>15</code></td></tr>
+<tr><td><code>-</code></td><td>Subtraction</td><td><code>10 - 5</code></td><td><code>5</code></td></tr>
+<tr><td><code>*</code></td><td>Multiplication</td><td><code>10 * 5</code></td><td><code>50</code></td></tr>
+<tr><td><code>/</code></td><td>Division</td><td><code>10 / 5</code></td><td><code>2</code></td></tr>
+<tr><td><code>%</code></td><td>Modulo (remainder)</td><td><code>10 % 3</code></td><td><code>1</code></td></tr>
+</tbody>
+</table>
+</div>
+<pre><code class="language-sfex">Story:
+    A is 10
+    B is 3
+
+    Sum is A + B      # 13
+    Diff is A - B     # 7
+    Product is A * B  # 30
+    Quotient is A / B # 3.333...
+    Remainder is A % B  # 1
+
+    Print "Sum: " + Sum
+    Print "Product: " + Product
+    Print "Remainder: " + Remainder
+</code></pre>
+<h3 id="mathematical-honesty-2"><a class="header" href="#mathematical-honesty-2">Mathematical Honesty</a></h3>
+<p>Remember, SFX uses arbitrary precision by default:</p>
+<pre><code class="language-sfex">Story:
+    Result is 0.1 + 0.2
+    Print Result  # 0.3 ✓ (not 0.30000000000000004)
+
+    Price is 19.99
+    Tax is Price * 0.08
+    Total is Price + Tax
+    Print Total  # 21.5892 (exact)
+</code></pre>
+<h3 id="unary-minus"><a class="header" href="#unary-minus">Unary Minus</a></h3>
+<pre><code class="language-sfex">Story:
+    X is 10
+    Y is -X   # -10
+    Z is -Y   # 10
+</code></pre>
+<h2 id="comparison-operators"><a class="header" href="#comparison-operators">Comparison Operators</a></h2>
+<p>Compare values and return Boolean results:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Operator</th><th>Operation</th><th>Example</th><th>Result</th></tr>
+</thead>
+<tbody>
+<tr><td><code>=</code></td><td>Equal to</td><td><code>5 = 5</code></td><td><code>True</code></td></tr>
+<tr><td><code>&lt;&gt;</code></td><td>Not equal to</td><td><code>5 &lt;&gt; 3</code></td><td><code>True</code></td></tr>
+<tr><td><code>&lt;</code></td><td>Less than</td><td><code>3 &lt; 5</code></td><td><code>True</code></td></tr>
+<tr><td><code>&gt;</code></td><td>Greater than</td><td><code>5 &gt; 3</code></td><td><code>True</code></td></tr>
+<tr><td><code>&lt;=</code></td><td>Less than or equal</td><td><code>5 &lt;= 5</code></td><td><code>True</code></td></tr>
+<tr><td><code>&gt;=</code></td><td>Greater than or equal</td><td><code>5 &gt;= 3</code></td><td><code>True</code></td></tr>
+</tbody>
+</table>
+</div>
+<pre><code class="language-sfex">Story:
+    Age is 25
+    MinAge is 18
+    MaxAge is 65
+
+    IsAdult is Age &gt;= MinAge     # True
+    IsSenior is Age &gt;= MaxAge    # False
+    IsEqual is Age = 25          # True
+    IsNotEqual is Age &lt;&gt; 30      # True
+</code></pre>
+<h3 id="string-comparison"><a class="header" href="#string-comparison">String Comparison</a></h3>
+<pre><code class="language-sfex">Story:
+    Name1 is "Alice"
+    Name2 is "Bob"
+    Name3 is "Alice"
+
+    Same is Name1 = Name3        # True
+    Different is Name1 &lt;&gt; Name2  # True
+
+    # Lexicographic comparison
+    Before is Name1 &lt; Name2      # True ("Alice" &lt; "Bob")
+</code></pre>
+<h3 id="boolean-comparison"><a class="header" href="#boolean-comparison">Boolean Comparison</a></h3>
+<pre><code class="language-sfex">Story:
+    Active is True
+    Deleted is False
+
+    Same is Active = True        # True
+    Different is Active &lt;&gt; Deleted  # True
+</code></pre>
+<h2 id="logical-operators"><a class="header" href="#logical-operators">Logical Operators</a></h2>
+<p>Combine Boolean expressions:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Operator</th><th>Operation</th><th>Example</th><th>Result</th></tr>
+</thead>
+<tbody>
+<tr><td><code>and</code></td><td>Logical AND</td><td><code>True and False</code></td><td><code>False</code></td></tr>
+<tr><td><code>or</code></td><td>Logical OR</td><td><code>True or False</code></td><td><code>True</code></td></tr>
+<tr><td><code>not</code></td><td>Logical NOT</td><td><code>not True</code></td><td><code>False</code></td></tr>
+</tbody>
+</table>
+</div>
+<pre><code class="language-sfex">Story:
+    Age is 25
+    HasLicense is True
+    HasCar is False
+
+    # AND - both must be true
+    CanDrive is Age &gt;= 18 and HasLicense  # True
+
+    # OR - at least one must be true
+    HasTransport is HasCar or HasBike  # Depends on HasBike
+
+    # NOT - inverts boolean
+    IsUnderAge is not (Age &gt;= 18)  # False
+
+    # Combined
+    CanRent is Age &gt;= 21 and HasLicense and not HasCar
+</code></pre>
+<h3 id="truth-tables"><a class="header" href="#truth-tables">Truth Tables</a></h3>
+<p><strong>AND:</strong></p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>A</th><th>B</th><th>A and B</th></tr>
+</thead>
+<tbody>
+<tr><td>True</td><td>True</td><td>True</td></tr>
+<tr><td>True</td><td>False</td><td>False</td></tr>
+<tr><td>False</td><td>True</td><td>False</td></tr>
+<tr><td>False</td><td>False</td><td>False</td></tr>
+</tbody>
+</table>
+</div>
+<p><strong>OR:</strong></p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>A</th><th>B</th><th>A or B</th></tr>
+</thead>
+<tbody>
+<tr><td>True</td><td>True</td><td>True</td></tr>
+<tr><td>True</td><td>False</td><td>True</td></tr>
+<tr><td>False</td><td>True</td><td>True</td></tr>
+<tr><td>False</td><td>False</td><td>False</td></tr>
+</tbody>
+</table>
+</div>
+<p><strong>NOT:</strong></p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>A</th><th>not A</th></tr>
+</thead>
+<tbody>
+<tr><td>True</td><td>False</td></tr>
+<tr><td>False</td><td>True</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="short-circuit-evaluation"><a class="header" href="#short-circuit-evaluation">Short-Circuit Evaluation</a></h3>
+<p>SFX uses short-circuit evaluation for <code>and</code> and <code>or</code>:</p>
+<pre><code class="language-sfex">Story:
+    # AND - stops if first is False
+    Result is False and ExpensiveCheck()  # ExpensiveCheck() not called
+
+    # OR - stops if first is True
+    Result is True or ExpensiveCheck()  # ExpensiveCheck() not called
+</code></pre>
+<h2 id="string-operators"><a class="header" href="#string-operators">String Operators</a></h2>
+<h3 id="concatenation-"><a class="header" href="#concatenation-">Concatenation (<code>+</code>)</a></h3>
+<pre><code class="language-sfex">Story:
+    FirstName is "Alice"
+    LastName is "Smith"
+    FullName is FirstName + " " + LastName
+    Print FullName  # "Alice Smith"
+
+    # Auto-conversion with numbers
+    Age is 25
+    Message is "Age: " + Age
+    Print Message  # "Age: 25"
+</code></pre>
+<h3 id="contains"><a class="header" href="#contains">Contains</a></h3>
+<pre><code class="language-sfex">Story:
+    Text is "Hello, World!"
+
+    If Text contains "World":
+        Print "Found!"
+
+    If Text contains "Goodbye":
+        Print "This won't print"
+</code></pre>
+<h2 id="list-operators"><a class="header" href="#list-operators">List Operators</a></h2>
+<h3 id="contains-1"><a class="header" href="#contains-1">Contains</a></h3>
+<pre><code class="language-sfex">Story:
+    Numbers is [1, 2, 3, 4, 5]
+
+    If Numbers contains 3:
+        Print "3 is in the list"
+
+    If not (Numbers contains 10):
+        Print "10 is not in the list"
+</code></pre>
+<h2 id="operator-precedence"><a class="header" href="#operator-precedence">Operator Precedence</a></h2>
+<p>Operators are evaluated in this order (highest to lowest):</p>
+<ol>
+<li><strong>Parentheses</strong> - <code>()</code></li>
+<li><strong>Unary minus</strong> - <code>-X</code></li>
+<li><strong>Multiplication, Division, Modulo</strong> - <code>*</code>, <code>/</code>, <code>%</code></li>
+<li><strong>Addition, Subtraction</strong> - <code>+</code>, <code>-</code></li>
+<li><strong>Comparison</strong> - <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>=</code>, <code>&lt;&gt;</code></li>
+<li><strong>Logical NOT</strong> - <code>not</code></li>
+<li><strong>Logical AND</strong> - <code>and</code></li>
+<li><strong>Logical OR</strong> - <code>or</code></li>
+</ol>
+<h3 id="examples-3"><a class="header" href="#examples-3">Examples</a></h3>
+<pre><code class="language-sfex">Story:
+    # Multiplication before addition
+    Result is 2 + 3 * 4
+    Print Result  # 14 (not 20)
+
+    # Use parentheses to override
+    Result is (2 + 3) * 4
+    Print Result  # 20
+
+    # Comparison before logical
+    Result is 5 &gt; 3 and 10 &lt; 20
+    Print Result  # True
+
+    # Complex expression
+    X is 10
+    Y is 5
+    Z is 3
+    Result is X + Y * Z &gt; 20 and X / Y = 2
+    # (10 + (5 * 3)) &gt; 20 and (10 / 5) = 2
+    # (10 + 15) &gt; 20 and 2 = 2
+    # 25 &gt; 20 and True
+    # True and True
+    # True
+    Print Result  # True
+</code></pre>
+<h2 id="best-practices-7"><a class="header" href="#best-practices-7">Best Practices</a></h2>
+<h3 id="1-use-parentheses-for-clarity"><a class="header" href="#1-use-parentheses-for-clarity">1. Use Parentheses for Clarity</a></h3>
+<pre><code class="language-sfex"># Less clear
+Result is A + B * C / D
+
+# Better
+Result is A + ((B * C) / D)
+</code></pre>
+<h3 id="2-compare-with-same-types"><a class="header" href="#2-compare-with-same-types">2. Compare with Same Types</a></h3>
+<pre><code class="language-sfex"># Good
+Age is 25
+IsAdult is Age &gt;= 18  # Number to Number
+
+# Potentially confusing
+IsAdult is Age &gt;= "18"  # Number to String - avoid!
+</code></pre>
+<h3 id="3-use-descriptive-names-for-boolean-expressions"><a class="header" href="#3-use-descriptive-names-for-boolean-expressions">3. Use Descriptive Names for Boolean Expressions</a></h3>
+<pre><code class="language-sfex"># Good
+IsEligible is Age &gt;= 18 and HasLicense
+CanProceed is IsAuthenticated and not IsBlocked
+
+# Less clear
+Check is Age &gt;= 18 and HasLicense
+Flag is IsAuthenticated and not IsBlocked
+</code></pre>
+<h3 id="4-break-complex-expressions"><a class="header" href="#4-break-complex-expressions">4. Break Complex Expressions</a></h3>
+<pre><code class="language-sfex"># Complex - hard to read
+If Age &gt;= 18 and HasLicense and not HasCar and Income &gt; 30000 and Score &gt; 700:
+    ApproveRental()
+
+# Better - broken down
+IsAdult is Age &gt;= 18
+HasRequirements is HasLicense and not HasCar
+IsFinanciallyStable is Income &gt; 30000 and Score &gt; 700
+IsEligible is IsAdult and HasRequirements and IsFinanciallyStable
+
+If IsEligible:
+    ApproveRental()
+</code></pre>
+<h3 id="5-avoid-double-negatives"><a class="header" href="#5-avoid-double-negatives">5. Avoid Double Negatives</a></h3>
+<pre><code class="language-sfex"># Confusing
+If not (not IsActive):
+    DoSomething()
+
+# Better
+If IsActive:
+    DoSomething()
+</code></pre>
+<h2 id="common-patterns-1"><a class="header" href="#common-patterns-1">Common Patterns</a></h2>
+<h3 id="range-check"><a class="header" href="#range-check">Range Check</a></h3>
+<pre><code class="language-sfex">Story:
+    Age is 25
+    MinAge is 18
+    MaxAge is 65
+
+    InRange is Age &gt;= MinAge and Age &lt;= MaxAge
+    Print InRange  # True
+</code></pre>
+<h3 id="either-or-check"><a class="header" href="#either-or-check">Either-Or Check</a></h3>
+<pre><code class="language-sfex">Story:
+    Role is "admin"
+
+    HasAccess is Role = "admin" or Role = "moderator"
+    Print HasAccess  # True
+</code></pre>
+<h3 id="safe-division"><a class="header" href="#safe-division">Safe Division</a></h3>
+<pre><code class="language-sfex">Story:
+    A is 10
+    B is 0
+
+    If B &lt;&gt; 0:
+        Result is A / B
+        Print Result
+    Else:
+        Print "Cannot divide by zero"
+</code></pre>
+<h3 id="default-value-pattern"><a class="header" href="#default-value-pattern">Default Value Pattern</a></h3>
+<pre><code class="language-sfex">Story:
+    UserInput is ""
+
+    # Use default if empty
+    Name is If UserInput &lt;&gt; "" then UserInput else "Guest"
+    Print Name  # "Guest"
+</code></pre>
+<h3 id="null-coalescing-pattern-with-option"><a class="header" href="#null-coalescing-pattern-with-option">Null-Coalescing Pattern (with Option)</a></h3>
+<pre><code class="language-sfex">Story:
+    OptionalValue is None
+
+    # Use UnwrapOr for default
+    Value is OptionalValue.UnwrapOr(42)
+    Print Value  # 42
+</code></pre>
+<h2 id="examples-1-1"><a class="header" href="#examples-1-1">Examples</a></h2>
+<h3 id="calculator"><a class="header" href="#calculator">Calculator</a></h3>
+<pre><code class="language-sfex">Concept: Calculator
+    To Calculate with Operator and A and B:
+        When Operator:
+            is "+":
+                Return A + B
+            is "-":
+                Return A - B
+            is "*":
+                Return A * B
+            is "/":
+                If B = 0:
+                    Print "Error: Division by zero"
+                    Return 0
+                Else:
+                    Return A / B
+            Otherwise:
+                Print "Unknown operator"
+                Return 0
+
+Story:
+    Create Calculator Called Calc
+
+    Result1 is Calc.Calculate with "+" and 10 and 5
+    Print "10 + 5 = " + Result1  # 15
+
+    Result2 is Calc.Calculate with "*" and 10 and 5
+    Print "10 * 5 = " + Result2  # 50
+</code></pre>
+<h3 id="grade-calculator"><a class="header" href="#grade-calculator">Grade Calculator</a></h3>
+<pre><code class="language-sfex">Story:
+    Score is 85
+
+    # Determine grade
+    Grade is ""
+    If Score &gt;= 90:
+        Grade is "A"
+    Else If Score &gt;= 80:
+        Grade is "B"
+    Else If Score &gt;= 70:
+        Grade is "C"
+    Else If Score &gt;= 60:
+        Grade is "D"
+    Else:
+        Grade is "F"
+
+    Print "Score: " + Score
+    Print "Grade: " + Grade
+</code></pre>
+<h3 id="validation"><a class="header" href="#validation">Validation</a></h3>
+<pre><code class="language-sfex">Concept: Validator
+    To ValidateAge with Age:
+        IsValid is Age &gt;= 0 and Age &lt;= 150
+        Return IsValid
+
+    To ValidateEmail with Email:
+        HasAt is Email contains "@"
+        HasDot is Email contains "."
+        NotEmpty is Email &lt;&gt; ""
+        IsValid is NotEmpty and HasAt and HasDot
+        Return IsValid
+
+Story:
+    Create Validator Called V
+
+    If V.ValidateAge with 25:
+        Print "Valid age"
+
+    If V.ValidateEmail with "alice@example.com":
+        Print "Valid email"
+</code></pre>
+<h3 id="price-calculator"><a class="header" href="#price-calculator">Price Calculator</a></h3>
+<pre><code class="language-sfex">Story:
+    BasePrice is 100
+    Quantity is 3
+    TaxRate is 0.08
+    DiscountRate is 0.10
+
+    # Calculate subtotal
+    Subtotal is BasePrice * Quantity
+
+    # Apply discount
+    Discount is Subtotal * DiscountRate
+    AfterDiscount is Subtotal - Discount
+
+    # Calculate tax
+    Tax is AfterDiscount * TaxRate
+
+    # Final total
+    Total is AfterDiscount + Tax
+
+    Print "Subtotal: $" + Subtotal      # $300
+    Print "Discount: $" + Discount      # $30
+    Print "After Discount: $" + AfterDiscount  # $270
+    Print "Tax: $" + Tax                # $21.60
+    Print "Total: $" + Total            # $291.60
+</code></pre>
+<h2 id="summary-6"><a class="header" href="#summary-6">Summary</a></h2>
+<ul>
+<li><strong>Arithmetic:</strong> <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code></li>
+<li><strong>Comparison:</strong> <code>=</code>, <code>&lt;&gt;</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code></li>
+<li><strong>Logical:</strong> <code>and</code>, <code>or</code>, <code>not</code></li>
+<li><strong>String:</strong> <code>+</code> (concatenation), <code>contains</code></li>
+<li><strong>List:</strong> <code>contains</code></li>
+<li><strong>Precedence:</strong> Use parentheses for clarity</li>
+<li><strong>Mathematical honesty:</strong> Exact decimal arithmetic by default</li>
+</ul>
+<hr>
+<p>Next: <a href="#comments-1">Comments</a> - Documenting your code</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="comments-1"><a class="header" href="#comments-1">Comments</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="comma-separated-syntax"><a class="header" href="#comma-separated-syntax">Comma-Separated Syntax</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="ifelse-1"><a class="header" href="#ifelse-1">If/Else</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="whenisotherwise"><a class="header" href="#whenisotherwise">When/Is/Otherwise</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="repeat-times"><a class="header" href="#repeat-times">Repeat Times</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="repeat-while"><a class="header" href="#repeat-while">Repeat While</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="for-each"><a class="header" href="#for-each">For Each</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="break-and-continue"><a class="header" href="#break-and-continue">Break and Continue</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="return"><a class="header" href="#return">Return</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="concepts-classes"><a class="header" href="#concepts-classes">Concepts (Classes)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="fields"><a class="header" href="#fields">Fields</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="methods-1"><a class="header" href="#methods-1">Methods</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="method-parameters"><a class="header" href="#method-parameters">Method Parameters</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="this-keyword"><a class="header" href="#this-keyword">This Keyword</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="creating-instances"><a class="header" href="#creating-instances">Creating Instances</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="set-statement"><a class="header" href="#set-statement">Set Statement</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="situations-1"><a class="header" href="#situations-1">Situations</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="adjustments"><a class="header" href="#adjustments">Adjustments</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="switch-onoff"><a class="header" href="#switch-onoff">Switch On/Off</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="proceed"><a class="header" href="#proceed">Proceed</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="use-cases"><a class="header" href="#use-cases">Use Cases</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="when-observers"><a class="header" href="#when-observers">When Observers</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="self-healing-data"><a class="header" href="#self-healing-data">Self-Healing Data</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="cascading-updates"><a class="header" href="#cascading-updates">Cascading Updates</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="recursion-guard"><a class="header" href="#recursion-guard">Recursion Guard</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="use-cases-1"><a class="header" href="#use-cases-1">Use Cases</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="trycatchalways"><a class="header" href="#trycatchalways">Try/Catch/Always</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="error-objects"><a class="header" href="#error-objects">Error Objects</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="best-practices-8"><a class="header" href="#best-practices-8">Best Practices</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="do-in-background"><a class="header" href="#do-in-background">Do in Background</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="task-handles"><a class="header" href="#task-handles">Task Handles</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="channels"><a class="header" href="#channels">Channels</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="thread-safety"><a class="header" href="#thread-safety">Thread Safety</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="overview-1"><a class="header" href="#overview-1">Overview</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="file-operations-1"><a class="header" href="#file-operations-1">File Operations</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="data-parsing"><a class="header" href="#data-parsing">Data Parsing</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="json"><a class="header" href="#json">JSON</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="xml"><a class="header" href="#xml">XML</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="html"><a class="header" href="#html">HTML</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="csv"><a class="header" href="#csv">CSV</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="toml"><a class="header" href="#toml">TOML</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="networking"><a class="header" href="#networking">Networking</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="http"><a class="header" href="#http">HTTP</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="websocket"><a class="header" href="#websocket">WebSocket</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="tcp"><a class="header" href="#tcp">TCP</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="udp"><a class="header" href="#udp">UDP</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="system"><a class="header" href="#system">System</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="environment"><a class="header" href="#environment">Environment</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="time"><a class="header" href="#time">Time</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="math"><a class="header" href="#math">Math</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="llm-integration"><a class="header" href="#llm-integration">LLM Integration</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="overview-2"><a class="header" href="#overview-2">Overview</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="how-it-works-1"><a class="header" href="#how-it-works-1">How It Works</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="profiling-system"><a class="header" href="#profiling-system">Profiling System</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="optimization-tiers"><a class="header" href="#optimization-tiers">Optimization Tiers</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="performance-benchmarks"><a class="header" href="#performance-benchmarks">Performance Benchmarks</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="supported-features"><a class="header" href="#supported-features">Supported Features</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="limitations"><a class="header" href="#limitations">Limitations</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="hello-world-1"><a class="header" href="#hello-world-1">Hello World</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="mathematical-operations"><a class="header" href="#mathematical-operations">Mathematical Operations</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="working-with-lists-1"><a class="header" href="#working-with-lists-1">Working with Lists</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="object-oriented-examples"><a class="header" href="#object-oriented-examples">Object-Oriented Examples</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="context-oriented-examples"><a class="header" href="#context-oriented-examples">Context-Oriented Examples</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="reactive-observers"><a class="header" href="#reactive-observers">Reactive Observers</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="file-io"><a class="header" href="#file-io">File I/O</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="http-requests-1"><a class="header" href="#http-requests-1">HTTP Requests</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="concurrency"><a class="header" href="#concurrency">Concurrency</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="physics-simulation"><a class="header" href="#physics-simulation">Physics Simulation</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="performance-tips"><a class="header" href="#performance-tips">Performance Tips</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="memory-management"><a class="header" href="#memory-management">Memory Management</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="debugging"><a class="header" href="#debugging">Debugging</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="testing"><a class="header" href="#testing">Testing</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="project-structure"><a class="header" href="#project-structure">Project Structure</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="keyword-reference"><a class="header" href="#keyword-reference">Keyword Reference</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="operator-precedence-1"><a class="header" href="#operator-precedence-1">Operator Precedence</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="standard-library-api"><a class="header" href="#standard-library-api">Standard Library API</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="error-messages"><a class="header" href="#error-messages">Error Messages</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="command-line-interface"><a class="header" href="#command-line-interface">Command Line Interface</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="contributing-guide"><a class="header" href="#contributing-guide">Contributing Guide</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="code-of-conduct"><a class="header" href="#code-of-conduct">Code of Conduct</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="security-policy"><a class="header" href="#security-policy">Security Policy</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="development-setup"><a class="header" href="#development-setup">Development Setup</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="architecture"><a class="header" href="#architecture">Architecture</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="comparison-with-other-languages-2"><a class="header" href="#comparison-with-other-languages-2">Comparison with Other Languages</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="migration-guide"><a class="header" href="#migration-guide">Migration Guide</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="faq"><a class="header" href="#faq">FAQ</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="glossary"><a class="header" href="#glossary">Glossary</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="changelog"><a class="header" href="#changelog">Changelog</a></h1>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>

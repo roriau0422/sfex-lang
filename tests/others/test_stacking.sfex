@@ -1,0 +1,41 @@
+Concept: Product
+    Price
+    To GetFinalPrice:
+        # Default logic: Full price + 10% tax
+        Return Price * 1.1
+
+Situation: SummerSale
+    Adjust Product:
+        To GetFinalPrice:
+            # Apply discount THEN call base logic for tax
+            BasePrice is Proceed
+            Return BasePrice - 10
+
+Situation: DutyFree
+    Adjust Product:
+        To GetFinalPrice:
+            # Get price from previous layer (with tax), then remove tax
+            PriceWithTax is Proceed
+            Return PriceWithTax / 1.1
+
+Story:
+    Create Product Called Laptop
+    Set Laptop.Price to 100
+    
+    Print "1. Base Price (100 + 10% tax):"
+    Print Laptop.GetFinalPrice
+    # Expect: 110
+
+    Task is Do in background:
+        Switch on SummerSale
+        Print "2. SummerSale (calls base=110, minus 10):"
+        Print Laptop.GetFinalPrice
+        # Expect: 100
+
+        # NESTED SWITCH (The ultimate test)
+        Switch on DutyFree
+        Print "3. SummerSale + DutyFree (chained with Proceed):"
+        Print Laptop.GetFinalPrice
+        # Expect: 90.909... (base=110, -10=100, /1.1≈90.909)
+
+    Result is Task.Await()

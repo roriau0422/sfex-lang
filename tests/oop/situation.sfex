@@ -1,0 +1,37 @@
+# Test that child Situations don't leak to parent
+
+Situation: ChildMode
+    Adjust Printer:
+        To Print:
+            Return "CHILD MODE"
+
+Concept: Printer
+    To Print:
+        Return "NORMAL MODE"
+
+Story:
+    Create Printer Called P
+
+    Print "1. Parent before spawn:"
+    Print P.Print
+
+    Task is Do in background:
+        Switch on ChildMode
+        Result is P.Print
+        Print "2. Child with ChildMode ON:"
+        Print Result
+        Return Result
+
+    TaskResult is Task.Await()
+
+    Print "3. Parent after child finished:"
+    Print P.Print
+
+    Print "4. Task returned:"
+    Print TaskResult
+
+    # Parent should still be NORMAL MODE
+    If P.Print = "NORMAL MODE":
+        Print "✅ SUCCESS: Child Situation did NOT leak to parent"
+    Else:
+        Print "❌ FAILURE: Child Situation leaked! Parent shows: " + P.Print

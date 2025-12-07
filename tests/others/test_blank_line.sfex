@@ -1,0 +1,8 @@
+Story:
+    Task is Do in background:
+        Print "Line 1"
+
+        Print "Line 2"
+
+    Result is Task.Await()
+    Print "Done"

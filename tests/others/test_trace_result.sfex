@@ -1,0 +1,32 @@
+Story:
+    Create MathOps Called M
+    Set M.X to 5.5
+    Set M.Y to 3.3
+
+    Result is M.ComplexCalc
+    Print "Result: " + Result
+
+    AddSq is M.AddSquares
+    Print "AddSquares: " + AddSq
+
+    X is M.GetX
+    Print "GetX: " + X
+
+Concept: MathOps
+    X
+    Y
+
+    To AddSquares:
+        A is This.X * This.X
+        B is This.Y * This.Y
+        Sum is A + B
+        Return Sum
+
+    To GetX:
+        Return This.X
+
+    To ComplexCalc:
+        Sum is This.AddSquares
+        X is This.GetX
+        Result is Sum + X
+        Return Result

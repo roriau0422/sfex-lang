@@ -1,0 +1,26 @@
+Situation: MutatingContext
+    Adjust Counter:
+        To Increment:
+            Set Value to Value + 1000  # Big increment
+
+Concept: Counter
+    Value
+    To Increment:
+        Set Value to Value + 1
+
+Story:
+    Create Counter Called C
+    Set C.Value to 0  # Initialize field
+    C.Increment
+    Print C.Value  # Should be 1
+
+    Task is Do in background:
+        Switch on MutatingContext
+        C.Increment  # Should be 1001
+        Return C.Value
+
+    Result is Task.Await()
+    Print Result  # Should be 1001
+
+    C.Increment
+    Print C.Value  # Should be 2 (not 1002 - task isolated)

@@ -1,0 +1,75 @@
+# Test JIT compilation of comparison operators
+
+Concept: Comparator
+    To IsEqual with A and B:
+        Return A = B
+
+    To IsGreater with A and B:
+        Return A > B
+
+    To IsLess with A and B:
+        Return A < B
+
+    To IsGreaterEq with A and B:
+        Return A >= B
+
+    To IsLessEq with A and B:
+        Return A <= B
+
+    To IsNotEqual with A and B:
+        Return A != B
+
+Story:
+    Print "=== JIT COMPARISON OPERATORS TEST ==="
+    Print ""
+
+    Create Comparator Called C
+
+    Print "Testing comparisons (will JIT after 100 calls)..."
+    Print ""
+
+    # Call each method 120 times to trigger JIT
+    Result is 0
+    Repeat 120 times:
+        Result is C.IsEqual with 10 and 10
+
+    Print "IsEqual(10, 10): " + Result + " (expected: 1)"
+
+    Result is 0
+    Repeat 120 times:
+        Result is C.IsEqual with 10 and 20
+
+    Print "IsEqual(10, 20): " + Result + " (expected: 0)"
+
+    Result is 0
+    Repeat 120 times:
+        Result is C.IsGreater with 20 and 10
+
+    Print "IsGreater(20, 10): " + Result + " (expected: 1)"
+
+    Result is 0
+    Repeat 120 times:
+        Result is C.IsLess with 10 and 20
+
+    Print "IsLess(10, 20): " + Result + " (expected: 1)"
+
+    Result is 0
+    Repeat 120 times:
+        Result is C.IsGreaterEq with 10 and 10
+
+    Print "IsGreaterEq(10, 10): " + Result + " (expected: 1)"
+
+    Result is 0
+    Repeat 120 times:
+        Result is C.IsLessEq with 10 and 10
+
+    Print "IsLessEq(10, 10): " + Result + " (expected: 1)"
+
+    Result is 0
+    Repeat 120 times:
+        Result is C.IsNotEqual with 10 and 20
+
+    Print "IsNotEqual(10, 20): " + Result + " (expected: 1)"
+
+    Print ""
+    Print "All tests complete! JIT should have compiled all comparison methods."

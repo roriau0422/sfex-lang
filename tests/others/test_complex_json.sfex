@@ -1,0 +1,43 @@
+Story:
+    Raw is '''{
+        "meta": {
+            "version": 1.0,
+            "source": "API"
+        },
+        "users": [
+            {
+                "id": 1,
+                "profile": {
+                    "name": "Temka",
+                    "roles": ["Admin", "Editor"],
+                    "settings": {
+                        "theme": "Dark",
+                        "notifications": true
+                    }
+                }
+            },
+            {
+                "id": 2,
+                "profile": {
+                    "name": "User2",
+                    "roles": ["Viewer"]
+                }
+            }
+        ]
+    }'''
+
+    Data is JSON.Parse(Raw)
+
+    # Access deep properties (Dot notation + Indexing mixed)
+    Print "API Version: " + Data["meta"]["version"]
+    
+    FirstUser is Data["users"][1]
+    Print "First User Name: " + FirstUser["profile"]["name"]
+    
+    # Access a list inside a map inside a list
+    FirstRole is FirstUser["profile"]["roles"][1]
+    Print "First Role: " + FirstRole
+
+    # Verify Boolean logic deep in the tree
+    If FirstUser["profile"]["settings"]["notifications"]:
+        Print "Notifications are ON"

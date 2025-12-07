@@ -1,0 +1,18 @@
+# Test task with return value and awaiting
+
+Story:
+    Print "=== Task Await Test ==="
+
+    # Spawn a background task that returns a value
+    Worker is Do in background:
+        Print "Task is computing..."
+        Return 42
+
+    Print "Task spawned, main thread continues..."
+
+    # Wait for the task to complete
+    Result is Worker.Await()
+    Print "Task returned:"
+    Print Result
+
+    Print "=== Test Complete ==="

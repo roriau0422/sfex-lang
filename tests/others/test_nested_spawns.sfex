@@ -1,0 +1,31 @@
+# Test deeply nested task spawning
+
+Story:
+    Print "=== Nested Task Spawning Test ==="
+
+    Task1 is Do in background:
+        Print "Task1: Starting"
+
+        Task2 is Do in background:
+            Print "Task2: Starting"
+
+            Task3 is Do in background:
+                Print "Task3: Starting"
+                Print "Task3: Returning 'Nested Result'"
+                Return "Nested Result"
+
+            Result3 is Task3.Await()
+            Print "Task2: Got from Task3: " + Result3
+            Return Result3
+
+        Result2 is Task2.Await()
+        Print "Task1: Got from Task2: " + Result2
+        Return Result2
+
+    Result1 is Task1.Await()
+    Print "Main: Got from Task1: " + Result1
+
+    If Result1 = "Nested Result":
+        Print "✅ SUCCESS: Nested spawning works!"
+    Else:
+        Print "❌ FAILURE: Got: " + Result1

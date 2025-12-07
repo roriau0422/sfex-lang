@@ -1,0 +1,189 @@
+Story:
+    Print "=== JSON File Processing Test ==="
+    Print "Reading tests/assets/dummy_long.json"
+    Print ""
+
+    # Test 1: Read JSON file
+    Print "Test 1: Reading JSON file from disk"
+    JsonContent is File.Read("tests/assets/dummy_long.json")
+    Print "✓ File read successfully"
+    Print "File size: " + JsonContent.Length + " characters"
+    Print ""
+
+    # Test 2: Parse JSON
+    Print "Test 2: Parsing JSON data"
+    Data is JSON.Parse(JsonContent)
+    Print "✓ JSON parsed successfully"
+    Print ""
+
+    # Test 3: Check success status
+    Print "Test 3: Check API success status"
+    Success is Data["success"]
+    Print "API Success: " + Success
+    Print ""
+
+    # Test 4: Get available products
+    Print "Test 4: Get available products"
+    Products is Data["available"]
+    ProductCount is Products.Length
+    Print "Total products found: " + ProductCount
+    Print ""
+
+    # Test 5: Display first product details
+    Print "Test 5: First product details"
+    FirstProduct is Products[1]
+    Print "Product ID: " + FirstProduct["productId"]
+    Print "Product Name: " + FirstProduct["productName"]
+    Print "SKU: " + FirstProduct["sku"]
+    Print "Price: " + FirstProduct["price"] + " " + FirstProduct["currencyCode"]
+    Print "In Stock: " + FirstProduct["inStock"]
+    Print ""
+
+    # Test 6: Display all product names
+    Print "Test 6: List all product names"
+    Index is 1
+    Repeat ProductCount times:
+        CurrentProduct is Products[Index]
+        ProductName is CurrentProduct["productName"]
+        Price is CurrentProduct["price"]
+        Print Index + ". " + ProductName + " - " + Price + " MNT"
+        Index is Index + 1
+    Print ""
+
+    # Test 7: Calculate total inventory value
+    Print "Test 7: Calculate total inventory value"
+    TotalValue is 0
+    Index is 1
+    Repeat ProductCount times:
+        Product is Products[Index]
+        Price is Product["price"]
+        TotalValue is TotalValue + Price
+        Index is Index + 1
+    Print "Total inventory value: " + TotalValue + " MNT"
+    Print ""
+
+    # Test 8: Find cheapest and most expensive products
+    Print "Test 8: Price analysis"
+    MinPrice is 999999999
+    MaxPrice is 0
+    CheapestProduct is ""
+    ExpensiveProduct is ""
+
+    Index is 1
+    Repeat ProductCount times:
+        Product is Products[Index]
+        Price is Product["price"]
+        Name is Product["productName"]
+
+        If Price < MinPrice:
+            MinPrice is Price
+            CheapestProduct is Name
+
+        If Price > MaxPrice:
+            MaxPrice is Price
+            ExpensiveProduct is Name
+
+        Index is Index + 1
+
+    Print "Cheapest: " + CheapestProduct + " - " + MinPrice + " MNT"
+    Print "Most Expensive: " + ExpensiveProduct + " - " + MaxPrice + " MNT"
+    Print ""
+
+    # Test 9: Filter products by price range
+    Print "Test 9: Products under 5,000,000 MNT"
+    Index is 1
+    Count is 0
+    Repeat ProductCount times:
+        Product is Products[Index]
+        Price is Product["price"]
+        Name is Product["productName"]
+
+        If Price < 5000000:
+            Count is Count + 1
+            Print "  - " + Name + " (" + Price + " MNT)"
+
+        Index is Index + 1
+    Print "Found " + Count + " products under 5M MNT"
+    Print ""
+
+    # Test 10: Check brand information
+    Print "Test 10: Brand analysis"
+    FirstProduct is Products[1]
+    BrandArray is FirstProduct["brand"]
+    BrandName is BrandArray[1]
+    Print "Brand: " + BrandName
+    BrandId is FirstProduct["customMapping_brandId"]
+    Print "Brand ID: " + BrandId
+    Print ""
+
+    # Test 11: Discount information
+    Print "Test 11: Discount analysis"
+    Index is 1
+    Repeat ProductCount times:
+        Product is Products[Index]
+        Name is Product["productName"]
+        OriginalPrice is Product["price"]
+        ComputedPrice is Product["customMapping_computedPrice"]
+        DiscountPercent is Product["customMapping_discountPercentage"]
+
+        Print "Product " + Index + ": " + Name
+        Print "  Original: " + OriginalPrice + " MNT"
+        Print "  Discounted: " + ComputedPrice + " MNT"
+        Print "  Discount: " + DiscountPercent + "%"
+
+        Index is Index + 1
+    Print ""
+
+    # Test 12: Performance metrics
+    Print "Test 12: API Performance Metrics"
+    DetectionMs is Data["detection_ms"]
+    EmbeddingMs is Data["embedding_ms"]
+    SearchMs is Data["search_ms"]
+    TotalMs is Data["total_ms"]
+
+    Print "Detection time: " + DetectionMs + " ms"
+    Print "Embedding time: " + EmbeddingMs + " ms"
+    Print "Search time: " + SearchMs + " ms"
+    Print "Total time: " + TotalMs + " ms"
+    Print ""
+
+    # Test 13: Stock availability
+    Print "Test 13: Stock availability check"
+    InStockCount is 0
+    Index is 1
+    Repeat ProductCount times:
+        Product is Products[Index]
+        IsInStock is Product["inStock"]
+
+        If IsInStock:
+            InStockCount is InStockCount + 1
+
+        Index is Index + 1
+
+    Print "Products in stock: " + InStockCount + " / " + ProductCount
+    StockPercentage is InStockCount * 100
+    Print "Stock rate: " + StockPercentage + "%"
+    Print ""
+
+    # Test 14: Working with nested arrays
+    Print "Test 14: Collection IDs for first product"
+    FirstProduct is Products[1]
+    Collections is FirstProduct["collectionIds"]
+    CollectionCount is Collections.Length
+    Print "Number of collections: " + CollectionCount
+    Print "Collections: "
+    Index is 1
+    Repeat CollectionCount times:
+        CollId is Collections[Index]
+        Print "  - " + CollId
+        Index is Index + 1
+    Print ""
+
+    # Test 15: Calculate average price
+    Print "Test 15: Average price calculation"
+    AveragePrice is TotalValue / ProductCount
+    Print "Average product price: " + AveragePrice + " MNT"
+    Print ""
+
+    Print "=== All JSON file tests completed successfully! ==="
+    Print "Total products processed: " + ProductCount

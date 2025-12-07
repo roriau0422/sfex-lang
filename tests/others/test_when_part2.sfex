@@ -1,0 +1,47 @@
+Story:
+    Print "=== WHEN STATEMENT TESTS (Part 2) ==="
+    Print ""
+
+    # Test 4: When without Otherwise (no match)
+    Print "[Test 4] When without Otherwise (should print nothing):"
+    Number is 999
+
+    When Number:
+        is 1:
+            Print "  This should not print"
+        is 2:
+            Print "  This should not print either"
+
+    Print "  (No output expected above)"
+    Print ""
+
+    # Test 5: When with boolean values
+    Print "[Test 5] When with booleans:"
+    Flag is True
+
+    When Flag:
+        is True:
+            Print "  Flag is true"
+        is False:
+            Print "  Flag is false"
+
+    Print ""
+
+    # Test 6: When with expressions
+    Print "[Test 6] When with expressions:"
+    X is 5
+    Y is 10
+    Sum is X + Y
+
+    When Sum:
+        is 10:
+            Print "  Sum is 10"
+        is 15:
+            Print "  Sum is 15"
+        is 20:
+            Print "  Sum is 20"
+        Otherwise:
+            Print "  Sum is something else"
+
+    Print ""
+    Print "=== TESTS COMPLETED ==="

@@ -1,0 +1,44 @@
+# Debug loop variable behavior
+
+Concept: Counter
+    To Count with N:
+        Total is 0
+        Repeat N times:
+            Total is Total + 1
+        Return Total
+
+    To DoubleLoop with N:
+        A is 0
+        B is 0
+        Repeat N times:
+            A is A + 1
+            B is B + 2
+        Return A + B
+
+Story:
+    Print "=== LOOP VARIABLE DEBUG ==="
+    Print ""
+
+    Create Counter Called C
+
+    # Single call - interpreter
+    Print "Interpreter - Count(5): " + C.Count with 5
+    Print "Interpreter - Count(10): " + C.Count with 10
+    Print ""
+
+    # Force JIT compilation
+    Print "Triggering JIT compilation (120 calls)..."
+    Dummy is 0
+    Repeat 120 times:
+        Dummy is C.Count with 3
+
+    Print "After JIT - Count(3): " + Dummy
+    Print ""
+
+    # Test with different values
+    Print "JIT - Count(5): " + C.Count with 5
+    Print "JIT - Count(10): " + C.Count with 10
+    Print ""
+
+    # Double loop test
+    Print "Interpreter - DoubleLoop(5): " + C.DoubleLoop with 5

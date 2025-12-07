@@ -1,0 +1,7 @@
+Story:
+    Print "Test: Can we access Stream?"
+    Print Stream
+
+    Print ""
+    Print "Test: Can we access Stream.FromList?"
+    Print Stream.FromList

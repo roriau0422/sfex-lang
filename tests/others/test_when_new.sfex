@@ -1,0 +1,210 @@
+Story:
+    Print "=== WHEN STATEMENT TESTS (Part 1) ==="
+    Print ""
+
+    # Test 1: Basic When with numbers
+    Print "[Test 1] When with numbers:"
+    Score is 100
+
+    When Score:
+        is 100:
+            Print "  Perfect score!"
+        is 90:
+            Print "  Great job!"
+        is 80:
+            Print "  Good!"
+        Otherwise:
+            Print "  Keep trying!"
+
+    Print ""
+
+    # Test 2: When with strings
+    Print "[Test 2] When with strings:"
+    Color is "red"
+
+    When Color:
+        is "red":
+            Print "  Stop"
+        is "yellow":
+            Print "  Caution"
+        is "green":
+            Print "  Go"
+        Otherwise:
+            Print "  Unknown color"
+
+    Print ""
+
+    # Test 3: When with Otherwise case
+    Print "[Test 3] When with Otherwise (no match):"
+    Value is 42
+
+    When Value:
+        is 1:
+            Print "  One"
+        is 2:
+            Print "  Two"
+        is 3:
+            Print "  Three"
+        Otherwise:
+            Print "  Not 1, 2, or 3 (it's 42)"
+
+    Print ""
+    Print "=== WHEN STATEMENT TESTS (Part 2) ==="
+    Print ""
+
+    # Test 4: When without Otherwise (no match)
+    Print "[Test 4] When without Otherwise (should print nothing):"
+    Number is 999
+
+    When Number:
+        is 1:
+            Print "  This should not print"
+        is 2:
+            Print "  This should not print either"
+
+    Print "  (No output expected above)"
+    Print ""
+
+    # Test 5: When with boolean values
+    Print "[Test 5] When with booleans:"
+    Flag is True
+
+    When Flag:
+        is True:
+            Print "  Flag is true"
+        is False:
+            Print "  Flag is false"
+
+    Print ""
+
+    # Test 6: When with expressions
+    Print "[Test 6] When with expressions:"
+    X is 5
+    Y is 10
+    Sum is X + Y
+
+    When Sum:
+        is 10:
+            Print "  Sum is 10"
+        is 15:
+            Print "  Sum is 15"
+        is 20:
+            Print "  Sum is 20"
+        Otherwise:
+            Print "  Sum is something else"
+
+    Print ""
+    Print "=== WHEN STATEMENT TESTS (Part 3) ==="
+    Print ""
+
+    # Test 7: Nested When statements
+    Print "[Test 7] Nested When:"
+    Category is "fruit"
+    Item is "apple"
+
+    When Category:
+        is "fruit":
+            Print "  Category: Fruit"
+            When Item:
+                is "apple":
+                    Print "    It's an apple!"
+                is "banana":
+                    Print "    It's a banana!"
+                Otherwise:
+                    Print "    Unknown fruit"
+        is "vegetable":
+            Print "  Category: Vegetable"
+        Otherwise:
+            Print "  Unknown category"
+
+    Print ""
+    Print "=== WHEN STATEMENT TESTS (Part 4) ==="
+    Print ""
+
+    # Test 8: When in a loop
+    Print "[Test 8] When in a loop:"
+    Numbers is [1, 2, 3, 4, 5]
+
+    For each Num in Numbers:
+        When Num:
+            is 1:
+                Print "  First"
+            is 2:
+                Print "  Second"
+            is 3:
+                Print "  Third"
+            Otherwise:
+                Print "  Other: " + Num
+
+    Print ""
+    Print "=== WHEN STATEMENT TESTS (Part 5) ==="
+    Print ""
+
+    # Test 9: When with decimal numbers
+    Print "[Test 9] When with decimals:"
+    Price is 0.3
+
+    When Price:
+        is 0.1:
+            Print "  Ten cents"
+        is 0.3:
+            Print "  Thirty cents (mathematically honest!)"
+        is 0.5:
+            Print "  Fifty cents"
+        Otherwise:
+            Print "  Other price"
+
+    Print ""
+
+    # Test 10: Multiple statements in case body
+    Print "[Test 10] Multiple statements in case:"
+    Grade is "A"
+
+    When Grade:
+        is "A":
+            Print "  Excellent!"
+            Points is 100
+            Print "  Points: " + Points
+        is "B":
+            Print "  Good!"
+            Points is 80
+            Print "  Points: " + Points
+        Otherwise:
+            Print "  Try harder!"
+            Points is 50
+            Print "  Points: " + Points
+
+    Print ""
+
+    # Test 11: When with negative numbers
+    Print "[Test 11] When with negative numbers:"
+    Temperature is -5
+
+    When Temperature:
+        is -10:
+            Print "  Very cold"
+        is -5:
+            Print "  Cold"
+        is 0:
+            Print "  Freezing"
+        is 10:
+            Print "  Cool"
+        Otherwise:
+            Print "  Other temperature"
+
+    Print ""
+
+    # Test 12: When matching first case (order matters)
+    Print "[Test 12] When matches first case only:"
+    Duplicate is 5
+
+    When Duplicate:
+        is 5:
+            Print "  First case matched (correct)"
+        is 5:
+            Print "  This should not execute"
+        is 5:
+            Print "  This should not execute either"
+
+    Print ""
+    Print "=== ALL WHEN TESTS COMPLETED ==="

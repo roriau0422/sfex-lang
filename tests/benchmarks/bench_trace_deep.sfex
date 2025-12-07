@@ -1,0 +1,104 @@
+Story:
+    Print "=== Deep Trace Compilation Benchmark ==="
+    Print "Testing 5 multi-statement method inlining"
+    Print ""
+
+    Create Calculator Called C
+    Set C.A to 10.0
+    Set C.B to 5.0
+    Set C.C to 3.0
+    Set C.D to 2.0
+    Result is 0
+
+    # Interpreter (99 calls)
+    Print "1. Interpreter (99 calls):"
+    Start is Time.Precise()
+    Repeat 99 times:
+        Result is C.ComplexCalculation
+    End is Time.Precise()
+    Time1 is End - Start
+    Rate1 is 99 / Time1
+    Print "   Rate: " + Rate1 + " calls/sec"
+    Print ""
+
+    # JIT (1M calls)
+    Create Calculator Called C2
+    Set C2.A to 10.0
+    Set C2.B to 5.0
+    Set C2.C to 3.0
+    Set C2.D to 2.0
+
+    Print "2. JIT (1,000,000 calls):"
+    Start is Time.Precise()
+    Repeat 1000000 times:
+        Result is C2.ComplexCalculation
+    End is Time.Precise()
+    Time2 is End - Start
+    Rate2 is 1000000 / Time2
+    Print "   Rate: " + Rate2 + " calls/sec"
+    Print ""
+
+    # Final result
+    FinalResult is C2.ComplexCalculation
+
+    # Results
+    Print "=== Results ==="
+    Speedup is Rate2 / Rate1
+    Print "Speedup: " + Speedup + "x"
+    Print "Final result: " + FinalResult + " (expected: 232)"
+
+Concept: Calculator
+    A
+    B
+    C
+    D
+
+    # Multi-statement method 1: Sum and product
+    To Step1:
+        Sum is This.A + This.B
+        Product is This.A * This.B
+        Result is Sum + Product
+        Return Result
+
+    # Multi-statement method 2: Difference and quotient
+    To Step2:
+        Diff is This.A - This.B
+        Quot is This.A / This.B
+        Result is Diff + Quot
+        Return Result
+
+    # Multi-statement method 3: Complex arithmetic
+    To Step3:
+        Temp1 is This.C * This.C
+        Temp2 is This.D * This.D
+        Temp3 is Temp1 + Temp2
+        Result is Temp3 * This.A
+        Return Result
+
+    # Multi-statement method 4: Nested calculations
+    To Step4:
+        X is This.B + This.C
+        Y is X * This.D
+        Z is Y - This.A
+        Final is Z + This.B
+        Return Final
+
+    # Multi-statement method 5: More complex
+    To Step5:
+        V1 is This.A / This.D
+        V2 is This.B * This.C
+        V3 is V1 + V2
+        V4 is V3 - This.C
+        V5 is V4 + This.D
+        Return V5
+
+    # Main method that calls all 5 helpers
+    # This will create a deep trace with 5 inlined methods
+    To ComplexCalculation:
+        R1 is This.Step1
+        R2 is This.Step2
+        R3 is This.Step3
+        R4 is This.Step4
+        R5 is This.Step5
+        Total is R1 + R2 + R3 + R4 + R5
+        Return Total

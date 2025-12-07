@@ -1,0 +1,8 @@
+Story:
+    Items is [1, 2, 3]
+
+    For each Item in Items:
+        Task is Do in background:
+            Print "Item: " + Item
+
+    Print "Done"

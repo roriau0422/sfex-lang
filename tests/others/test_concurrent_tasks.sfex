@@ -1,0 +1,48 @@
+# Test multiple concurrent tasks
+
+Story:
+    Print "=== Concurrent Tasks Test ==="
+
+    # Spawn multiple tasks
+    Task1 is Do in background:
+        Print "Task 1 starting"
+        Counter is 0
+        Repeat 50000 times:
+            Counter is Counter + 1
+        Print "Task 1 complete"
+        Return 100
+
+    Task2 is Do in background:
+        Print "Task 2 starting"
+        Counter is 0
+        Repeat 30000 times:
+            Counter is Counter + 1
+        Print "Task 2 complete"
+        Return 200
+
+    Task3 is Do in background:
+        Print "Task 3 starting"
+        Counter is 0
+        Repeat 40000 times:
+            Counter is Counter + 1
+        Print "Task 3 complete"
+        Return 300
+
+    Print "All tasks spawned, main thread continues..."
+
+    # Await all tasks
+    Result1 is Task1.Await()
+    Result2 is Task2.Await()
+    Result3 is Task3.Await()
+
+    Print "All tasks completed!"
+    Print "Results:"
+    Print Result1
+    Print Result2
+    Print Result3
+
+    Total is Result1 + Result2 + Result3
+    Print "Total: "
+    Print Total
+
+    Print "=== Test Complete ==="

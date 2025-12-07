@@ -1,0 +1,15 @@
+Concept: Planet
+    Name
+    Gravity
+
+Story:
+    Create Planet called Mars
+    Set Mars.Name to "Mars"
+    Set Mars.Gravity to 3.7
+    
+    Create Planet called Earth
+    Set Earth.Name to "Earth"
+    Set Earth.Gravity to 9.8
+    
+    Print Mars.Name + " gravity: " + Mars.Gravity
+    Print Earth.Name + " gravity: " + Earth.Gravity

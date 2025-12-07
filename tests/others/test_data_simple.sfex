@@ -1,0 +1,48 @@
+Story:
+    Print "=== Simple Data Detection Test ==="
+    Print ""
+
+    # Test 1: Detect JSON file
+    Print "Test 1: Detect JSON file format"
+    Info is Data.Detect("tests/assets/products.json")
+    Format is Info["Format"]
+    MediaType is Info["MediaType"]
+    Print "Format: " + Format
+    Print "Media Type: " + MediaType
+    Print ""
+
+    # Test 2: Parse JSON file
+    Print "Test 2: Parse JSON file"
+    JsonData is Data.Parse("tests/assets/products.json")
+    Print "Parsed JSON successfully"
+    Print "Data type: List"
+    Print ""
+
+    # Test 3: Detect XML file
+    Print "Test 3: Detect XML file format"
+    XmlInfo is Data.Detect("tests/assets/books.xml")
+    XmlFormat is XmlInfo["Format"]
+    Print "Format: " + XmlFormat
+    Print ""
+
+    # Test 4: Parse XML file
+    Print "Test 4: Parse XML file"
+    XmlDoc is Data.Parse("tests/assets/books.xml")
+    Print "Parsed XML successfully"
+    Print ""
+
+    # Test 5: Detect TOML file
+    Print "Test 5: Detect TOML file format"
+    TomlInfo is Data.Detect("tests/assets/config.toml")
+    TomlFormat is TomlInfo["Format"]
+    Print "Format: " + TomlFormat
+    Print ""
+
+    # Test 6: Parse TOML file
+    Print "Test 6: Parse TOML file"
+    TomlData is Data.Parse("tests/assets/config.toml")
+    AppName is TomlData["app"]["name"]
+    Print "App name from TOML: " + AppName
+    Print ""
+
+    Print "✓ All tests completed!"

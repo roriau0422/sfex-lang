@@ -1,0 +1,4 @@
+Story:
+    Data is Data.Parse("tests/assets/lol.json")
+    Print "Read JSON content:"
+    Print Data

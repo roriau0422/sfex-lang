@@ -1,0 +1,47 @@
+# Test Task.WaitAll functionality
+
+Story:
+    Print "=== WaitAll Test ==="
+
+    # Create multiple tasks
+    Tasks is []
+
+    Task1 is Do in background:
+        Print "Task 1 working..."
+        Counter is 0
+        Repeat 30000 times:
+            Counter is Counter + 1
+        Print "Task 1 done"
+        Return 100
+
+    Task2 is Do in background:
+        Print "Task 2 working..."
+        Counter is 0
+        Repeat 20000 times:
+            Counter is Counter + 1
+        Print "Task 2 done"
+        Return 200
+
+    Task3 is Do in background:
+        Print "Task 3 working..."
+        Counter is 0
+        Repeat 40000 times:
+            Counter is Counter + 1
+        Print "Task 3 done"
+        Return 300
+
+    # Build task list
+    Tasks is [Task1, Task2, Task3]
+
+    Print "All tasks spawned, waiting for all to complete..."
+
+    # Wait for all tasks
+    Results is Task.WaitAll(Tasks)
+
+    Print "All tasks completed!"
+    Print "Results:"
+    Print Results[1]
+    Print Results[2]
+    Print Results[3]
+
+    Print "=== Test Complete ==="

@@ -1,0 +1,60 @@
+Story:
+    Print "=== Real JIT Performance Benchmark ==="
+    Print ""
+
+    # Benchmark 1: Interpreter only (99 calls, then many interpreter calls)
+    Print "1. Interpreter only (50,000 calls, no JIT - all in interpreter):"
+    Create Calculator Called C1
+    Set C1.X to 5
+    Set C1.Y to 3
+
+    # Warm up with 99 calls (no JIT compilation)
+    Repeat 99 times:
+        Result is C1.Compute
+
+    # Now time 50,000 calls in pure interpreter
+    Start is Time.Now()
+    Repeat 50000 times:
+        Result is C1.Compute
+    End is Time.Now()
+
+    Time1 is End - Start
+    Print "   Time: " + Time1 + " seconds"
+    If Time1 > 0:
+        Print "   Calls per second: " + (50000 / Time1)
+    Print ""
+
+    # Benchmark 2: With JIT (500,000 calls, JIT kicks in at 100)
+    Print "2. With JIT (500,000 calls, JIT compiles at call 100):"
+    Create Calculator Called C2
+    Set C2.X to 5
+    Set C2.Y to 3
+    Start is Time.Now()
+
+    Repeat 500000 times:
+        Result is C2.Compute
+
+    End is Time.Now()
+    Time2 is End - Start
+    Print "   Time: " + Time2 + " seconds"
+    Print "   Calls per second: " + (500000 / Time2)
+    Print ""
+
+    # Calculate speedup
+    Print "=== Results ==="
+    Rate1 is 99 / Time1
+    Rate2 is 500000 / Time2
+    Speedup is Rate2 / Rate1
+    Print "JIT speedup: " + Speedup + "x faster"
+    Print ""
+    Print "Expected: 2-5x for arithmetic operations"
+
+Concept: Calculator
+    X
+    Y
+
+    To Compute:
+        # Pure arithmetic - perfect for JIT compilation
+        # No local variables, just field access and math
+        Set This.X to This.X * This.Y + This.X - This.Y
+        Return This.X

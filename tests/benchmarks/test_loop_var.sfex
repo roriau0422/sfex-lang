@@ -1,0 +1,8 @@
+Story:
+    Print "Testing loop variable syntax"
+    Sum is 0
+    Repeat 5 times with I:
+        Print I
+        Sum is Sum + I
+    Print "Final sum: "
+    Print Sum

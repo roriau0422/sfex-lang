@@ -1,0 +1,72 @@
+Story:
+    Print "=== WHEN STATEMENT TESTS (Part 5) ==="
+    Print ""
+
+    # Test 9: When with decimal numbers
+    Print "[Test 9] When with decimals:"
+    Price is 0.3
+
+    When Price:
+        is 0.1:
+            Print "  Ten cents"
+        is 0.3:
+            Print "  Thirty cents (mathematically honest!)"
+        is 0.5:
+            Print "  Fifty cents"
+        Otherwise:
+            Print "  Other price"
+
+    Print ""
+
+    # Test 10: Multiple statements in case body
+    Print "[Test 10] Multiple statements in case:"
+    Grade is "A"
+
+    When Grade:
+        is "A":
+            Print "  Excellent!"
+            Points is 100
+            Print "  Points: " + Points
+        is "B":
+            Print "  Good!"
+            Points is 80
+            Print "  Points: " + Points
+        Otherwise:
+            Print "  Try harder!"
+            Points is 50
+            Print "  Points: " + Points
+
+    Print ""
+
+    # Test 11: When with negative numbers
+    Print "[Test 11] When with negative numbers:"
+    Temperature is -5
+
+    When Temperature:
+        is -10:
+            Print "  Very cold"
+        is -5:
+            Print "  Cold"
+        is 0:
+            Print "  Freezing"
+        is 10:
+            Print "  Cool"
+        Otherwise:
+            Print "  Other temperature"
+
+    Print ""
+
+    # Test 12: When matching first case (order matters)
+    Print "[Test 12] When matches first case only:"
+    Duplicate is 5
+
+    When Duplicate:
+        is 5:
+            Print "  First case matched (correct)"
+        is 5:
+            Print "  This should not execute"
+        is 5:
+            Print "  This should not execute either"
+
+    Print ""
+    Print "=== TESTS COMPLETED ==="

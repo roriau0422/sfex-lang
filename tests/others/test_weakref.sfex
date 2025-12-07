@@ -1,0 +1,91 @@
+# Test: Weak References
+# Tests weak reference creation and lifecycle management
+
+Story:
+    Print "=== Weak Reference Tests ==="
+
+    # Test 1: Create weak reference to a List
+    Print ""
+    Print "Test 1: Create weak reference to List"
+    Items is [1, 2, 3]
+    WeakItems is WeakRef(Items)
+    Print "Original list: " + Items[1] + ", " + Items[2] + ", " + Items[3]
+    Print "Weak reference created: " + WeakItems
+
+    # Test 2: Check if weak reference is valid
+    Print ""
+    Print "Test 2: Check weak reference validity"
+    If WeakItems.IsValid:
+        Print "✓ Weak reference is valid"
+    Else:
+        Print "✗ Weak reference is invalid"
+
+    # Test 3: Dereference weak reference with .Get()
+    Print ""
+    Print "Test 3: Dereference weak reference"
+    Restored is WeakItems.Get()
+    Print "Restored list: " + Restored[1] + ", " + Restored[2] + ", " + Restored[3]
+
+    # Test 4: Weak reference to Map
+    Print ""
+    Print "Test 4: Weak reference to Map"
+    User is { name: "Alice", age: 30 }
+    WeakUser is WeakRef(User)
+    Print "Original map: " + User["name"] + " is " + User["age"] + " years old"
+    Print "Weak reference created: " + WeakUser
+
+    If WeakUser.IsValid:
+        Print "✓ Weak reference to map is valid"
+        RestoredUser is WeakUser.Get()
+        Print "Restored map: " + RestoredUser["name"] + " is " + RestoredUser["age"] + " years old"
+
+    # Test 5: Weak reference survives while strong reference exists
+    Print ""
+    Print "Test 5: Weak reference persistence"
+    Data is [10, 20, 30]
+    WeakData is WeakRef(Data)
+    Copy is Data
+    Print "Strong references exist: IsValid = " + WeakData.IsValid
+
+    # Test 6: Demonstrate weak reference lifecycle
+    Print ""
+    Print "Test 6: Weak reference after strong ref goes out of scope"
+    TempList is [100, 200, 300]
+    WeakTemp is WeakRef(TempList)
+    Retrieved is WeakTemp.Get()
+    Print "Retrieved value: " + Retrieved[1] + ", " + Retrieved[2] + ", " + Retrieved[3]
+
+    # Test 7: Multiple weak references to same object
+    Print ""
+    Print "Test 7: Multiple weak references"
+    SharedList is [1, 2, 3, 4, 5]
+    Weak1 is WeakRef(SharedList)
+    Weak2 is WeakRef(SharedList)
+    Print "Both weak refs are valid: " + Weak1.IsValid + " and " + Weak2.IsValid
+    List1 is Weak1.Get()
+    List2 is Weak2.Get()
+    Print "From Weak1: " + List1[1]
+    Print "From Weak2: " + List2[1]
+
+    # Test 8: WeakRef to empty collections
+    Print ""
+    Print "Test 8: Weak reference to empty collections"
+    EmptyList is []
+    EmptyMap is {}
+    WeakEmpty is WeakRef(EmptyList)
+    WeakEmptyMap is WeakRef(EmptyMap)
+    Print "Weak ref to empty list is valid: " + WeakEmpty.IsValid
+    Print "Weak ref to empty map is valid: " + WeakEmptyMap.IsValid
+
+    # Test 9: Truthy/falsy behavior of weak references
+    Print ""
+    Print "Test 9: Truthy behavior of weak references"
+    StrongRef is [1, 2, 3]
+    ValidWeakRef is WeakRef(StrongRef)
+    If ValidWeakRef:
+        Print "✓ Valid weak reference is truthy (strong ref exists)"
+    Else:
+        Print "✗ Valid weak reference is falsy"
+
+    Print ""
+    Print "=== All Weak Reference Tests Complete ==="

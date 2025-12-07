@@ -1,0 +1,40 @@
+# Test Task.WaitAny functionality (race)
+
+Story:
+    Print "=== WaitAny Test ==="
+
+    # Create multiple tasks with different durations
+    SlowTask is Do in background:
+        Print "Slow task started..."
+        Counter is 0
+        Repeat 100000 times:
+            Counter is Counter + 1
+        Print "Slow task done"
+        Return 999
+
+    FastTask is Do in background:
+        Print "Fast task started..."
+        Counter is 0
+        Repeat 10000 times:
+            Counter is Counter + 1
+        Print "Fast task done"
+        Return 42
+
+    MediumTask is Do in background:
+        Print "Medium task started..."
+        Counter is 0
+        Repeat 50000 times:
+            Counter is Counter + 1
+        Print "Medium task done"
+        Return 777
+
+    # Race all tasks
+    Tasks is [SlowTask, FastTask, MediumTask]
+
+    Print "Racing tasks..."
+    FirstResult is Task.WaitAny(Tasks)
+
+    Print "First task completed with result:"
+    Print FirstResult
+
+    Print "=== Test Complete ==="

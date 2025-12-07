@@ -1,0 +1,14 @@
+# Test multi-parameter methods (no JIT)
+
+Concept: Math
+    To Add with A and B:
+        Return A + B
+
+Story:
+    Create Math Called M
+
+    # Just call it once (no JIT)
+    Result is M.Add with 5 and 3
+
+    Print "Result: " + Result
+    Print "Expected: 8"

@@ -1,0 +1,54 @@
+# Benchmark loops with local variables in JIT
+
+Concept: Math
+    To SumToN with N:
+        Total is 0
+        Repeat N times:
+            Total is Total + 1
+        Return Total
+
+    To Factorial with N:
+        Result is 1
+        Counter is 1
+        Repeat N times:
+            Result is Result * Counter
+            Counter is Counter + 1
+        Return Result
+
+Story:
+    Print "=== JIT LOOP PERFORMANCE ==="
+    Print ""
+
+    Create Math Called M
+
+    Print "1. SumToN (1M calls with N=10)..."
+    StartTime is Time.Precise()
+
+    Result is 0
+    Repeat 1000000 times:
+        Result is M.SumToN with 10
+
+    EndTime is Time.Precise()
+    Elapsed is EndTime - StartTime
+
+    Print "Result: " + Result
+    Print "Time: " + Elapsed + " seconds"
+    Print "Throughput: " + (1000000 / Elapsed) + " calls/sec"
+    Print ""
+
+    Print "2. Factorial (100K calls with N=10)..."
+    StartTime2 is Time.Precise()
+
+    Result2 is 0
+    Repeat 100000 times:
+        Result2 is M.Factorial with 10
+
+    EndTime2 is Time.Precise()
+    Elapsed2 is EndTime2 - StartTime2
+
+    Print "Result: " + Result2 + " (10! = 3628800)"
+    Print "Time: " + Elapsed2 + " seconds"
+    Print "Throughput: " + (100000 / Elapsed2) + " calls/sec"
+    Print ""
+
+    Print "Loops with local variables in JIT! 🚀"

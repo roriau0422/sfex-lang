@@ -1,0 +1,43 @@
+Story:
+    Print "=== UDP Server Test ==="
+    Print "Starting UDP server on 127.0.0.1:8888"
+    Print ""
+
+    # Bind UDP socket
+    Socket is UDP.Bind("127.0.0.1:8888")
+    Print "✓ Socket bound to port 8888"
+    Print "Waiting for messages..."
+    Print ""
+
+    # Receive and echo 3 messages
+    Print "Message 1:"
+    Result1 is Socket.ReceiveFrom()
+    Data1 is Result1["Data"]
+    From1 is Result1["From"]
+    Print "  Received: " + Data1
+    Print "  From: " + From1
+    Socket.SendTo("Echo: " + Data1, From1)
+    Print "  Sent echo back"
+    Print ""
+
+    Print "Message 2:"
+    Result2 is Socket.ReceiveFrom()
+    Data2 is Result2["Data"]
+    From2 is Result2["From"]
+    Print "  Received: " + Data2
+    Print "  From: " + From2
+    Socket.SendTo("Echo: " + Data2, From2)
+    Print "  Sent echo back"
+    Print ""
+
+    Print "Message 3:"
+    Result3 is Socket.ReceiveFrom()
+    Data3 is Result3["Data"]
+    From3 is Result3["From"]
+    Print "  Received: " + Data3
+    Print "  From: " + From3
+    Socket.SendTo("Echo: " + Data3, From3)
+    Print "  Sent echo back"
+    Print ""
+
+    Print "✓ UDP Server test completed!"

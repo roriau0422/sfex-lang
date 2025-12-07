@@ -1,0 +1,49 @@
+Concept: BadCounter
+    Value
+
+    When Value changes:
+        # This creates infinite recursion!
+        Print "  [When fired] Value is now: " + This.Value
+        Set This.Value to This.Value + 1
+
+Concept: GoodCounter
+    Value
+    MaxValue
+
+    When Value changes:
+        # Safe When observer - doesn't trigger itself
+        Print "  [When fired] Value changed to: " + This.Value
+        If This.Value > This.MaxValue:
+            Print "  [When fired] Value exceeds max! Resetting to max."
+            # This would cause recursion, but we'll demonstrate it doesn't
+
+Story:
+    Print "=== Testing Recursion Guard ==="
+    Print ""
+
+    # Test 1: Demonstrate recursion guard catches infinite loops
+    Print "Test 1: Infinite loop detection"
+    Print "Creating BadCounter with self-triggering When observer..."
+    Create BadCounter Called Bad
+    Set Bad.Value to 0
+
+    Print "Attempting to trigger infinite loop..."
+    Try:
+        Set Bad.Value to 1
+    Catch error:
+        Print "Recursion guard triggered (expected): " + error
+
+    Print ""
+
+    # Test 2: Show safe When observers work fine  
+    Print "Test 2: Safe When observer (doesn't trigger itself)"
+    Create GoodCounter Called Good
+    Set Good.Value to 0
+    Set Good.MaxValue to 100
+
+    Print "Setting value to 50..."
+    Set Good.Value to 50
+    Print "Final value: " + Good.Value
+    
+    Print ""
+    Print "=== Recursion Guard Test Complete! ==="
