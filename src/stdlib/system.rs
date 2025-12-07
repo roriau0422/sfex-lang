@@ -1,13 +1,12 @@
 use crate::runtime::value::Value;
 use std::collections::HashMap;
-use std::process::Command;
 use std::sync::Arc;
+use system::system_output;
 
 pub fn create_system_module() -> Value {
     let mut methods = HashMap::new();
-
-    // System.Execute(command) - Execute shell command and return output
     methods.insert(
+        // Dangerious
         "Execute".to_string(),
         Value::NativeFunction(Arc::new(Box::new(|args| {
             if args.len() != 1 {
@@ -15,15 +14,7 @@ pub fn create_system_module() -> Value {
             }
 
             let command_str = args[0].to_display_string();
-
-            // Determine shell based on OS
-            let (shell, flag) = if cfg!(target_os = "windows") {
-                ("cmd", "/C")
-            } else {
-                ("sh", "-c")
-            };
-
-            match Command::new(shell).arg(flag).arg(&command_str).output() {
+            match system_output(&command_str) {
                 Ok(output) => {
                     let mut result = HashMap::new();
 
@@ -56,7 +47,6 @@ pub fn create_system_module() -> Value {
         }))),
     );
 
-    // System.Run(script) - Run a SFX script and return result
     methods.insert(
         "Run".to_string(),
         Value::NativeFunction(Arc::new(Box::new(|args| {
@@ -65,17 +55,8 @@ pub fn create_system_module() -> Value {
             }
 
             let script_path = args[0].to_display_string();
-
-            // Execute: cargo run --quiet -- run <script_path>
             let command = format!("cargo run --quiet -- run {}", script_path);
-
-            let (shell, flag) = if cfg!(target_os = "windows") {
-                ("cmd", "/C")
-            } else {
-                ("sh", "-c")
-            };
-
-            match Command::new(shell).arg(flag).arg(&command).output() {
+            match system_output(&command) {
                 Ok(output) => {
                     let mut result = HashMap::new();
 
@@ -100,6 +81,61 @@ pub fn create_system_module() -> Value {
                 }
                 Err(e) => Err(format!("Failed to run script: {}", e)),
             }
+        }))),
+    );
+
+    methods.insert(
+        "Info".to_string(),
+        Value::NativeFunction(Arc::new(Box::new(|args| {
+            if !args.is_empty() {
+                return Err("System.Info takes no arguments".to_string());
+            }
+
+            let mut info = HashMap::new();
+
+            // OS Type
+            let os_type = if cfg!(target_os = "windows") {
+                "Windows"
+            } else if cfg!(target_os = "linux") {
+                "Linux"
+            } else if cfg!(target_os = "macos") {
+                "macOS"
+            } else {
+                std::env::consts::OS
+            };
+            info.insert("OS".to_string(), Value::String(os_type.to_string()));
+
+            // OS Family
+            info.insert(
+                "Family".to_string(),
+                Value::String(std::env::consts::FAMILY.to_string()),
+            );
+
+            // Architecture
+            info.insert(
+                "Arch".to_string(),
+                Value::String(std::env::consts::ARCH.to_string()),
+            );
+
+            // Hostname
+            if let Ok(hostname) = hostname::get() {
+                info.insert(
+                    "Hostname".to_string(),
+                    Value::String(hostname.to_string_lossy().to_string()),
+                );
+            } else {
+                info.insert("Hostname".to_string(), Value::String("Unknown".to_string()));
+            }
+
+            // Number of CPUs
+            use bigdecimal::BigDecimal;
+            let cpu_count = num_cpus::get() as i64;
+            info.insert(
+                "CPUs".to_string(),
+                Value::Number(BigDecimal::from(cpu_count)),
+            );
+
+            Ok(Value::Map(Arc::new(std::sync::RwLock::new(info))))
         }))),
     );
 

@@ -1,0 +1,20 @@
+Story:
+    Print "=== Testing Different Quote Styles ==="
+    Print ""
+
+    Print "1. systeminfo | findstr OS"
+    Result1 is System.Execute("systeminfo | findstr OS")
+    Print "   Success: " + Result1["Success"]
+    Print "   Output: " + Result1["Output"]
+    Print ""
+
+    Print "2. systeminfo | findstr /C:\"\"OS Name\"\""
+    Result2 is System.Execute("systeminfo | findstr /C:\"OS Name\"")
+    Print "   Success: " + Result2["Success"]
+    Print "   Output: " + Result2["Output"]
+    Print ""
+
+    Print "3. hostname"
+    Result3 is System.Execute("hostname")
+    Print "   Success: " + Result3["Success"]
+    Print "   Output: " + Result3["Output"]

@@ -1,0 +1,32 @@
+Story:
+    Print "=== System Information Test ==="
+    Print ""
+
+    SysInfo is System.Info()
+
+    # Display OS information
+    Print "Operating System:"
+    Print "  OS: " + SysInfo["OS"]
+    Print "  Family: " + SysInfo["Family"]
+    Print "  Architecture: " + SysInfo["Arch"]
+    Print ""
+
+    Print "Hardware:"
+    Print "  Hostname: " + SysInfo["Hostname"]
+    Print "  CPU Count: " + SysInfo["CPUs"]
+    Print ""
+
+    Print "=== Validation ==="
+    HasOS is SysInfo["OS"] != ""
+    HasFamily is SysInfo["Family"] != ""
+    HasArch is SysInfo["Arch"] != ""
+    HasHostname is SysInfo["Hostname"] != ""
+    HasCPUs is SysInfo["CPUs"] > 0
+
+    If HasOS and HasFamily and HasArch and HasHostname and HasCPUs:
+        Print "All system info fields present and valid"
+    Else:
+        Print "Some system info fields missing or invalid"
+
+    Print ""
+    Print "=== Test Complete ==="

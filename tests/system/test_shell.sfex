@@ -1,0 +1,5 @@
+Story:
+    Result is System.Execute("whoami")
+    Print "Current User: " + Result["Output"]
+    # Hostname is System.Execute("hostname")
+    # Print Hostname["Output"]
