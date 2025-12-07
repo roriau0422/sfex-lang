@@ -26,7 +26,7 @@ Concept: Item
 # --- RESUME STORY ---
 Story:
     Repeat 5000 times:
-        Create Item called Thing
+        Create Item Called Thing
         Set Thing.Value to 100
 
     # -----------------------------------------------
@@ -42,7 +42,7 @@ Concept: Processor
 
 # --- RESUME STORY ---
 Story:
-    Create Processor called CPU
+    Create Processor Called CPU
     Set CPU.Count to 0
     
     Repeat 10000 times:

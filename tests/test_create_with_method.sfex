@@ -1,0 +1,11 @@
+Concept: Person
+    Name, Age
+
+    To Greet:
+        Print "Hello, I am " + This.Age + " years old"
+        Return This.Age
+
+Story:
+    Create Person Called John with Age 25
+    Print "Age: " + John.Age
+    John.Greet()

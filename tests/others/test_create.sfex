@@ -3,11 +3,11 @@ Concept: Planet
     Gravity
 
 Story:
-    Create Planet called Mars
+    Create Planet Called Mars
     Set Mars.Name to "Mars"
     Set Mars.Gravity to 3.7
     
-    Create Planet called Earth
+    Create Planet Called Earth
     Set Earth.Name to "Earth"
     Set Earth.Gravity to 9.8
     

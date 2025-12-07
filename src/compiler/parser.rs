@@ -366,9 +366,38 @@ impl Parser {
                 self.expect(TokenType::Called)?;
                 let instance_name = self.expect_identifier()?;
                 self.skip_ignorable();
+
+                // Parse optional "with Field Value and Field Value..." syntax
+                let mut initial_fields = Vec::new();
+                if self.check(&TokenType::With) {
+                    self.advance(); // eat "with"
+                    self.skip_ignorable();
+
+                    loop {
+                        // Parse field name
+                        let field_name = self.expect_identifier()?;
+                        self.skip_ignorable();
+
+                        // Parse field value (expression without logical operators to avoid consuming "and")
+                        let field_value = self.parse_comparison()?;
+                        initial_fields.push((field_name, field_value));
+
+                        self.skip_ignorable();
+
+                        // Check if there's an "and" to continue parsing more fields
+                        if self.check(&TokenType::And) {
+                            self.advance(); // eat "and"
+                            self.skip_ignorable();
+                        } else {
+                            break;
+                        }
+                    }
+                }
+
                 Ok(Statement::Create {
                     concept_name,
                     instance_name,
+                    initial_fields,
                     line,
                 })
             }

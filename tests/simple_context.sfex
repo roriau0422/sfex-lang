@@ -1,0 +1,32 @@
+Concept: User
+    Name, Role
+    To CheckInbox:
+        # Энгийн үед зүгээр л нэрээр нь мэндлээд дуусна
+        Print "Checking inbox for " + This.Name + "..."
+        Return "No new messages."
+
+Situation: ManagerMode
+    Adjust User:
+        To CheckInbox:
+            # Менежер болонгуут API дуудаж жинхэнэ TASK хийнэ
+            rawJson is HTTP.Get("https://jsonplaceholder.typicode.com/todos/1")["Body"]
+            taskTitle is JSON.Parse(rawJson)["title"]
+            Print "MANAGER ACCESS GRANTED: " + This.Name
+            Print "Urgent Task: " + taskTitle
+            Return taskTitle
+
+Story:
+    # Энгийн ажилтан үүсгэх
+    Create User Called Bat with Name "Bat-Erdene" and Role "Employee"
+    
+    # Энгийн горимд шалгах
+    Bat.CheckInbox
+    # Output: Checking inbox for Bat-Erdene...
+    
+    # Менежерийн эрх рүү шилжих (Context Switch)
+    Print "--- Switching Context ---"
+    Switch on ManagerMode
+    
+    Bat.CheckInbox
+    # Output: MANAGER ACCESS GRANTED: Bat-Erdene
+    # Output: Urgent Task: delectus aut autem

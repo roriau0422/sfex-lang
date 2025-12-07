@@ -1,0 +1,6 @@
+Concept: Person
+    Name, Age
+
+Story:
+    Create Person Called John with Age 25
+    Print "Age: " + John.Age

@@ -41,7 +41,7 @@ Story:
 
     # Create concept instance
     Print "Step 2: Creating ApiClient instance"
-    Create ApiClient called Client
+    Create ApiClient Called Client
     Print "✓ ApiClient created"
     Print ""
 

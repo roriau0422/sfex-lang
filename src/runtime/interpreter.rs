@@ -207,7 +207,7 @@ impl Interpreter {
                 self.load_module(module_path)?;
                 Ok(ExecutionResult::Done)
             }
-            Statement::Create { concept_name, instance_name, .. } => {
+            Statement::Create { concept_name, instance_name, initial_fields, .. } => {
                 let concept = self.concepts
                     .get(concept_name)
                     .ok_or_else(|| RuntimeError::UndefinedConcept(concept_name.clone()))?
@@ -224,9 +224,19 @@ impl Interpreter {
                     std::sync::Arc::new(std::sync::RwLock::new(instance_data))
                 );
 
-                if !self.env.assign(instance_name, instance.clone_deep()) {
-                    self.env.define(instance_name.clone(), instance);
+                // Store the instance (use shallow clone so we can modify it afterwards)
+                if !self.env.assign(instance_name, instance.clone()) {
+                    self.env.define(instance_name.clone(), instance.clone());
                 }
+
+                // Set initial field values if provided (modifies the shared Arc)
+                if let Value::Map(m) = &instance {
+                    for (field_name, field_expr) in initial_fields {
+                        let field_value = self.evaluate_expression(field_expr)?;
+                        m.write().expect("lock poisoned").insert(field_name.clone(), field_value);
+                    }
+                }
+
                 Ok(ExecutionResult::Done)
             }
 

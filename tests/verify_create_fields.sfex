@@ -1,0 +1,11 @@
+Concept: Person
+    Name, Age, Email
+
+    To ShowInfo:
+        Print "Name: " + This.Name
+        Print "Age: " + This.Age
+        Print "Email: " + This.Email
+
+Story:
+    Create Person Called Temuujin with Age 34 and Email "roriau@gmail.com"
+    Temuujin.ShowInfo

@@ -14,7 +14,7 @@ Concept: Product
         Print "   [When fired] Tax auto-calculated to: " + This.Tax
 
 Story:
-    Create Product called Phone
+    Create Product Called Phone
     Set Phone.Tax to 0
 
     Print "   Setting Phone.Price to 100..."
@@ -51,7 +51,7 @@ Concept: Item
         Print "   [When fired] FinalPrice recalculated: " + This.FinalPrice
 
 Story:
-    Create Item called Laptop
+    Create Item Called Laptop
     Set Laptop.BasePrice to 1000
     Set Laptop.Discount to 0
     Set Laptop.FinalPrice to 0

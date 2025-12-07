@@ -59,6 +59,7 @@ pub enum Statement {
     Create {
         concept_name: String,
         instance_name: String,
+        initial_fields: Vec<(String, Expression)>, // Field name -> initial value
         line: usize,
     },
 

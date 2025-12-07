@@ -1,0 +1,13 @@
+Concept: Person
+    Name, Age, Email
+
+    To GetInfo:
+        Return This.Name + " (" + This.Age + ") - " + This.Email
+
+Story:
+    Create Person Called John with Name "John" and Age 25 and Email "john@example.com"
+    Print John.GetInfo()
+
+    Print "Name: " + John.Name
+    Print "Age: " + John.Age
+    Print "Email: " + John.Email
