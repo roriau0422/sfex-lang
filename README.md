@@ -153,7 +153,7 @@ Pub/sub boilerplate байхгүй. Гараар invalidate хийх хэрэг�
 | Env | Environment variable, .env support |
 | System | Shell command |
 | Time | Огноо/цаг |
-| Math | Random, тригонометр, бөөрөнхийлөх |
+| Math | Random, тригонометр, тоймлох |
 | LLM | OpenAI API integration |
 | Task/Channel | Concurrency primitive |
 
