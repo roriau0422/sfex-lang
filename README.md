@@ -1,6 +1,6 @@
 # SFX (Situation Framework eXchange)
 
-[![en](https://img.shields.io/badge/lang-mn-red.svg)](https://raw.githubusercontent.com/roriau0422/sfex-lang/blob/main/README-en.md)
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://raw.githubusercontent.com/roriau0422/sfex-lang/blob/main/README-en.md)
 [![Rust](https://img.shields.io/badge/rust-1.75%2B-orange.svg)](https://www.rust-lang.org/)
 [![Build Status](https://github.com/roriau0422/sfex-lang/actions/workflows/rust.yml/badge.svg)](https://github.com/roriau0422/sfex-lang/actions)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/roriau0422/sfex-lang)](https://github.com/roriau0422/sfex-lang/releases)
