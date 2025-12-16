@@ -972,7 +972,8 @@ impl Interpreter {
 
                             if needs_obj_ptr {
                                 if let Value::Map(m) = &obj_val {
-                                    let obj_ptr = m as *const _ as *const u8 as i64;
+                                    //let obj_ptr = m as *const _ as *const u8 as i64;
+                                    let obj_ptr = Arc::as_ptr(m) as *const u8 as i64;
                                     jit_args.push(f64::from_bits(obj_ptr as u64));
                                 }
                             }
@@ -1039,7 +1040,8 @@ impl Interpreter {
 
                                         if needs_obj_ptr {
                                             if let Value::Map(m) = &obj_val {
-                                                let obj_ptr = m as *const _ as *const u8 as i64;
+                                                //let obj_ptr = m as *const _ as *const u8 as i64;
+                                                let obj_ptr = Arc::as_ptr(m) as *const u8 as i64;
                                                 jit_args.push(f64::from_bits(obj_ptr as u64));
                                             }
                                         }
@@ -1076,7 +1078,7 @@ impl Interpreter {
                                 }
                                 Err(e) => {
                                     println!(
-                                        "⚠️  JIT compilation failed for {}.{}: {}",
+                                        "JIT compilation failed for {}.{}: {}",
                                         c_name,
                                         member,
                                         e
@@ -1298,7 +1300,8 @@ impl Interpreter {
 
                         if needs_obj_ptr {
                             if let Value::Map(m) = &obj_val {
-                                let obj_ptr = m as *const _ as *const u8 as i64;
+                                //let obj_ptr = m as *const _ as *const u8 as i64;
+                                let obj_ptr = Arc::as_ptr(m) as *const u8 as i64;
                                 jit_args.push(f64::from_bits(obj_ptr as u64));
                             }
                         }
@@ -1370,7 +1373,8 @@ impl Interpreter {
 
                                     if needs_obj_ptr {
                                         if let Value::Map(m) = &obj_val {
-                                            let obj_ptr = m as *const _ as *const u8 as i64;
+                                            //let obj_ptr = m as *const _ as *const u8 as i64;
+                                            let obj_ptr = Arc::as_ptr(m) as *const u8 as i64;
                                             jit_args.push(f64::from_bits(obj_ptr as u64));
                                         }
                                     }
@@ -1405,7 +1409,7 @@ impl Interpreter {
 
                                 if !e.contains("side effects") {
                                     eprintln!(
-                                        "❌ JIT compilation failed for {}.{}: {}",
+                                        "JIT compilation failed for {}.{}: {}",
                                         c_name,
                                         method,
                                         e

@@ -11,7 +11,7 @@ name = "sfex"
 path = "src/main.rs"
 
 [dependencies]
-# Phase 1: Core CVM dependencies
+# Core CVM dependencies
 pest = "2.8.4"
 pest_derive = "2.8.4"
 bigdecimal = "0.4.9"
@@ -24,15 +24,13 @@ thiserror = "2.0.17"
 clap = { version = "4.5.53", features = ["derive"] }
 unicode-segmentation = "1.12.0"
 
-# Phase 2: Data & Networking
-# JSON (Already present)
 serde_json = { version = "1.0.145", features = ["preserve_order"] }
 
 # TOML
 toml = "0.9.8"
 
 # HTML (DOM Parsing & CSS Selectors)
-scraper = "0.24.0"
+scraper = "0.25.0"
 
 # XML (DOM & XPath)
 sxd-document = "0.3"
@@ -44,7 +42,6 @@ csv = "1.3.0"
 # Auto-detection (with reader features for better accuracy)
 file-format = { version = "0.28.0", features = ["reader-txt", "reader-xml", "reader-zip", "reader-pdf"] }
 
-# Phase 2: Networking (HTTP, WebSocket, TCP, UDP)
 reqwest = { version = "0.12", features = ["blocking", "json"] }
 tokio = { version = "1", features = ["full"] }
 tokio-tungstenite = { version = "0.28.0", features = ["native-tls"] }
@@ -55,7 +52,7 @@ hostname = "0.4.0"
 num_cpus = "1.16.0"
 system = "0.3.3"
 
-# Phase 4: JIT Compilation (Cranelift)
+# JIT
 cranelift = "0.126.1"
 cranelift-codegen = "0.126.1"
 cranelift-frontend = "0.126.1"

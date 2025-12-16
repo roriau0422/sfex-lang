@@ -5,7 +5,8 @@ use cranelift::prelude::*;
 use cranelift_jit::{ JITBuilder, JITModule };
 use cranelift_module::{ DataDescription, Linkage, Module };
 use std::collections::HashMap;
-use std::sync::{ Arc, RwLock };
+use std::sync::{ /*Arc,*/ RwLock };
+// use std::mem::ManuallyDrop;
 
 struct VarContext<'a> {
     param_values: HashMap<String, Value>,
@@ -759,21 +760,28 @@ impl Default for JitCompiler {
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn jit_update_field(
-    obj_ptr: *mut u8,
+    obj_ptr: *const u8,
     field_ptr: *const u8,
     field_len: usize,
     value: f64
 ) {
-    unsafe {
-        let obj_arc = &*(obj_ptr as *const Arc<RwLock<HashMap<String, SfxValue>>>);
+    let rwlock = unsafe { 
+        &*(obj_ptr as *const RwLock<HashMap<String, SfxValue>>) 
+    };
 
-        let field_slice = std::slice::from_raw_parts(field_ptr, field_len);
-        let field_name = std::str::from_utf8_unchecked(field_slice);
+    let field_slice = unsafe { std::slice::from_raw_parts(field_ptr, field_len) };
+    
+    let field_name = unsafe { std::str::from_utf8_unchecked(field_slice) };
 
-        let sfx_value = SfxValue::Number(
-            BigDecimal::from_f64(value).unwrap_or_else(|| BigDecimal::from(0))
-        );
+    let sfx_value = SfxValue::Number(
+        BigDecimal::from_f64(value).unwrap_or_else(|| BigDecimal::from(0))
+    );
 
-        obj_arc.write().expect("lock poisoned").insert(field_name.to_string(), sfx_value);
+    let mut map = rwlock.write().expect("lock poisoned");
+
+    if let Some(existing_val) = map.get_mut(field_name) {
+        *existing_val = sfx_value;
+    } else {
+        map.insert(field_name.to_string(), sfx_value);
     }
 }
