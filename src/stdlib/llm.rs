@@ -112,8 +112,7 @@ fn call_responses_api(
                     if let Ok(parsed) = s.parse::<i64>() {
                         max_output_tokens = Some(parsed);
                     }
-                }
-                else if let Some(mt_legacy) = opts.get("max_tokens") {
+                } else if let Some(mt_legacy) = opts.get("max_tokens") {
                     if let Value::Number(n) = mt_legacy {
                         let s = n.to_string();
                         if let Ok(parsed) = s.parse::<i64>() {

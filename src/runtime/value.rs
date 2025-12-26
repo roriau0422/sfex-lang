@@ -1,9 +1,9 @@
-use bigdecimal::{ BigDecimal, ToPrimitive };
+use bigdecimal::{BigDecimal, ToPrimitive};
 use std::collections::HashMap;
 use std::fmt;
 use std::str::FromStr;
 use std::sync::atomic::AtomicBool;
-use std::sync::{ Arc, RwLock, Weak };
+use std::sync::{Arc, RwLock, Weak};
 use unicode_segmentation::UnicodeSegmentation;
 
 #[derive(Clone, Debug)]
@@ -46,7 +46,10 @@ pub enum Value {
 
     Option(Box<Option<Value>>),
 
-    TaskHandle(Arc<std::sync::Mutex<Option<tokio::task::JoinHandle<Value>>>>, Arc<AtomicBool>),
+    TaskHandle(
+        Arc<std::sync::Mutex<Option<tokio::task::JoinHandle<Value>>>>,
+        Arc<AtomicBool>,
+    ),
 
     Error(Arc<ErrorInfo>),
 }
@@ -84,7 +87,10 @@ impl Value {
         match self {
             Value::List(arc) => Ok(Value::WeakList(Arc::downgrade(arc))),
             Value::Map(arc) => Ok(Value::WeakMap(Arc::downgrade(arc))),
-            _ => Err(format!("Cannot create weak reference from {}", self.type_name())),
+            _ => Err(format!(
+                "Cannot create weak reference from {}",
+                self.type_name()
+            )),
         }
     }
 
@@ -98,16 +104,14 @@ impl Value {
 
     pub fn upgrade_weak(&self) -> Result<Value, String> {
         match self {
-            Value::WeakList(weak) =>
-                weak
-                    .upgrade()
-                    .map(|arc| Value::List(arc))
-                    .ok_or("Weak reference no longer valid (object was collected)".to_string()),
-            Value::WeakMap(weak) =>
-                weak
-                    .upgrade()
-                    .map(|arc| Value::Map(arc))
-                    .ok_or("Weak reference no longer valid (object was collected)".to_string()),
+            Value::WeakList(weak) => weak
+                .upgrade()
+                .map(|arc| Value::List(arc))
+                .ok_or("Weak reference no longer valid (object was collected)".to_string()),
+            Value::WeakMap(weak) => weak
+                .upgrade()
+                .map(|arc| Value::Map(arc))
+                .ok_or("Weak reference no longer valid (object was collected)".to_string()),
             _ => Err(format!("{} is not a weak reference", self.type_name())),
         }
     }
@@ -128,8 +132,10 @@ impl Value {
 
     pub fn unwrap_option(&self) -> Result<Value, String> {
         match self {
-            Value::Option(opt) =>
-                opt.as_ref().clone().ok_or("Cannot unwrap None value".to_string()),
+            Value::Option(opt) => opt
+                .as_ref()
+                .clone()
+                .ok_or("Cannot unwrap None value".to_string()),
             _ => Err(format!("{} is not an Option type", self.type_name())),
         }
     }
@@ -189,17 +195,29 @@ impl Value {
                 Ok(Value::FastNumber(n_f64 + f))
             }
             (Value::String(a), Value::String(b)) => Ok(Value::String(format!("{}{}", a, b))),
-            (Value::String(s), Value::Number(n)) =>
-                Ok(Value::String(format!("{}{}", s, format_number_for_display(n)))),
-            (Value::Number(n), Value::String(s)) =>
-                Ok(Value::String(format!("{}{}", format_number_for_display(n), s))),
+            (Value::String(s), Value::Number(n)) => Ok(Value::String(format!(
+                "{}{}",
+                s,
+                format_number_for_display(n)
+            ))),
+            (Value::Number(n), Value::String(s)) => Ok(Value::String(format!(
+                "{}{}",
+                format_number_for_display(n),
+                s
+            ))),
             (Value::String(s), Value::FastNumber(f)) => Ok(Value::String(format!("{}{}", s, f))),
             (Value::FastNumber(f), Value::String(s)) => Ok(Value::String(format!("{}{}", f, s))),
 
-            (Value::String(s), Value::Boolean(b)) =>
-                Ok(Value::String(format!("{}{}", s, if *b { "True" } else { "False" }))),
-            (Value::Boolean(b), Value::String(s)) =>
-                Ok(Value::String(format!("{}{}", if *b { "True" } else { "False" }, s))),
+            (Value::String(s), Value::Boolean(b)) => Ok(Value::String(format!(
+                "{}{}",
+                s,
+                if *b { "True" } else { "False" }
+            ))),
+            (Value::Boolean(b), Value::String(s)) => Ok(Value::String(format!(
+                "{}{}",
+                if *b { "True" } else { "False" },
+                s
+            ))),
 
             (Value::String(s), Value::WeakList(_)) | (Value::String(s), Value::WeakMap(_)) => {
                 Ok(Value::String(format!("{}{}", s, other.to_display_string())))
@@ -223,14 +241,14 @@ impl Value {
                 if a.len() != b.len() {
                     return Err("Vectors must have same length for addition".to_string());
                 }
-                let result: Vec<f32> = a
-                    .iter()
-                    .zip(b.iter())
-                    .map(|(x, y)| x + y)
-                    .collect();
+                let result: Vec<f32> = a.iter().zip(b.iter()).map(|(x, y)| x + y).collect();
                 Ok(Value::Vector(result))
             }
-            _ => Err(format!("Cannot add {:?} and {:?}", self.type_name(), other.type_name())),
+            _ => Err(format!(
+                "Cannot add {:?} and {:?}",
+                self.type_name(),
+                other.type_name()
+            )),
         }
     }
 
@@ -250,15 +268,14 @@ impl Value {
                 if a.len() != b.len() {
                     return Err("Vectors must have same length".to_string());
                 }
-                let result: Vec<f32> = a
-                    .iter()
-                    .zip(b.iter())
-                    .map(|(x, y)| x - y)
-                    .collect();
+                let result: Vec<f32> = a.iter().zip(b.iter()).map(|(x, y)| x - y).collect();
                 Ok(Value::Vector(result))
             }
-            _ =>
-                Err(format!("Cannot subtract {:?} from {:?}", other.type_name(), self.type_name())),
+            _ => Err(format!(
+                "Cannot subtract {:?} from {:?}",
+                other.type_name(),
+                self.type_name()
+            )),
         }
     }
 
@@ -274,7 +291,11 @@ impl Value {
                 let n_f64 = n.to_f64().unwrap_or(0.0);
                 Ok(Value::FastNumber(n_f64 * f))
             }
-            _ => Err(format!("Cannot multiply {:?} and {:?}", self.type_name(), other.type_name())),
+            _ => Err(format!(
+                "Cannot multiply {:?} and {:?}",
+                self.type_name(),
+                other.type_name()
+            )),
         }
     }
 
@@ -310,7 +331,11 @@ impl Value {
                     Ok(Value::FastNumber(n_f64 / f))
                 }
             }
-            _ => Err(format!("Cannot divide {:?} by {:?}", self.type_name(), other.type_name())),
+            _ => Err(format!(
+                "Cannot divide {:?} by {:?}",
+                self.type_name(),
+                other.type_name()
+            )),
         }
     }
 
@@ -346,7 +371,11 @@ impl Value {
                     Ok(Value::FastNumber(n_f64 % f))
                 }
             }
-            _ => Err(format!("Cannot modulo {:?} by {:?}", self.type_name(), other.type_name())),
+            _ => Err(format!(
+                "Cannot modulo {:?} by {:?}",
+                self.type_name(),
+                other.type_name()
+            )),
         }
     }
 
@@ -356,10 +385,18 @@ impl Value {
             (Value::FastNumber(a), Value::FastNumber(b)) => a == b,
 
             (Value::FastNumber(f), Value::Number(n)) => {
-                if let Some(n_f64) = n.to_f64() { (f - n_f64).abs() < f64::EPSILON } else { false }
+                if let Some(n_f64) = n.to_f64() {
+                    (f - n_f64).abs() < f64::EPSILON
+                } else {
+                    false
+                }
             }
             (Value::Number(n), Value::FastNumber(f)) => {
-                if let Some(n_f64) = n.to_f64() { (n_f64 - f).abs() < f64::EPSILON } else { false }
+                if let Some(n_f64) = n.to_f64() {
+                    (n_f64 - f).abs() < f64::EPSILON
+                } else {
+                    false
+                }
             }
             (Value::String(a), Value::String(b)) => a == b,
             (Value::Boolean(a), Value::Boolean(b)) => a == b,
@@ -370,18 +407,30 @@ impl Value {
     pub fn compare(&self, other: &Value) -> Result<std::cmp::Ordering, String> {
         match (self, other) {
             (Value::Number(a), Value::Number(b)) => Ok(a.cmp(b)),
-            (Value::FastNumber(a), Value::FastNumber(b)) =>
-                a.partial_cmp(b).ok_or("Cannot compare NaN values".to_string()),
+            (Value::FastNumber(a), Value::FastNumber(b)) => a
+                .partial_cmp(b)
+                .ok_or("Cannot compare NaN values".to_string()),
             (Value::FastNumber(f), Value::Number(n)) => {
-                let n_f64 = n.to_f64().ok_or("Number too large for FastNumber comparison")?;
-                f.partial_cmp(&n_f64).ok_or("Cannot compare NaN values".to_string())
+                let n_f64 = n
+                    .to_f64()
+                    .ok_or("Number too large for FastNumber comparison")?;
+                f.partial_cmp(&n_f64)
+                    .ok_or("Cannot compare NaN values".to_string())
             }
             (Value::Number(n), Value::FastNumber(f)) => {
-                let n_f64 = n.to_f64().ok_or("Number too large for FastNumber comparison")?;
-                n_f64.partial_cmp(f).ok_or("Cannot compare NaN values".to_string())
+                let n_f64 = n
+                    .to_f64()
+                    .ok_or("Number too large for FastNumber comparison")?;
+                n_f64
+                    .partial_cmp(f)
+                    .ok_or("Cannot compare NaN values".to_string())
             }
             (Value::String(a), Value::String(b)) => Ok(a.cmp(b)),
-            _ => Err(format!("Cannot compare {:?} and {:?}", self.type_name(), other.type_name())),
+            _ => Err(format!(
+                "Cannot compare {:?} and {:?}",
+                self.type_name(),
+                other.type_name()
+            )),
         }
     }
 
@@ -394,11 +443,18 @@ impl Value {
                     return Err("SFX lists start at 1, not 0".to_string());
                 }
 
-                let rust_idx = if idx_i64 > 0 {
-                    (idx_i64 - 1) as usize
+                let len = list.read().expect("lock poisoned").len() as i64;
+                let rust_idx_i64 = if idx_i64 > 0 {
+                    idx_i64 - 1
                 } else {
-                    return Err("Negative indices not supported yet".to_string());
+                    len + idx_i64
                 };
+
+                if rust_idx_i64 < 0 || rust_idx_i64 >= len {
+                    return Err(format!("Index {} out of bounds", idx_i64));
+                }
+
+                let rust_idx = rust_idx_i64 as usize;
 
                 list.read()
                     .expect("lock poisoned")
@@ -411,7 +467,7 @@ impl Value {
 
                 if idx_i64 == 0 {
                     return Err(
-                        "SFX strings start at 1. Use index 1 for the first character.".to_string()
+                        "SFX strings start at 1. Use index 1 for the first character.".to_string(),
                     );
                 }
 
@@ -427,14 +483,17 @@ impl Value {
                     .map(|g| Value::String(g.to_string()))
                     .ok_or_else(|| format!("Index {} out of bounds", idx_i64))
             }
-            (Value::Map(map), Value::String(key)) =>
-                map
-                    .read()
-                    .expect("lock poisoned")
-                    .get(key)
-                    .cloned()
-                    .ok_or_else(|| format!("Key '{}' not found", key)),
-            _ => Err(format!("Cannot index {:?} with {:?}", self.type_name(), idx.type_name())),
+            (Value::Map(map), Value::String(key)) => map
+                .read()
+                .expect("lock poisoned")
+                .get(key)
+                .cloned()
+                .ok_or_else(|| format!("Key '{}' not found", key)),
+            _ => Err(format!(
+                "Cannot index {:?} with {:?}",
+                self.type_name(),
+                idx.type_name()
+            )),
         }
     }
 
@@ -448,10 +507,7 @@ impl Value {
             Value::List(l) => {
                 let inner = l.read().expect("lock poisoned");
 
-                let deep_copied_items: Vec<Value> = inner
-                    .iter()
-                    .map(|v| v.clone_deep())
-                    .collect();
+                let deep_copied_items: Vec<Value> = inner.iter().map(|v| v.clone_deep()).collect();
                 Value::List(Arc::new(RwLock::new(deep_copied_items)))
             }
 
@@ -471,14 +527,7 @@ impl Value {
             Value::WeakMap(w) => Value::WeakMap(w.clone()),
 
             Value::Option(opt) => {
-                Value::Option(
-                    Box::new(
-                        opt
-                            .as_ref()
-                            .clone()
-                            .map(|v| v.clone_deep())
-                    )
-                )
+                Value::Option(Box::new(opt.as_ref().clone().map(|v| v.clone_deep())))
             }
 
             Value::TaskHandle(h, c) => Value::TaskHandle(h.clone(), c.clone()),
@@ -507,7 +556,11 @@ impl Value {
                 if f.is_finite() {
                     format!("{}", f)
                 } else if f.is_infinite() {
-                    if *f > 0.0 { "Infinity".to_string() } else { "-Infinity".to_string() }
+                    if *f > 0.0 {
+                        "Infinity".to_string()
+                    } else {
+                        "-Infinity".to_string()
+                    }
                 } else {
                     "NaN".to_string()
                 }
@@ -532,7 +585,9 @@ impl Value {
                     .collect();
                 format!("{{{}}}", entries.join(", "))
             }
-            Value::Vector(v) => { format!("Vector[{}]", v.len()) }
+            Value::Vector(v) => {
+                format!("Vector[{}]", v.len())
+            }
             Value::NativeFunction(_) => "<native function>".to_string(),
             Value::WeakList(weak) => {
                 if weak.strong_count() > 0 {
@@ -548,11 +603,10 @@ impl Value {
                     "<WeakRef to Map (collected)>".to_string()
                 }
             }
-            Value::Option(opt) =>
-                match opt.as_ref() {
-                    Some(v) => format!("Some({})", v.to_display_string()),
-                    None => "None".to_string(),
-                }
+            Value::Option(opt) => match opt.as_ref() {
+                Some(v) => format!("Some({})", v.to_display_string()),
+                None => "None".to_string(),
+            },
             Value::TaskHandle(_, _) => "<TaskHandle>".to_string(),
             Value::Error(err) => {
                 format!("Error.{}.{}: {}", err.category, err.subtype, err.message)
@@ -631,12 +685,11 @@ impl PartialEq for Value {
             (Value::WeakList(a), Value::WeakList(b)) => Weak::ptr_eq(a, b),
             (Value::WeakMap(a), Value::WeakMap(b)) => Weak::ptr_eq(a, b),
 
-            (Value::Option(a), Value::Option(b)) =>
-                match (a.as_ref(), b.as_ref()) {
-                    (Some(va), Some(vb)) => va.equals(vb),
-                    (None, None) => true,
-                    _ => false,
-                }
+            (Value::Option(a), Value::Option(b)) => match (a.as_ref(), b.as_ref()) {
+                (Some(va), Some(vb)) => va.equals(vb),
+                (None, None) => true,
+                _ => false,
+            },
 
             (Value::TaskHandle(a, _), Value::TaskHandle(b, _)) => Arc::ptr_eq(a, b),
 
@@ -664,27 +717,23 @@ mod tests {
 
     #[test]
     fn test_1_based_indexing() {
-        let list = Value::List(
-            Arc::new(
-                std::sync::RwLock::new(
-                    vec![
-                        Value::from_number_string("10").unwrap(),
-                        Value::from_number_string("20").unwrap(),
-                        Value::from_number_string("30").unwrap()
-                    ]
-                )
-            )
-        );
+        let list = Value::List(Arc::new(std::sync::RwLock::new(vec![
+            Value::from_number_string("10").unwrap(),
+            Value::from_number_string("20").unwrap(),
+            Value::from_number_string("30").unwrap(),
+        ])));
 
-        let first = list.index(&Value::from_number_string("1").unwrap()).unwrap();
+        let first = list
+            .index(&Value::from_number_string("1").unwrap())
+            .unwrap();
         assert!(first.equals(&Value::from_number_string("10").unwrap()));
     }
 
     #[test]
     fn test_zero_index_error() {
-        let list = Value::List(
-            Arc::new(std::sync::RwLock::new(vec![Value::from_number_string("10").unwrap()]))
-        );
+        let list = Value::List(Arc::new(std::sync::RwLock::new(vec![
+            Value::from_number_string("10").unwrap(),
+        ])));
 
         let result = list.index(&Value::from_number_string("0").unwrap());
         assert!(result.is_err());
@@ -696,7 +745,9 @@ mod tests {
         let flag = Value::String("🇲🇳".to_string());
         assert_eq!(flag.len().unwrap(), 1, "Emoji flag should be 1 character");
 
-        let indexed = flag.index(&Value::from_number_string("1").unwrap()).unwrap();
+        let indexed = flag
+            .index(&Value::from_number_string("1").unwrap())
+            .unwrap();
         assert_eq!(indexed.to_display_string(), "🇲🇳");
     }
 
@@ -711,21 +762,17 @@ mod tests {
 
     #[test]
     fn test_copy_on_write() {
-        let a = Value::List(
-            Arc::new(
-                RwLock::new(
-                    vec![
-                        Value::from_number_string("1").unwrap(),
-                        Value::from_number_string("2").unwrap()
-                    ]
-                )
-            )
-        );
+        let a = Value::List(Arc::new(RwLock::new(vec![
+            Value::from_number_string("1").unwrap(),
+            Value::from_number_string("2").unwrap(),
+        ])));
 
         let b = a.clone_deep();
 
         if let Value::List(list) = &b {
-            list.write().expect("lock poisoned").push(Value::from_number_string("3").unwrap());
+            list.write()
+                .expect("lock poisoned")
+                .push(Value::from_number_string("3").unwrap());
         }
 
         if let Value::List(list) = &a {
@@ -739,7 +786,7 @@ mod tests {
             Value::default_number(),
             Value::default_string(),
             Value::default_boolean(),
-            Value::default_list()
+            Value::default_list(),
         ];
 
         for val in defaults {

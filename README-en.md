@@ -52,12 +52,11 @@ Story:
 - Async with `Do in background` and channels
 - 1-based indexing, arbitrary precision math
 
-**Not working / TODO:**
-- No debugger yet
-- No LSP / editor support
-- Error messages could be better
-- Documentation is sparse
-- No package manager
+**Newly added:**
+- Trace debugger (`sfex debug`)
+- Minimal LSP server (stdio diagnostics)
+- Project scaffolding (`sfex new`) + package install (`sfex install`)
+- Error messages now include line/column hints
 
 ## Installation
 

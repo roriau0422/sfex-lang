@@ -6,14 +6,21 @@ const MAX_INDENT: usize = 100;
 const TAB_SIZE: usize = 8;
 const ALT_TAB_SIZE: usize = 1;
 
-#[derive(Debug)]
-pub enum LexerError {
+#[derive(Debug, Clone)]
+pub enum LexerErrorKind {
     TooDeep,
     DedentError,
     IndentError,
     UnexpectedChar(char),
     UnterminatedString,
     NewlineInString,
+}
+
+#[derive(Debug, Clone)]
+pub struct LexerError {
+    pub kind: LexerErrorKind,
+    pub line: usize,
+    pub column: usize,
 }
 
 pub struct Lexer<'a> {
@@ -65,6 +72,14 @@ impl<'a> Lexer<'a> {
         }
 
         Ok(tokens)
+    }
+
+    fn error(&self, kind: LexerErrorKind) -> LexerError {
+        LexerError {
+            kind,
+            line: self.line,
+            column: self.column,
+        }
     }
 
     // Get next token (handles indentation logic)
@@ -137,7 +152,7 @@ impl<'a> Lexer<'a> {
             // Check for mixed tabs/spaces
             let current_alt = *self.alt_indent_stack.last().unwrap();
             if alt_col != current_alt {
-                return Err(LexerError::IndentError);
+                return Err(self.error(LexerErrorKind::IndentError));
             }
             // No INDENT or DEDENT needed
         }
@@ -145,13 +160,13 @@ impl<'a> Lexer<'a> {
         else if col > current_indent {
             // Check stack overflow
             if self.indent_stack.len() >= MAX_INDENT {
-                return Err(LexerError::TooDeep);
+                return Err(self.error(LexerErrorKind::TooDeep));
             }
 
             // Check for mixed tabs/spaces
             let current_alt = *self.alt_indent_stack.last().unwrap();
             if alt_col <= current_alt {
-                return Err(LexerError::IndentError);
+                return Err(self.error(LexerErrorKind::IndentError));
             }
 
             // Push new level
@@ -170,13 +185,13 @@ impl<'a> Lexer<'a> {
 
             // Must land exactly on a known indentation level
             if col != *self.indent_stack.last().unwrap() {
-                return Err(LexerError::DedentError);
+                return Err(self.error(LexerErrorKind::DedentError));
             }
 
             // Check mixed tabs/spaces
             let current_alt = *self.alt_indent_stack.last().unwrap();
             if alt_col != current_alt {
-                return Err(LexerError::IndentError);
+                return Err(self.error(LexerErrorKind::IndentError));
             }
         }
 
@@ -196,7 +211,7 @@ impl<'a> Lexer<'a> {
         Token::new(token_type, self.line, self.column, 0)
     }
 
-    /// Read the next token 
+    /// Read the next token
     fn read_token(&mut self) -> Result<Token, LexerError> {
         match self.peek_char() {
             None => {
@@ -416,11 +431,11 @@ impl<'a> Lexer<'a> {
                         2,
                     ))
                 } else {
-                    Err(LexerError::UnexpectedChar('!'))
+                    Err(self.error(LexerErrorKind::UnexpectedChar('!')))
                 }
             }
 
-            Some(c) => Err(LexerError::UnexpectedChar(c)),
+            Some(c) => Err(self.error(LexerErrorKind::UnexpectedChar(c))),
         }
     }
 
@@ -475,7 +490,7 @@ impl<'a> Lexer<'a> {
 
         loop {
             match self.peek_char() {
-                None => return Err(LexerError::UnterminatedString),
+                None => return Err(self.error(LexerErrorKind::UnterminatedString)),
 
                 Some(c) if c == quote => {
                     self.advance();
@@ -498,7 +513,7 @@ impl<'a> Lexer<'a> {
                     }
                 }
                 Some('\r') | Some('\n') => {
-                    return Err(LexerError::NewlineInString);
+                    return Err(self.error(LexerErrorKind::NewlineInString));
                 }
                 Some(c) => {
                     value.push(c);
@@ -524,7 +539,7 @@ impl<'a> Lexer<'a> {
 
         loop {
             match self.peek_char() {
-                None => return Err(LexerError::UnterminatedString),
+                None => return Err(self.error(LexerErrorKind::UnterminatedString)),
 
                 Some(c) if c == quote => {
                     // Check if this is the start of closing triple quotes
@@ -697,6 +712,28 @@ impl<'a> Lexer<'a> {
         Ok(Token::new(token_type, self.line, start_col, length))
     }
 }
+
+impl std::fmt::Display for LexerError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let message = match &self.kind {
+            LexerErrorKind::TooDeep => "Indentation too deep".to_string(),
+            LexerErrorKind::DedentError => "Invalid dedent level".to_string(),
+            LexerErrorKind::IndentError => {
+                "Inconsistent indentation (mixed tabs/spaces)".to_string()
+            }
+            LexerErrorKind::UnexpectedChar(ch) => format!("Unexpected character '{}'", ch),
+            LexerErrorKind::UnterminatedString => "Unterminated string literal".to_string(),
+            LexerErrorKind::NewlineInString => "Newline in string literal".to_string(),
+        };
+        write!(
+            f,
+            "Lexer error at line {}, column {}: {}",
+            self.line, self.column, message
+        )
+    }
+}
+
+impl std::error::Error for LexerError {}
 
 #[cfg(test)]
 mod tests {

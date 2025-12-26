@@ -3,11 +3,23 @@ use super::token::{Token, TokenType};
 use std::iter::Peekable;
 use std::vec::IntoIter;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ParseError {
-    UnexpectedToken { expected: String, found: TokenType },
-    UnexpectedEof,
-    InvalidSyntax(String),
+    UnexpectedToken {
+        expected: String,
+        found: TokenType,
+        line: usize,
+        column: usize,
+    },
+    UnexpectedEof {
+        line: usize,
+        column: usize,
+    },
+    InvalidSyntax {
+        message: String,
+        line: usize,
+        column: usize,
+    },
 }
 
 pub struct Parser {
@@ -57,7 +69,7 @@ impl Parser {
                 Some(TokenType::Eof) => break,
                 None => break,
                 _ => {
-                    return Err(ParseError::InvalidSyntax(format!(
+                    return Err(self.make_invalid_syntax(format!(
                         "Expected Story, Concept, or Situation. Found: {:?}",
                         self.peek_type()
                     )));
@@ -151,10 +163,10 @@ impl Parser {
                     // Expect "changes" identifier
                     let changes_word = self.expect_identifier()?;
                     if changes_word != "changes" {
-                        return Err(ParseError::UnexpectedToken {
-                            expected: "changes".to_string(),
-                            found: TokenType::Identifier(changes_word),
-                        });
+                        return Err(self.make_unexpected_token(
+                            "changes".to_string(),
+                            TokenType::Identifier(changes_word),
+                        ));
                     }
 
                     self.expect(TokenType::Colon)?;
@@ -421,10 +433,10 @@ impl Parser {
                     } else if self.check(&TokenType::To) {
                         self.advance();
                     } else {
-                        return Err(ParseError::UnexpectedToken {
-                            expected: "to".to_string(),
-                            found: self.peek_type().cloned().unwrap_or(TokenType::Eof),
-                        });
+                        return Err(self.make_unexpected_token(
+                            "to".to_string(),
+                            self.peek_type().cloned().unwrap_or(TokenType::Eof),
+                        ));
                     }
 
                     let value = self.parse_expression()?;
@@ -449,9 +461,9 @@ impl Parser {
                         self.skip_ignorable();
                         return Ok(Statement::SwitchOff { situation, line });
                     }
-                    return Err(ParseError::InvalidSyntax(
-                        "Expected 'on' or 'off' after Switch".to_string(),
-                    ));
+                    return Err(
+                        self.make_invalid_syntax("Expected 'on' or 'off' after Switch".to_string())
+                    );
                 }
 
                 let next_is_assign = self
@@ -574,14 +586,14 @@ impl Parser {
             } else if self.check(&TokenType::Dedent) {
                 break;
             } else {
-                return Err(ParseError::InvalidSyntax(
+                return Err(self.make_invalid_syntax(
                     "Expected 'Is' or 'Otherwise' in When block".to_string(),
                 ));
             }
         }
 
         if cases.is_empty() {
-            return Err(ParseError::InvalidSyntax(
+            return Err(self.make_invalid_syntax(
                 "When statement must have at least one 'Is' case".to_string(),
             ));
         }
@@ -900,7 +912,7 @@ impl Parser {
                     self.advance();
                     let member = self.expect_member_name()?;
                     if self.check(&TokenType::With) {
-                        self.advance(); 
+                        self.advance();
 
                         let mut arguments = Vec::new();
                         let arg_val = self.parse_comparison()?;
@@ -996,19 +1008,42 @@ impl Parser {
             }
             Some(TokenType::Proceed) => {
                 self.advance();
-                // Proceed doesn't require parentheses (like Return)
-                Ok(Expression::Proceed {
-                    arguments: Vec::new(),
-                })
+                let mut arguments = Vec::new();
+
+                if self.check(&TokenType::With) {
+                    self.advance();
+                    let arg_val = self.parse_comparison()?;
+                    arguments.push(arg_val);
+
+                    while self.check(&TokenType::And) {
+                        self.advance();
+                        let arg_val = self.parse_comparison()?;
+                        arguments.push(arg_val);
+                    }
+                } else if self.check(&TokenType::LeftParen) {
+                    self.advance();
+                    if !self.check(&TokenType::RightParen) {
+                        loop {
+                            arguments.push(self.parse_expression()?);
+                            if !self.check(&TokenType::RightParen) {
+                                self.expect(TokenType::Comma)?;
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                    self.expect(TokenType::RightParen)?;
+                }
+
+                Ok(Expression::Proceed { arguments })
             }
-            _ => Err(ParseError::UnexpectedToken {
-                expected: "expression".to_string(),
-                found: self
-                    .current
+            _ => Err(self.make_unexpected_token(
+                "expression".to_string(),
+                self.current
                     .as_ref()
                     .map(|t| t.token_type.clone())
                     .unwrap_or(TokenType::Eof),
-            }),
+            )),
         }
     }
 
@@ -1053,7 +1088,7 @@ impl Parser {
                 }
 
                 if !found_close {
-                    return Err(ParseError::InvalidSyntax(
+                    return Err(self.make_invalid_syntax(
                         "Unclosed string interpolation brace '}'".to_string(),
                     ));
                 }
@@ -1062,9 +1097,9 @@ impl Parser {
                 let trimmed = var_name.trim();
 
                 if trimmed.is_empty() {
-                    return Err(ParseError::InvalidSyntax(
-                        "Empty string interpolation '{}'".to_string(),
-                    ));
+                    return Err(
+                        self.make_invalid_syntax("Empty string interpolation '{}'".to_string())
+                    );
                 }
 
                 if trimmed.contains('.') {
@@ -1107,13 +1142,13 @@ impl Parser {
 
     fn parse_list(&mut self) -> Result<Expression, ParseError> {
         self.expect(TokenType::LeftBracket)?;
-        self.skip_ignorable_with_indent(); 
+        self.skip_ignorable_with_indent();
 
         let mut items = Vec::new();
 
         while !self.check(&TokenType::RightBracket) && !self.is_at_end() {
             items.push(self.parse_expression()?);
-            self.skip_ignorable_with_indent(); 
+            self.skip_ignorable_with_indent();
 
             if !self.check(&TokenType::RightBracket) {
                 self.expect(TokenType::Comma)?;
@@ -1134,7 +1169,7 @@ impl Parser {
         while !self.check(&TokenType::RightBrace) && !self.is_at_end() {
             let key = self.expect_identifier()?;
             self.expect(TokenType::Colon)?;
-            self.skip_ignorable_with_indent(); 
+            self.skip_ignorable_with_indent();
             let value = self.parse_expression()?;
             entries.push((key, value));
             self.skip_ignorable_with_indent();
@@ -1161,6 +1196,27 @@ impl Parser {
         self.current.as_ref().map(|t| t.line).unwrap_or(0)
     }
 
+    fn current_column(&self) -> usize {
+        self.current.as_ref().map(|t| t.column).unwrap_or(0)
+    }
+
+    fn make_unexpected_token(&self, expected: String, found: TokenType) -> ParseError {
+        ParseError::UnexpectedToken {
+            expected,
+            found,
+            line: self.current_line(),
+            column: self.current_column(),
+        }
+    }
+
+    fn make_invalid_syntax(&self, message: String) -> ParseError {
+        ParseError::InvalidSyntax {
+            message,
+            line: self.current_line(),
+            column: self.current_column(),
+        }
+    }
+
     fn check(&self, token_type: &TokenType) -> bool {
         if let Some(current_type) = self.peek_type() {
             std::mem::discriminant(current_type) == std::mem::discriminant(token_type)
@@ -1178,14 +1234,13 @@ impl Parser {
             self.advance();
             Ok(())
         } else {
-            Err(ParseError::UnexpectedToken {
-                expected: format!("{:?}", token_type),
-                found: self
-                    .current
+            Err(self.make_unexpected_token(
+                format!("{:?}", token_type),
+                self.current
                     .as_ref()
                     .map(|t| t.token_type.clone())
                     .unwrap_or(TokenType::Eof),
-            })
+            ))
         }
     }
 
@@ -1195,14 +1250,13 @@ impl Parser {
             self.advance();
             Ok(name)
         } else {
-            Err(ParseError::UnexpectedToken {
-                expected: "identifier".to_string(),
-                found: self
-                    .current
+            Err(self.make_unexpected_token(
+                "identifier".to_string(),
+                self.current
                     .as_ref()
                     .map(|t| t.token_type.clone())
                     .unwrap_or(TokenType::Eof),
-            })
+            ))
         }
     }
 
@@ -1222,14 +1276,62 @@ impl Parser {
                 self.advance();
                 Ok("Return".to_string())
             }
-            _ => Err(ParseError::UnexpectedToken {
-                expected: "member name".to_string(),
-                found: self
-                    .current
+            _ => Err(self.make_unexpected_token(
+                "member name".to_string(),
+                self.current
                     .as_ref()
                     .map(|t| t.token_type.clone())
                     .unwrap_or(TokenType::Eof),
-            }),
+            )),
         }
     }
 }
+
+impl ParseError {
+    pub fn location(&self) -> (usize, usize) {
+        match self {
+            ParseError::UnexpectedToken { line, column, .. }
+            | ParseError::UnexpectedEof { line, column }
+            | ParseError::InvalidSyntax { line, column, .. } => (*line, *column),
+        }
+    }
+}
+
+impl std::fmt::Display for ParseError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ParseError::UnexpectedToken {
+                expected,
+                found,
+                line,
+                column,
+            } => {
+                write!(
+                    f,
+                    "Parse error at line {}, column {}: expected {}, found {:?}",
+                    line, column, expected, found
+                )
+            }
+            ParseError::UnexpectedEof { line, column } => {
+                write!(
+                    f,
+                    "Parse error at line {}, column {}: unexpected end of file",
+                    line, column
+                )
+            }
+            ParseError::InvalidSyntax {
+                message,
+                line,
+                column,
+            } => {
+                write!(
+                    f,
+                    "Parse error at line {}, column {}: {}",
+                    line, column, message
+                )
+            }
+        }
+    }
+}
+
+impl std::error::Error for ParseError {}

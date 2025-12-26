@@ -1,7 +1,9 @@
 // Core Library
 pub mod compiler;
-pub mod runtime;
 pub mod jit;
+pub mod lsp;
+pub mod project;
+pub mod runtime;
 pub mod stdlib;
 pub use compiler::ast::*;
 pub use compiler::lexer::{Lexer, LexerError};

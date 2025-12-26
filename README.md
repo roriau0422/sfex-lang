@@ -53,12 +53,11 @@ Story:
 - `Do in background` болон channel-тай async
 - 1-ээс эхэлдэг index, arbitrary precision тоо
 
-**Ажиллахгүй байгаа / TODO:**
-- Debugger байхгүй
-- LSP / editor support байхгүй
-- Error message-үүд WORSE
-- Баримтжуулалт дутуу
-- Package manager байхгүй
+**Шинээр нэмэгдсэн:**
+- Trace debugger (`sfex debug`)
+- Жижиг LSP сервер (stdio diagnostics)
+- Project scaffolding (`sfex new`) + package install (`sfex install`)
+- Error message-үүд line/column мэдээлэлтэй болсон
 
 ## Суулгах
 
@@ -176,7 +175,6 @@ JIT нь Cranelift хэрэглэдэг. Function 100 удаа дуудагдс�
 - Илүү сайн error message
 - Test coverage
 - Баримтжуулалт
-- LSP implementation гоё байх байсан
 
 Issue-г https://github.com/roriau0422/sfex-lang/issues дээр бичээрэй
 

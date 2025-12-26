@@ -1,7 +1,7 @@
 use clap::{Parser, Subcommand};
-use sfex_lang::{Interpreter, Lexer, Parser as SFXParser};
+use sfex_lang::{Interpreter, Lexer, Parser as SFXParser, project};
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process;
 
 #[derive(Parser)]
@@ -18,7 +18,10 @@ struct Cli {
 enum Commands {
     Run { file: PathBuf },
     Lex { file: PathBuf },
+    Debug { file: PathBuf },
     New { name: String },
+    Install,
+    Lsp,
     Version,
 }
 
@@ -36,9 +39,25 @@ fn main() {
                 process::exit(1);
             }
         }
+        Commands::Debug { file } => {
+            if debug_script(&file).is_err() {
+                process::exit(1);
+            }
+        }
         Commands::New { name } => {
-            println!("Creating new SFX project: {}", name);
-            println!("Project scaffolding coming soon!");
+            if new_project(&name).is_err() {
+                process::exit(1);
+            }
+        }
+        Commands::Install => {
+            if install_project().is_err() {
+                process::exit(1);
+            }
+        }
+        Commands::Lsp => {
+            if sfex_lang::lsp::run().is_err() {
+                process::exit(1);
+            }
         }
         Commands::Version => {
             print_version_info();
@@ -56,7 +75,7 @@ fn run_script(path: &PathBuf) -> Result<(), ()> {
 
     let mut lexer = Lexer::new(&source);
     let tokens = lexer.tokenize().map_err(|e| {
-        eprintln!("Lexer error: {:?}", e);
+        eprintln!("Lexer error: {}", e);
     })?;
 
     // for token in &tokens {
@@ -65,12 +84,12 @@ fn run_script(path: &PathBuf) -> Result<(), ()> {
 
     let mut parser = SFXParser::new(tokens);
     let program = parser.parse().map_err(|e| {
-        eprintln!("Parser error: {:?}", e);
+        eprintln!("Parser error: {}", e);
     })?;
 
     let mut interpreter = Interpreter::new();
     interpreter.run(program).map_err(|e| {
-        eprintln!("Runtime error: {:?}", e);
+        eprintln!("Runtime error: {}", e);
     })?;
 
     Ok(())
@@ -86,7 +105,7 @@ fn lex_script(path: &PathBuf) -> Result<(), ()> {
 
     let mut lexer = Lexer::new(&source);
     let tokens = lexer.tokenize().map_err(|e| {
-        eprintln!("Lexer error: {:?}", e);
+        eprintln!("Lexer error: {}", e);
     })?;
 
     println!("┌─────────────────────────────────────────────────────────────┐");
@@ -146,6 +165,96 @@ fn lex_script(path: &PathBuf) -> Result<(), ()> {
 
     println!();
     println!("Tokenization complete!");
+    Ok(())
+}
+
+fn debug_script(path: &PathBuf) -> Result<(), ()> {
+    println!("Debugging SFX script: {}", path.display());
+    println!();
+
+    let source = fs::read_to_string(path).map_err(|e| {
+        eprintln!("Error reading file: {}", e);
+    })?;
+
+    let mut lexer = Lexer::new(&source);
+    let tokens = lexer.tokenize().map_err(|e| {
+        eprintln!("Lexer error: {}", e);
+    })?;
+
+    let mut parser = SFXParser::new(tokens);
+    let program = parser.parse().map_err(|e| {
+        eprintln!("Parser error: {}", e);
+    })?;
+
+    let mut interpreter = Interpreter::new();
+    interpreter.enable_trace();
+    interpreter.run(program).map_err(|e| {
+        eprintln!("Runtime error: {}", e);
+    })?;
+
+    Ok(())
+}
+
+fn new_project(name: &str) -> Result<(), ()> {
+    let project_dir = Path::new(name);
+    if project_dir.exists() {
+        eprintln!("Directory '{}' already exists", name);
+        return Err(());
+    }
+
+    fs::create_dir_all(project_dir).map_err(|e| {
+        eprintln!("Failed to create project directory: {}", e);
+    })?;
+
+    let packages_dir = project_dir.join("packages");
+    fs::create_dir_all(&packages_dir).map_err(|e| {
+        eprintln!("Failed to create packages directory: {}", e);
+    })?;
+
+    let manifest = format!(
+        "[package]\nname = \"{}\"\nversion = \"0.1.0\"\n\n[dependencies]\n",
+        name
+    );
+    fs::write(project_dir.join("sfex.toml"), manifest).map_err(|e| {
+        eprintln!("Failed to write sfex.toml: {}", e);
+    })?;
+
+    let main_sfex = "Story:\n    Print \"Hello, SFX!\"\n";
+    fs::write(project_dir.join("main.sfex"), main_sfex).map_err(|e| {
+        eprintln!("Failed to write main.sfex: {}", e);
+    })?;
+
+    let readme = format!("# {}\n\nRun:\n\n```\nsfex run main.sfex\n```\n", name);
+    fs::write(project_dir.join("README.md"), readme).map_err(|e| {
+        eprintln!("Failed to write README.md: {}", e);
+    })?;
+
+    println!("Created new SFX project at {}", project_dir.display());
+    Ok(())
+}
+
+fn install_project() -> Result<(), ()> {
+    let cwd = std::env::current_dir().map_err(|e| {
+        eprintln!("Failed to resolve current directory: {}", e);
+    })?;
+
+    let root = project::find_project_root(&cwd).ok_or_else(|| {
+        eprintln!("No sfex.toml found (run from a project directory).");
+    })?;
+
+    let installed = project::install_dependencies(&root).map_err(|e| {
+        eprintln!("Install failed: {}", e);
+    })?;
+
+    if installed.is_empty() {
+        println!("No dependencies to install.");
+    } else {
+        println!("Installed dependencies:");
+        for name in installed {
+            println!("  - {}", name);
+        }
+    }
+
     Ok(())
 }
 

@@ -2,7 +2,7 @@ use crate::runtime::value::Value;
 use std::collections::HashMap;
 use std::sync::Arc;
 use sxd_document::parser;
-use sxd_xpath::{ Value as XPathValue, evaluate_xpath };
+use sxd_xpath::{Value as XPathValue, evaluate_xpath};
 
 pub fn parse_xml(xml_content: &str) -> Result<Value, String> {
     match parser::parse(xml_content) {
@@ -16,18 +16,14 @@ pub fn create_xml_module() -> Value {
 
     methods.insert(
         "Parse".to_string(),
-        Value::NativeFunction(
-            Arc::new(
-                Box::new(|args| {
-                    if args.len() != 1 {
-                        return Err("XML.Parse requires 1 argument (xml_string)".to_string());
-                    }
+        Value::NativeFunction(Arc::new(Box::new(|args| {
+            if args.len() != 1 {
+                return Err("XML.Parse requires 1 argument (xml_string)".to_string());
+            }
 
-                    let xml_content = args[0].to_display_string();
-                    parse_xml(&xml_content)
-                })
-            )
-        )
+            let xml_content = args[0].to_display_string();
+            parse_xml(&xml_content)
+        }))),
     );
 
     Value::Map(Arc::new(std::sync::RwLock::new(methods)))
@@ -39,64 +35,54 @@ fn create_document_object(xml: String) -> Value {
 
     doc_methods.insert(
         "XPath".to_string(),
-        Value::NativeFunction(
-            Arc::new(
-                Box::new(move |args| {
-                    if args.len() != 1 {
-                        return Err(
-                            "Document.XPath requires 1 argument (xpath_expression)".to_string()
-                        );
-                    }
+        Value::NativeFunction(Arc::new(Box::new(move |args| {
+            if args.len() != 1 {
+                return Err("Document.XPath requires 1 argument (xpath_expression)".to_string());
+            }
 
-                    let xpath_expr = args[0].to_display_string();
+            let xpath_expr = args[0].to_display_string();
 
-                    let package = match parser::parse(&doc_string) {
-                        Ok(p) => p,
-                        Err(e) => {
-                            return Err(format!("XML Parse Error: {}", e));
-                        }
-                    };
+            let package = match parser::parse(&doc_string) {
+                Ok(p) => p,
+                Err(e) => {
+                    return Err(format!("XML Parse Error: {}", e));
+                }
+            };
 
-                    let document = package.as_document();
+            let document = package.as_document();
 
-                    let xpath_result = match evaluate_xpath(&document, &xpath_expr) {
-                        Ok(result) => result,
-                        Err(e) => {
-                            return Err(format!("XPath Error: {}", e));
-                        }
-                    };
+            let xpath_result = match evaluate_xpath(&document, &xpath_expr) {
+                Ok(result) => result,
+                Err(e) => {
+                    return Err(format!("XPath Error: {}", e));
+                }
+            };
 
-                    Ok(convert_xpath_to_object(xpath_result))
-                })
-            )
-        )
+            Ok(convert_xpath_to_object(xpath_result))
+        }))),
     );
 
     let doc_string_2 = xml.clone();
     doc_methods.insert(
         "Text".to_string(),
-        Value::NativeFunction(
-            Arc::new(
-                Box::new(move |args| {
-                    if !args.is_empty() {
-                        return Err("Document.Text requires no arguments".to_string());
-                    }
+        Value::NativeFunction(Arc::new(Box::new(move |args| {
+            if !args.is_empty() {
+                return Err("Document.Text requires no arguments".to_string());
+            }
 
-                    let package = match parser::parse(&doc_string_2) {
-                        Ok(p) => p,
-                        Err(e) => {
-                            return Err(format!("XML Parse Error: {}", e));
-                        }
-                    };
+            let package = match parser::parse(&doc_string_2) {
+                Ok(p) => p,
+                Err(e) => {
+                    return Err(format!("XML Parse Error: {}", e));
+                }
+            };
 
-                    let document = package.as_document();
-                    let root = document.root();
+            let document = package.as_document();
+            let root = document.root();
 
-                    let text = extract_text_recursive(root.children());
-                    Ok(Value::String(text))
-                })
-            )
-        )
+            let text = extract_text_recursive(root.children());
+            Ok(Value::String(text))
+        }))),
     );
 
     Value::Map(Arc::new(std::sync::RwLock::new(doc_methods)))

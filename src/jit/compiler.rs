@@ -1,11 +1,11 @@
-use crate::compiler::ast::{ Expression, Method, Statement };
+use crate::compiler::ast::{Expression, Method, Statement};
 use crate::runtime::value::Value as SfxValue;
-use bigdecimal::{ BigDecimal, FromPrimitive };
+use bigdecimal::{BigDecimal, FromPrimitive};
 use cranelift::prelude::*;
-use cranelift_jit::{ JITBuilder, JITModule };
-use cranelift_module::{ DataDescription, Linkage, Module };
+use cranelift_jit::{JITBuilder, JITModule};
+use cranelift_module::{DataDescription, Linkage, Module};
 use std::collections::HashMap;
-use std::sync::{ /*Arc,*/ RwLock };
+use std::sync::{/*Arc,*/ RwLock};
 // use std::mem::ManuallyDrop;
 
 struct VarContext<'a> {
@@ -38,7 +38,7 @@ impl JitCompiler {
 
         let mut builder = JITBuilder::with_isa(
             cranelift_native::builder().unwrap().finish(flags).unwrap(),
-            cranelift_module::default_libcall_names()
+            cranelift_module::default_libcall_names(),
         );
 
         builder.symbol("jit_update_field", jit_update_field as *const u8);
@@ -71,7 +71,7 @@ impl JitCompiler {
         &mut self,
         concept_name: &str,
         method: &Method,
-        available_methods: &[Method]
+        available_methods: &[Method],
     ) -> Result<*const u8, String> {
         let key = (concept_name.to_string(), method.name.clone());
         if let Some(&ptr) = self.compiled_functions.get(&key) {
@@ -80,7 +80,8 @@ impl JitCompiler {
 
         let this_fields = Self::find_this_fields(method, available_methods);
 
-        self.required_fields_cache.insert(key.clone(), this_fields.clone());
+        self.required_fields_cache
+            .insert(key.clone(), this_fields.clone());
 
         let has_set = Self::has_set_statements(method);
         self.methods_with_set.insert(key.clone(), has_set);
@@ -100,8 +101,13 @@ impl JitCompiler {
 
         sig.returns.push(AbiParam::new(types::F64));
 
-        let func_id = self.module
-            .declare_function(&format!("{}_{}", concept_name, method.name), Linkage::Export, &sig)
+        let func_id = self
+            .module
+            .declare_function(
+                &format!("{}_{}", concept_name, method.name),
+                Linkage::Export,
+                &sig,
+            )
             .map_err(|e| format!("Failed to declare function: {}", e))?;
 
         self.ctx.func.signature = sig;
@@ -156,7 +162,7 @@ impl JitCompiler {
                 &method.body,
                 &mut var_context,
                 &mut self.module,
-                self.update_field_func
+                self.update_field_func,
             )?;
 
             builder.ins().return_(&[result]);
@@ -167,7 +173,9 @@ impl JitCompiler {
             .define_function(func_id, &mut self.ctx)
             .map_err(|e| format!("Failed to define function: {}", e))?;
         self.module.clear_context(&mut self.ctx);
-        self.module.finalize_definitions().map_err(|e| format!("Failed to finalize: {}", e))?;
+        self.module
+            .finalize_definitions()
+            .map_err(|e| format!("Failed to finalize: {}", e))?;
         let code_ptr = self.module.get_finalized_function(func_id);
         self.compiled_functions.insert(key, code_ptr);
         Ok(code_ptr)
@@ -178,18 +186,13 @@ impl JitCompiler {
         statements: &[Statement],
         var_context: &mut VarContext,
         module: &mut JITModule,
-        update_field_func_id: Option<cranelift_module::FuncId>
+        update_field_func_id: Option<cranelift_module::FuncId>,
     ) -> Result<Value, String> {
         let mut last_value = builder.ins().iconst(types::I64, 0);
 
         for stmt in statements {
-            last_value = Self::compile_statement(
-                builder,
-                stmt,
-                var_context,
-                module,
-                update_field_func_id
-            )?;
+            last_value =
+                Self::compile_statement(builder, stmt, var_context, module, update_field_func_id)?;
         }
 
         Ok(last_value)
@@ -200,7 +203,7 @@ impl JitCompiler {
         statement: &Statement,
         var_context: &mut VarContext,
         module: &mut JITModule,
-        update_field_func_id: Option<cranelift_module::FuncId>
+        update_field_func_id: Option<cranelift_module::FuncId>,
     ) -> Result<Value, String> {
         match statement {
             Statement::Return { value, .. } => {
@@ -210,7 +213,7 @@ impl JitCompiler {
                         expr,
                         var_context,
                         module,
-                        update_field_func_id
+                        update_field_func_id,
                     )
                 } else {
                     Ok(builder.ins().iconst(types::I64, 0))
@@ -222,7 +225,7 @@ impl JitCompiler {
                     value,
                     var_context,
                     module,
-                    update_field_func_id
+                    update_field_func_id,
                 )?;
 
                 if let Some(&var) = var_context.local_vars.get(target) {
@@ -241,29 +244,28 @@ impl JitCompiler {
                     value,
                     var_context,
                     module,
-                    update_field_func_id
+                    update_field_func_id,
                 )?;
 
                 match target {
                     Expression::MemberAccess { object, member } => {
                         if matches!(&**object, Expression::Identifier(name) if name == "This") {
                             let obj_ptr_f64 = var_context.obj_ptr.ok_or(
-                                "Set statement requires object pointer but none was provided"
+                                "Set statement requires object pointer but none was provided",
                             )?;
 
-                            let obj_ptr = builder
-                                .ins()
-                                .bitcast(types::I64, MemFlags::new(), obj_ptr_f64);
+                            let obj_ptr =
+                                builder
+                                    .ins()
+                                    .bitcast(types::I64, MemFlags::new(), obj_ptr_f64);
 
-                            let func_id = update_field_func_id.ok_or(
-                                "External update_field function not declared"
-                            )?;
+                            let func_id = update_field_func_id
+                                .ok_or("External update_field function not declared")?;
 
                             let func_ref = module.declare_func_in_func(func_id, builder.func);
 
-                            let field_static: &'static str = Box::leak(
-                                member.clone().into_boxed_str()
-                            );
+                            let field_static: &'static str =
+                                Box::leak(member.clone().into_boxed_str());
                             let field_ptr = field_static.as_ptr() as i64;
                             let field_len = field_static.len() as i64;
 
@@ -282,7 +284,12 @@ impl JitCompiler {
                     _ => Err("Set statement target must be This.FieldName".to_string()),
                 }
             }
-            Statement::If { condition, then_body, else_body, .. } => {
+            Statement::If {
+                condition,
+                then_body,
+                else_body,
+                ..
+            } => {
                 let then_block = builder.create_block();
                 let else_block = builder.create_block();
                 let merge_block = builder.create_block();
@@ -294,13 +301,15 @@ impl JitCompiler {
                     condition,
                     var_context,
                     module,
-                    update_field_func_id
+                    update_field_func_id,
                 )?;
 
                 let zero = builder.ins().f64const(0.0);
                 let cond_bool = builder.ins().fcmp(FloatCC::NotEqual, cond_val, zero);
 
-                builder.ins().brif(cond_bool, then_block, &[], else_block, &[]);
+                builder
+                    .ins()
+                    .brif(cond_bool, then_block, &[], else_block, &[]);
 
                 builder.switch_to_block(then_block);
                 builder.seal_block(then_block);
@@ -309,7 +318,7 @@ impl JitCompiler {
                     then_body,
                     var_context,
                     module,
-                    update_field_func_id
+                    update_field_func_id,
                 )?;
                 builder.def_var(result_var, then_result);
                 builder.ins().jump(merge_block, &[]);
@@ -322,7 +331,7 @@ impl JitCompiler {
                         else_stmts,
                         var_context,
                         module,
-                        update_field_func_id
+                        update_field_func_id,
                     )?
                 } else {
                     builder.ins().iconst(types::I64, 0)
@@ -336,7 +345,12 @@ impl JitCompiler {
                 let result = builder.use_var(result_var);
                 Ok(result)
             }
-            Statement::RepeatTimes { count, variable, body, .. } => {
+            Statement::RepeatTimes {
+                count,
+                variable,
+                body,
+                ..
+            } => {
                 if variable.is_some() {
                     return Err("JIT doesn't support loop variables in RepeatTimes yet".to_string());
                 }
@@ -352,7 +366,7 @@ impl JitCompiler {
                     count,
                     var_context,
                     module,
-                    update_field_func_id
+                    update_field_func_id,
                 )?;
 
                 let count_val = builder.ins().fcvt_to_sint(types::I64, count_val_f64);
@@ -363,7 +377,9 @@ impl JitCompiler {
 
                 builder.switch_to_block(loop_header);
                 let counter = builder.use_var(counter_var);
-                let cond = builder.ins().icmp(IntCC::SignedLessThan, counter, count_val);
+                let cond = builder
+                    .ins()
+                    .icmp(IntCC::SignedLessThan, counter, count_val);
                 builder.ins().brif(cond, loop_body, &[], loop_exit, &[]);
 
                 builder.switch_to_block(loop_body);
@@ -372,7 +388,7 @@ impl JitCompiler {
                     body,
                     var_context,
                     module,
-                    update_field_func_id
+                    update_field_func_id,
                 )?;
                 let one = builder.ins().iconst(types::I64, 1);
                 let counter_again = builder.use_var(counter_var);
@@ -388,7 +404,7 @@ impl JitCompiler {
 
                 Ok(builder.ins().iconst(types::I64, 0))
             }
-            _ => { Ok(builder.ins().iconst(types::I64, 0)) }
+            _ => Err(format!("Unsupported statement for JIT: {:?}", statement)),
         }
     }
 
@@ -397,27 +413,31 @@ impl JitCompiler {
         expr: &Expression,
         var_context: &mut VarContext,
         module: &mut JITModule,
-        update_field_func_id: Option<cranelift_module::FuncId>
+        update_field_func_id: Option<cranelift_module::FuncId>,
     ) -> Result<Value, String> {
         match expr {
             Expression::Number(n) => {
                 let num: f64 = n.parse().unwrap_or(0.0);
                 Ok(builder.ins().f64const(num))
             }
-            Expression::BinaryOp { left, operator, right } => {
+            Expression::BinaryOp {
+                left,
+                operator,
+                right,
+            } => {
                 let lhs = Self::compile_expression(
                     builder,
                     left,
                     var_context,
                     module,
-                    update_field_func_id
+                    update_field_func_id,
                 )?;
                 let rhs = Self::compile_expression(
                     builder,
                     right,
                     var_context,
                     module,
-                    update_field_func_id
+                    update_field_func_id,
                 )?;
 
                 use crate::compiler::ast::BinaryOperator;
@@ -426,7 +446,9 @@ impl JitCompiler {
                     BinaryOperator::Subtract => Ok(builder.ins().fsub(lhs, rhs)),
                     BinaryOperator::Multiply => Ok(builder.ins().fmul(lhs, rhs)),
                     BinaryOperator::Divide => Ok(builder.ins().fdiv(lhs, rhs)),
-                    BinaryOperator::Modulo => { Ok(builder.ins().f64const(0.0)) }
+                    BinaryOperator::Modulo => {
+                        Err("Modulo operator is not supported by JIT yet".to_string())
+                    }
 
                     BinaryOperator::Equal => {
                         let cmp = builder.ins().fcmp(FloatCC::Equal, lhs, rhs);
@@ -481,28 +503,27 @@ impl JitCompiler {
             Expression::MemberAccess { object, member } => {
                 if let Expression::Identifier(obj_name) = &**object {
                     if obj_name == "This" {
-                        if
-                            let Some(callee) = var_context.available_methods
-                                .iter()
-                                .find(|m| &m.name == member)
+                        if let Some(callee) = var_context
+                            .available_methods
+                            .iter()
+                            .find(|m| &m.name == member)
                         {
-                            if
-                                callee.parameters.is_empty() &&
-                                Self::is_inlinable(callee, var_context.method_name)
+                            if callee.parameters.is_empty()
+                                && Self::is_inlinable(callee, var_context.method_name)
                             {
                                 let saved_local_vars = var_context.local_vars.clone();
 
                                 let result = if callee.body.len() == 1 {
-                                    if
-                                        let Statement::Return { value: Some(expr), .. } =
-                                            &callee.body[0]
+                                    if let Statement::Return {
+                                        value: Some(expr), ..
+                                    } = &callee.body[0]
                                     {
                                         Self::compile_expression(
                                             builder,
                                             expr,
                                             var_context,
                                             module,
-                                            update_field_func_id
+                                            update_field_func_id,
                                         )
                                     } else {
                                         Ok(builder.ins().f64const(0.0))
@@ -512,13 +533,15 @@ impl JitCompiler {
 
                                     for stmt in &callee.body {
                                         match stmt {
-                                            Statement::Return { value: Some(expr), .. } => {
+                                            Statement::Return {
+                                                value: Some(expr), ..
+                                            } => {
                                                 result_value = Self::compile_expression(
                                                     builder,
                                                     expr,
                                                     var_context,
                                                     module,
-                                                    update_field_func_id
+                                                    update_field_func_id,
                                                 )?;
                                                 break;
                                             }
@@ -528,13 +551,14 @@ impl JitCompiler {
                                                     stmt,
                                                     var_context,
                                                     module,
-                                                    update_field_func_id
+                                                    update_field_func_id,
                                                 )?;
                                             }
                                             _ => {
-                                                return Err(
-                                                    format!("Inlined method {} contains unsupported statement", member)
-                                                );
+                                                return Err(format!(
+                                                    "Inlined method {} contains unsupported statement",
+                                                    member
+                                                ));
                                             }
                                         }
                                     }
@@ -558,7 +582,10 @@ impl JitCompiler {
                         }
                     }
                 }
-                Err(format!("Unsupported member access: {:?}.{}", object, member))
+                Err(format!(
+                    "Unsupported member access: {:?}.{}",
+                    object, member
+                ))
             }
             Expression::UnaryOp { operator, operand } => {
                 let val = Self::compile_expression(
@@ -566,12 +593,12 @@ impl JitCompiler {
                     operand,
                     var_context,
                     module,
-                    update_field_func_id
+                    update_field_func_id,
                 )?;
 
                 use crate::compiler::ast::UnaryOperator;
                 match operator {
-                    UnaryOperator::Minus => { Ok(builder.ins().fneg(val)) }
+                    UnaryOperator::Minus => Ok(builder.ins().fneg(val)),
                     UnaryOperator::Not => {
                         let zero = builder.ins().f64const(0.0);
                         let is_zero = builder.ins().fcmp(FloatCC::Equal, val, zero);
@@ -580,7 +607,11 @@ impl JitCompiler {
                     }
                 }
             }
-            Expression::MethodCall { object, method: method_name, arguments } => {
+            Expression::MethodCall {
+                object,
+                method: method_name,
+                arguments,
+            } => {
                 if !matches!(&**object, Expression::Identifier(name) if name == "This") {
                     return Err("JIT only supports method calls on This".to_string());
                 }
@@ -589,37 +620,42 @@ impl JitCompiler {
                     return Err("JIT inlining only supports zero-argument methods".to_string());
                 }
 
-                if
-                    let Some(callee) = var_context.available_methods
-                        .iter()
-                        .find(|m| &m.name == method_name)
+                if let Some(callee) = var_context
+                    .available_methods
+                    .iter()
+                    .find(|m| &m.name == method_name)
                 {
                     if Self::is_inlinable(callee, var_context.method_name) {
                         if callee.body.len() == 1 {
-                            if let Statement::Return { value: Some(expr), .. } = &callee.body[0] {
+                            if let Statement::Return {
+                                value: Some(expr), ..
+                            } = &callee.body[0]
+                            {
                                 return Self::compile_expression(
                                     builder,
                                     expr,
                                     var_context,
                                     module,
-                                    update_field_func_id
+                                    update_field_func_id,
                                 );
                             }
                         }
 
-                        Err(
-                            format!("Method {} is inlinable but too complex for current implementation", method_name)
-                        )
+                        Err(format!(
+                            "Method {} is inlinable but too complex for current implementation",
+                            method_name
+                        ))
                     } else {
-                        Err(
-                            format!("Method {} is not inlinable (too large or has control flow)", method_name)
-                        )
+                        Err(format!(
+                            "Method {} is not inlinable (too large or has control flow)",
+                            method_name
+                        ))
                     }
                 } else {
                     Err(format!("Method {} not found for inlining", method_name))
                 }
             }
-            _ => { Ok(builder.ins().f64const(0.0)) }
+            _ => Err(format!("Unsupported expression for JIT: {:?}", expr)),
         }
     }
 
@@ -630,7 +666,10 @@ impl JitCompiler {
 
     pub fn get_required_fields_by_key(&self, concept: &str, method_name: &str) -> Vec<String> {
         let key = (concept.to_string(), method_name.to_string());
-        self.required_fields_cache.get(&key).cloned().unwrap_or_default()
+        self.required_fields_cache
+            .get(&key)
+            .cloned()
+            .unwrap_or_default()
     }
 
     pub fn get_required_fields(&self, method: &Method) -> Vec<String> {
@@ -653,7 +692,7 @@ impl JitCompiler {
 
         for stmt in &method.body {
             match stmt {
-                | Statement::If { .. }
+                Statement::If { .. }
                 | Statement::RepeatTimes { .. }
                 | Statement::RepeatWhile { .. }
                 | Statement::ForEach { .. }
@@ -661,7 +700,9 @@ impl JitCompiler {
                     return false;
                 }
 
-                Statement::Return { value: Some(expr), .. } => {
+                Statement::Return {
+                    value: Some(expr), ..
+                } => {
                     if Self::contains_method_call(expr, caller_name) {
                         return false;
                     }
@@ -677,8 +718,8 @@ impl JitCompiler {
         match expr {
             Expression::MethodCall { method, .. } => method == method_name,
             Expression::BinaryOp { left, right, .. } => {
-                Self::contains_method_call(left, method_name) ||
-                    Self::contains_method_call(right, method_name)
+                Self::contains_method_call(left, method_name)
+                    || Self::contains_method_call(right, method_name)
             }
             Expression::UnaryOp { operand, .. } => Self::contains_method_call(operand, method_name),
             _ => false,
@@ -703,10 +744,12 @@ impl JitCompiler {
     fn find_fields_in_statement(
         stmt: &Statement,
         fields: &mut Vec<String>,
-        available_methods: &[Method]
+        available_methods: &[Method],
     ) {
         match stmt {
-            Statement::Return { value: Some(expr), .. } => {
+            Statement::Return {
+                value: Some(expr), ..
+            } => {
                 Self::find_fields_in_expression(expr, fields, available_methods);
             }
             Statement::Assignment { value, .. } => {
@@ -722,7 +765,7 @@ impl JitCompiler {
     fn find_fields_in_expression(
         expr: &Expression,
         fields: &mut Vec<String>,
-        available_methods: &[Method]
+        available_methods: &[Method],
     ) {
         match expr {
             Expression::MemberAccess { object, member } => {
@@ -763,22 +806,13 @@ pub unsafe extern "C" fn jit_update_field(
     obj_ptr: *const u8,
     field_ptr: *const u8,
     field_len: usize,
-    value: f64
+    value: f64,
 ) {
-    let rwlock = unsafe { 
-        &*(obj_ptr as *const RwLock<HashMap<String, SfxValue>>) 
-    };
-
+    let rwlock = unsafe { &*(obj_ptr as *const RwLock<HashMap<String, SfxValue>>) };
     let field_slice = unsafe { std::slice::from_raw_parts(field_ptr, field_len) };
-    
     let field_name = unsafe { std::str::from_utf8_unchecked(field_slice) };
-
-    let sfx_value = SfxValue::Number(
-        BigDecimal::from_f64(value).unwrap_or_else(|| BigDecimal::from(0))
-    );
-
+    let sfx_value = SfxValue::Number(BigDecimal::from_f64(value).unwrap_or_else(|| BigDecimal::from(0)));
     let mut map = rwlock.write().expect("lock poisoned");
-
     if let Some(existing_val) = map.get_mut(field_name) {
         *existing_val = sfx_value;
     } else {

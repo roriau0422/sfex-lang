@@ -96,9 +96,7 @@ pub fn register_stdlib(interpreter: &mut Interpreter) {
                 let f64_val = n.to_f64().ok_or("Number too large for FastNumber")?;
                 Ok(Value::FastNumber(f64_val))
             }
-            Value::FastNumber(f) => {
-                Ok(Value::FastNumber(*f))
-            }
+            Value::FastNumber(f) => Ok(Value::FastNumber(*f)),
             Value::String(s) => {
                 let f64_val = s
                     .parse::<f64>()

@@ -29,36 +29,28 @@ pub fn create_json_module() -> Value {
 
     methods.insert(
         "Parse".to_string(),
-        Value::NativeFunction(
-            Arc::new(
-                Box::new(|args| {
-                    if args.len() != 1 {
-                        return Err("JSON.Parse requires 1 argument".to_string());
-                    }
+        Value::NativeFunction(Arc::new(Box::new(|args| {
+            if args.len() != 1 {
+                return Err("JSON.Parse requires 1 argument".to_string());
+            }
 
-                    let json_str = args[0].to_display_string();
+            let json_str = args[0].to_display_string();
 
-                    match serde_json::from_str(&json_str) {
-                        Ok(json_val) => Ok(convert_json_to_object(json_val)),
-                        Err(e) => Err(format!("JSON Parse Error: {}", e)),
-                    }
-                })
-            )
-        )
+            match serde_json::from_str(&json_str) {
+                Ok(json_val) => Ok(convert_json_to_object(json_val)),
+                Err(e) => Err(format!("JSON Parse Error: {}", e)),
+            }
+        }))),
     );
 
     methods.insert(
         "Stringify".to_string(),
-        Value::NativeFunction(
-            Arc::new(
-                Box::new(|args| {
-                    if args.len() != 1 {
-                        return Err("JSON.Stringify requires 1 argument".to_string());
-                    }
-                    Ok(Value::String(args[0].to_display_string()))
-                })
-            )
-        )
+        Value::NativeFunction(Arc::new(Box::new(|args| {
+            if args.len() != 1 {
+                return Err("JSON.Stringify requires 1 argument".to_string());
+            }
+            Ok(Value::String(args[0].to_display_string()))
+        }))),
     );
 
     Value::Map(Arc::new(std::sync::RwLock::new(methods)))

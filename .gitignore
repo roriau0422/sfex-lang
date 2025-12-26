@@ -20,3 +20,8 @@ Thumbs.db
 # SFX specific
 *.sfex.cache
 .sfx/
+
+CLAUDE.md
+AGENTS.md
+.claude/
+.codex/

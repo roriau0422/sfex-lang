@@ -1,7 +1,7 @@
 use crate::runtime::value::Value;
 use std::collections::HashMap;
 use std::sync::Arc;
-use toml::{ Table, Value as TomlValue };
+use toml::{Table, Value as TomlValue};
 
 pub fn convert_toml_to_object(toml: TomlValue) -> Value {
     match toml {
@@ -33,22 +33,18 @@ pub fn create_toml_module() -> Value {
 
     methods.insert(
         "Parse".to_string(),
-        Value::NativeFunction(
-            Arc::new(
-                Box::new(|args| {
-                    if args.len() != 1 {
-                        return Err("TOML.Parse requires 1 argument".to_string());
-                    }
+        Value::NativeFunction(Arc::new(Box::new(|args| {
+            if args.len() != 1 {
+                return Err("TOML.Parse requires 1 argument".to_string());
+            }
 
-                    let toml_str = args[0].to_display_string();
+            let toml_str = args[0].to_display_string();
 
-                    match toml::from_str::<Table>(&toml_str) {
-                        Ok(table) => Ok(convert_toml_to_object(TomlValue::Table(table))),
-                        Err(e) => Err(format!("TOML Parse Error: {}", e)),
-                    }
-                })
-            )
-        )
+            match toml::from_str::<Table>(&toml_str) {
+                Ok(table) => Ok(convert_toml_to_object(TomlValue::Table(table))),
+                Err(e) => Err(format!("TOML Parse Error: {}", e)),
+            }
+        }))),
     );
 
     Value::Map(Arc::new(std::sync::RwLock::new(methods)))
