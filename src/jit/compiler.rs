@@ -811,7 +811,8 @@ pub unsafe extern "C" fn jit_update_field(
     let rwlock = unsafe { &*(obj_ptr as *const RwLock<HashMap<String, SfxValue>>) };
     let field_slice = unsafe { std::slice::from_raw_parts(field_ptr, field_len) };
     let field_name = unsafe { std::str::from_utf8_unchecked(field_slice) };
-    let sfx_value = SfxValue::Number(BigDecimal::from_f64(value).unwrap_or_else(|| BigDecimal::from(0)));
+    let sfx_value =
+        SfxValue::Number(BigDecimal::from_f64(value).unwrap_or_else(|| BigDecimal::from(0)));
     let mut map = rwlock.write().expect("lock poisoned");
     if let Some(existing_val) = map.get_mut(field_name) {
         *existing_val = sfx_value;

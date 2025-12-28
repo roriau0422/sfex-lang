@@ -1,0 +1,55 @@
+# Web server integration test
+Story:
+    Base is "http://127.0.0.1:4050"
+
+    Root is HTTP.Get(Base + "/")
+    If Root["Status"] = 200:
+        Print "PASS /"
+    Else:
+        Print "FAIL /"
+        Crash is MissingVar
+
+    Hello is HTTP.Get(Base + "/hello")
+    HelloData is JSON.Parse(Hello["Body"])
+    If HelloData["message"] = "hi":
+        Print "PASS /hello"
+    Else:
+        Print "FAIL /hello"
+        Crash is MissingVar
+
+    QueryRes is HTTP.Get(Base + "/query?name=SFX")
+    If QueryRes["Body"] = "hello SFX":
+        Print "PASS /query"
+    Else:
+        Print "FAIL /query"
+        Crash is MissingVar
+
+    EchoRes is HTTP.Post(Base + "/echo", "ping")
+    If EchoRes["Body"] = "ping":
+        Print "PASS /echo"
+    Else:
+        Print "FAIL /echo"
+        Crash is MissingVar
+
+    StaticRes is HTTP.Get(Base + "/static.txt")
+    If StaticRes["Body"] = "static ok":
+        Print "PASS /static.txt"
+    Else:
+        Print "FAIL /static.txt"
+        Crash is MissingVar
+
+    FileRes is HTTP.Get(Base + "/file")
+    If FileRes["Body"] = "hello file":
+        Print "PASS /file"
+    Else:
+        Print "FAIL /file"
+        Crash is MissingVar
+
+    StreamRes is HTTP.Get(Base + "/stream")
+    If StreamRes["Body"] = "onetwo":
+        Print "PASS /stream"
+    Else:
+        Print "FAIL /stream"
+        Crash is MissingVar
+
+    Print "Web server tests complete"

@@ -1,0 +1,20 @@
+# Web server handler for tests
+Story:
+    Path is Request.Path
+    When Path:
+        is "/":
+            Response is Web.Response("root ok", 200)
+        is "/hello":
+            Response is Web.Json({ message: "hi", path: Path }, 200)
+        is "/echo":
+            Response is Web.Response(Request.Body, 200)
+        is "/query":
+            Name is Request.Query["name"]
+            Response is Web.Response("hello " + Name, 200)
+        is "/file":
+            Response is Web.File("tests/web/public/hello.txt")
+        is "/stream":
+            Chunks is Stream.FromList(["one", "two"])
+            Response is Web.Stream(Chunks, 200)
+        Otherwise:
+            Response is Web.Response("Not Found", 404)

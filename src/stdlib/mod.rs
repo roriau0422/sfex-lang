@@ -16,6 +16,7 @@ pub mod tcp;
 pub mod time;
 pub mod toml;
 pub mod udp;
+pub mod web;
 pub mod websocket;
 pub mod xml;
 
@@ -81,6 +82,9 @@ pub fn register_stdlib(interpreter: &mut Interpreter) {
 
     let math_module = math::create_math_module();
     interpreter.define_global("Math", math_module);
+
+    let web_module = web::create_web_module();
+    interpreter.define_global("Web", web_module);
 
     // FastNumber() creates fast floating-point numbers
     use crate::runtime::value::Value;

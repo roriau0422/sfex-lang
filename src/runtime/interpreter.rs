@@ -126,7 +126,9 @@ impl Interpreter {
         interpreter
     }
 
-    fn new_with_shared_runtime(runtime: std::sync::Arc<tokio::runtime::Runtime>) -> Self {
+    pub(crate) fn new_with_shared_runtime(
+        runtime: std::sync::Arc<tokio::runtime::Runtime>,
+    ) -> Self {
         let mut interpreter = Self {
             env: Environment::new(),
             concepts: HashMap::new(),
@@ -148,6 +150,10 @@ impl Interpreter {
 
     pub fn define_global(&mut self, name: &str, value: Value) {
         self.env.define(name.to_string(), value);
+    }
+
+    pub fn get_global(&self, name: &str) -> Option<Value> {
+        self.env.get(name)
     }
 
     pub fn enable_trace(&mut self) {

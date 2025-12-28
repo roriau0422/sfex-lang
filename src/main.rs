@@ -1,4 +1,5 @@
 use clap::{Parser, Subcommand};
+use sfex_lang::stdlib::web;
 use sfex_lang::{Interpreter, Lexer, Parser as SFXParser, project};
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -16,10 +17,29 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    Run { file: PathBuf },
-    Lex { file: PathBuf },
-    Debug { file: PathBuf },
-    New { name: String },
+    Run {
+        file: PathBuf,
+    },
+    Lex {
+        file: PathBuf,
+    },
+    Debug {
+        file: PathBuf,
+    },
+    Serve {
+        file: PathBuf,
+        #[arg(short, long, default_value = "127.0.0.1:8000")]
+        addr: String,
+        #[arg(short, long)]
+        static_dir: Option<PathBuf>,
+        #[arg(long)]
+        tls_cert: Option<PathBuf>,
+        #[arg(long)]
+        tls_key: Option<PathBuf>,
+    },
+    New {
+        name: String,
+    },
     Install,
     Lsp,
     Version,
@@ -41,6 +61,25 @@ fn main() {
         }
         Commands::Debug { file } => {
             if debug_script(&file).is_err() {
+                process::exit(1);
+            }
+        }
+        Commands::Serve {
+            file,
+            addr,
+            static_dir,
+            tls_cert,
+            tls_key,
+        } => {
+            if serve_script(
+                &file,
+                &addr,
+                static_dir.as_ref(),
+                tls_cert.as_ref(),
+                tls_key.as_ref(),
+            )
+            .is_err()
+            {
                 process::exit(1);
             }
         }
@@ -191,6 +230,44 @@ fn debug_script(path: &PathBuf) -> Result<(), ()> {
     interpreter.run(program).map_err(|e| {
         eprintln!("Runtime error: {}", e);
     })?;
+
+    Ok(())
+}
+
+fn serve_script(
+    path: &PathBuf,
+    addr: &str,
+    static_dir: Option<&PathBuf>,
+    tls_cert: Option<&PathBuf>,
+    tls_key: Option<&PathBuf>,
+) -> Result<(), ()> {
+    let handler_path = path
+        .to_str()
+        .ok_or_else(|| {
+            eprintln!("Invalid handler path");
+        })
+        .map(|s| s.to_string())?;
+
+    let static_str = static_dir.and_then(|p| p.to_str()).map(|s| s.to_string());
+    let tls_cert_str = tls_cert.and_then(|p| p.to_str()).map(|s| s.to_string());
+    let tls_key_str = tls_key.and_then(|p| p.to_str()).map(|s| s.to_string());
+
+    match (tls_cert_str.as_deref(), tls_key_str.as_deref()) {
+        (Some(cert), Some(key)) => {
+            web::serve_tls(addr, &handler_path, cert, key, static_str.as_deref()).map_err(|e| {
+                eprintln!("Serve error: {}", e);
+            })?;
+        }
+        (None, None) => {
+            web::serve(addr, &handler_path, static_str.as_deref()).map_err(|e| {
+                eprintln!("Serve error: {}", e);
+            })?;
+        }
+        _ => {
+            eprintln!("Serve error: --tls-cert and --tls-key must be provided together");
+            return Err(());
+        }
+    }
 
     Ok(())
 }

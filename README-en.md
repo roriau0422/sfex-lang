@@ -57,6 +57,7 @@ Story:
 - Minimal LSP server (stdio diagnostics)
 - Project scaffolding (`sfex new`) + package install (`sfex install`)
 - Error messages now include line/column hints
+- Dev web server (`sfex serve` + `Web.Serve`)
 
 ## Installation
 
@@ -154,6 +155,39 @@ No pub/sub boilerplate. No manual invalidation. It just works.
 | Math | Random, trig, rounding |
 | LLM | OpenAI API integration |
 | Task/Channel | Concurrency primitives |
+| Web | Dev HTTP server + router |
+
+## Web Server (Dev)
+
+Create a handler file (e.g. `app.sfex`):
+
+```sfex
+Story:
+    If Request.Path = "/":
+        Response is Web.Response("Hello from SFX!", 200)
+    Otherwise:
+        Response is Web.Response("Not Found", 404)
+```
+
+Router example:
+
+```sfex
+Story:
+    Router is Web.Router()
+    Router.Get("/hello", "handlers/hello.sfex")
+    Router.Static("/assets", "public")
+    Router.Serve("127.0.0.1:8000")
+```
+
+Request fields: Method, Path, Query, Params, Headers, Body, Cookies
+Helpers: Web.Json, Web.File, Web.Redirect, Web.Stream
+
+Run:
+
+```bash
+sfex serve app.sfex --addr 127.0.0.1:8000 --static-dir public
+sfex serve app.sfex --addr 127.0.0.1:8443 --tls-cert cert.pem --tls-key key.pem
+```
 
 ## Performance
 

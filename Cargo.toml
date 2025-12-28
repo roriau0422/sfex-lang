@@ -46,6 +46,12 @@ reqwest = { version = "0.12", features = ["blocking", "json"] }
 tokio = { version = "1", features = ["full"] }
 tokio-tungstenite = { version = "0.28.0", features = ["native-tls"] }
 futures-util = "0.3"
+bytes = "1.10.1"
+hyper = { version = "0.14.32", features = ["http1", "http2", "server", "stream", "runtime", "tcp"] }
+rustls = "0.21.12"
+rustls-pemfile = "1.0.4"
+tokio-rustls = "0.24.1"
+tokio-stream = { version = "0.1.17", features = ["net"] }
 
 # System Information
 hostname = "0.4.0"

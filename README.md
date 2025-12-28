@@ -58,6 +58,7 @@ Story:
 - Жижиг LSP сервер (stdio diagnostics)
 - Project scaffolding (`sfex new`) + package install (`sfex install`)
 - Error message-үүд line/column мэдээлэлтэй болсон
+- Dev web сервер (`sfex serve` + `Web.Serve`)
 
 ## Суулгах
 
@@ -155,6 +156,39 @@ Pub/sub boilerplate байхгүй. Гараар invalidate хийх хэрэг�
 | Math | Random, тригонометр, тоймлох |
 | LLM | OpenAI API integration |
 | Task/Channel | Concurrency primitive |
+| Web | Dev HTTP server + router |
+
+## Web сервер (Dev)
+
+Handler файл (жишээ нь `app.sfex`) үүсгэнэ:
+
+```sfex
+Story:
+    If Request.Path = "/":
+        Response is Web.Response("Hello from SFX!", 200)
+    Otherwise:
+        Response is Web.Response("Not Found", 404)
+```
+
+Router example:
+
+```sfex
+Story:
+    Router is Web.Router()
+    Router.Get("/hello", "handlers/hello.sfex")
+    Router.Static("/assets", "public")
+    Router.Serve("127.0.0.1:8000")
+```
+
+Request fields: Method, Path, Query, Params, Headers, Body, Cookies
+Helpers: Web.Json, Web.File, Web.Redirect, Web.Stream
+
+Ажиллуулах:
+
+```bash
+sfex serve app.sfex --addr 127.0.0.1:8000 --static-dir public
+sfex serve app.sfex --addr 127.0.0.1:8443 --tls-cert cert.pem --tls-key key.pem
+```
 
 ## Performance
 
